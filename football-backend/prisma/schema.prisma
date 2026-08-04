@@ -1,0 +1,159 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  SUPER_ADMIN
+  PODIUM_ADMIN
+  TEAM_MANAGER
+  PLAYER
+}
+
+enum Phase {
+  SETUP
+  REGISTRATION
+  AUCTION
+  TOURNAMENT
+}
+
+enum PlayerStatus {
+  UNSOLD
+  SOLD
+  WITHDRAWN
+}
+
+enum BidMode {
+  NORMAL
+  BLIND
+}
+
+model User {
+  id              String  @id @default(cuid())
+  name            String
+  email           String  @unique
+  phone           String? @unique
+  passwordHash    String
+  role            Role
+  isApproved      Boolean @default(true) // Team managers default to false, others true
+  desiredTeamName String? // For manager registration
+  team            Team?
+}
+
+model SystemConfig {
+  id              String  @id @default("singleton")
+  currentPhase    Phase   @default(SETUP)
+  totalBudget     Int
+  minRosterSize   Int
+  maxRosterSize   Int     @default(18)
+  defaultTimer    Int     @default(60)
+  timerLocked     Boolean @default(false)
+}
+
+model Session {
+  id     String  @id @default(cuid())
+  name   String
+  active Boolean @default(true)
+}
+
+model PlayerCategory {
+  id        String   @id @default(cuid())
+  name      String   // e.g. Platinum, Gold
+  basePrice Int
+  players   Player[]
+}
+
+model BiddingRaiseTier {
+  id       String @id @default(cuid())
+  minPct   Float
+  maxPct   Float
+  raisePct Float
+}
+
+model Team {
+  id              String   @id @default(cuid())
+  name            String
+  managerId       String?  @unique
+  manager         User?    @relation(fields: [managerId], references: [id])
+  remainingBudget Int
+  players         Player[]
+  wishlistPlayers Player[] @relation("TeamWishlist")
+}
+
+model Player {
+  id            String           @id @default(cuid())
+  name          String
+  studentId     String           @unique
+  email         String           @unique
+  sessionId     String
+  jerseyName    String
+  imageUrl      String           // Cloudinary URL
+  imagePublicId String           // needed for cascade delete
+  status        PlayerStatus     @default(UNSOLD)
+  teamId        String?
+  team          Team?            @relation(fields: [teamId], references: [id])
+  categoryId    String?
+  category      PlayerCategory?  @relation(fields: [categoryId], references: [id])
+  soldPrice     Int?
+  positions     PlayerPosition[]
+  wishlistedByTeams Team[] @relation("TeamWishlist")
+}
+
+model PlayerPosition {
+  id        String  @id @default(cuid())
+  playerId  String
+  player    Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  position  String  // GK, CB, LB, CM, RW, ST...
+  isPrimary Boolean
+}
+
+model AuctionLedgerEntry {
+  id        String   @id @default(cuid())
+  playerId  String
+  teamId    String
+  amount    Int
+  createdAt DateTime @default(now())
+}
+
+model Fixture {
+  id          String   @id @default(cuid())
+  teamAId     String
+  teamBId     String
+  isTwoLegged Boolean
+  venue       String
+  matches     Match[]
+}
+
+model Match {
+  id          String            @id @default(cuid())
+  fixtureId   String
+  fixture     Fixture           @relation(fields: [fixtureId], references: [id], onDelete: Cascade)
+  legNumber   Int               @default(1)
+  scoreA      Int?
+  scoreB      Int?
+  status      String
+  scheduledAt DateTime
+  stats       PlayerMatchStat[]
+}
+
+model PlayerMatchStat {
+  id          String  @id @default(cuid())
+  matchId     String
+  match       Match   @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  playerId    String
+  goals       Int     @default(0)
+  assists     Int     @default(0)
+  yellowCards Int     @default(0)
+  redCards    Int     @default(0)
+  cleanSheet  Boolean @default(false)
+}
+
+model News {
+  id        String   @id @default(cuid())
+  title     String
+  body      String
+  createdAt DateTime @default(now())
+}
