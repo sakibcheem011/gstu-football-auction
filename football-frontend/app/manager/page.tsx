@@ -27,7 +27,7 @@ export default function ManagerDashboard() {
     const t = localStorage.getItem('token');
     if (!t) { router.push('/login'); return; }
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`auth/me', { headers: { Authorization: `Bearer ${t}` }})
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/me`, { headers: { Authorization: `Bearer ${t}` }})
       .then(res => res.json())
       .then(data => {
         if (data.role !== 'TEAM_MANAGER' || !data.team) {
@@ -40,16 +40,16 @@ export default function ManagerDashboard() {
         }
       }).catch(() => router.push('/login'));
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`rules/config').then(res => res.json()).then(data => setConfig(data)).catch(console.error);
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`players/public').then(res => res.json()).then(data => setAllPlayers(data)).catch(console.error);
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`teams/wishlist', { headers: { Authorization: `Bearer ${t}` }})
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/config`).then(res => res.json()).then(data => setConfig(data)).catch(console.error);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/players/public`).then(res => res.json()).then(data => setAllPlayers(data)).catch(console.error);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams/wishlist`, { headers: { Authorization: `Bearer ${t}` }})
       .then(res => res.json())
       .then(data => setWishlistIds(Array.isArray(data) ? data : []))
       .catch(console.error);
       
     // Refresh team data on player_sold event to update roster and budget
     const refreshInterval = setInterval(() => {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`auth/me', { headers: { Authorization: `Bearer ${t}` }})
+      fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/me`, { headers: { Authorization: `Bearer ${t}` }})
       .then(res => res.json())
       .then(data => { if(data.team) setTeam(data.team); })
       .catch(console.error);
@@ -58,7 +58,7 @@ export default function ManagerDashboard() {
   }, [router]);
 
   const initSocket = (t: string) => {
-    const s = io(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`', { auth: { token: t } });
+    const s = io(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`, { auth: { token: t } });
     s.on('auction_state_sync', (data) => {
       setAuctionState(data);
       setIsBidding(false);
@@ -67,7 +67,7 @@ export default function ManagerDashboard() {
       setAuctionState((prev: any) => prev ? { ...prev, timer: data.timer } : null);
     });
     s.on('data_updated', () => {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`auth/me', { headers: { Authorization: `Bearer ${t}` }})
+      fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/me`, { headers: { Authorization: `Bearer ${t}` }})
         .then(res => res.json())
         .then(data => { if(data.team) setTeam(data.team); })
         .catch(console.error);
@@ -94,7 +94,7 @@ export default function ManagerDashboard() {
       prev.includes(playerId) ? prev.filter(id => id !== playerId) : [...prev, playerId]
     );
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`teams/wishlist/toggle', {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams/wishlist/toggle`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${t}` },
       body: JSON.stringify({ playerId })

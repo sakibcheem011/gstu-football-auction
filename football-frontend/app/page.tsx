@@ -15,8 +15,8 @@ export default function Home() {
   useEffect(() => {
     const fetchData = () => {
       Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`rules/config').then(r => r.json()),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`teams').then(r => r.json()),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/config`).then(r => r.json()),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams`).then(r => r.json()),
       ]).then(([conf, tms]) => {
         if (conf) setConfig(conf);
         if (Array.isArray(tms)) setTeams(tms);
@@ -29,7 +29,7 @@ export default function Home() {
 
     fetchData();
 
-    const socket: Socket = io(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`');
+    const socket: Socket = io(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`);
     socket.on('auction_state_sync', (data) => setAuctionState(data));
     socket.on('auction_timer_tick', (data) => {
       setAuctionState((prev: any) => prev ? { ...prev, timer: data.timer } : null);
@@ -359,9 +359,9 @@ function TournamentPhase() {
   const [teams, setTeams] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`tournament/standings').then(r => r.json()).then(setStandings).catch(console.error);
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`tournament/fixtures').then(r => r.json()).then(setFixtures).catch(console.error);
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`teams').then(r => r.json()).then(setTeams).catch(console.error);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/tournament/standings`).then(r => r.json()).then(setStandings).catch(console.error);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/tournament/fixtures`).then(r => r.json()).then(setFixtures).catch(console.error);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams`).then(r => r.json()).then(setTeams).catch(console.error);
   }, []);
 
   return (

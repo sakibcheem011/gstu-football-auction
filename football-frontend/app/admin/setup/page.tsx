@@ -93,7 +93,7 @@ export default function SuperAdminSetup() {
       fetchData(t);
     }
 
-    const socket = io(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`');
+    const socket = io(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`);
     socket.on('player_registered', (newPlayer) => {
       setPlayers((prev) => [...prev, newPlayer]);
       toast.success(`New player registered: ${newPlayer.name}`, { icon: '⚽' });
@@ -110,14 +110,14 @@ export default function SuperAdminSetup() {
   const fetchData = async (t: string) => {
     try {
       const [resConfig, resTeams, resPlayers, resStaff, resCat, resTier, resSess, resPending] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`rules/config'),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`teams'),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`players', { headers: { Authorization: `Bearer ${t}` } }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`auth/staff', { headers: { Authorization: `Bearer ${t}` } }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`rules/categories'),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`rules/tiers'),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`rules/sessions'),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`teams/pending-managers', { headers: { Authorization: `Bearer ${t}` } })
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/config`),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams`),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/players`, { headers: { Authorization: `Bearer ${t}` } }),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/staff`, { headers: { Authorization: `Bearer ${t}` } }),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/categories`),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/tiers`),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/sessions`),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams/pending-managers`, { headers: { Authorization: `Bearer ${t}` } })
       ]);
       const dataConfig = await resConfig.json();
       const dataTeams = await resTeams.json();
@@ -145,7 +145,7 @@ export default function SuperAdminSetup() {
   };
 
   const updatePhase = async (phase: string) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`rules/phase', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/phase`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ phase })
@@ -160,7 +160,7 @@ export default function SuperAdminSetup() {
 
   const updateTimerConfig = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`rules/timer', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/timer`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ defaultTimer, timerLocked })
@@ -175,7 +175,7 @@ export default function SuperAdminSetup() {
 
   const updateBudgetConfig = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`rules/budget', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/budget`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ totalBudget: parseInt(totalBudgetInput) || 150000 })
@@ -192,7 +192,7 @@ export default function SuperAdminSetup() {
 
   const createCategory = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`rules/categories', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/categories`, {
       method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ name: catName, basePrice: catPrice })
     });
@@ -200,13 +200,13 @@ export default function SuperAdminSetup() {
   };
 
   const deleteCategory = async (id: string) => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/rules/categories/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`}/rules/categories/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
     fetchData(token!);
   };
 
   const createTier = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`rules/tiers', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/tiers`, {
       method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ minPct: tierMin, maxPct: tierMax, raisePct: tierRaise })
     });
@@ -214,13 +214,13 @@ export default function SuperAdminSetup() {
   };
 
   const deleteTier = async (id: string) => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/rules/tiers/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`}/rules/tiers/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
     fetchData(token!);
   };
 
   const createSession = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`rules/sessions', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/sessions`, {
       method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ name: sessionName })
     });
@@ -228,7 +228,7 @@ export default function SuperAdminSetup() {
   };
 
   const deleteSession = async (id: string) => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/rules/sessions/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`}/rules/sessions/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
     fetchData(token!);
   };
 
@@ -242,7 +242,7 @@ export default function SuperAdminSetup() {
     e.preventDefault();
     if (!approveDialog || !approveTeamName) return;
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`teams/approve-manager', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams/approve-manager`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ 
@@ -275,7 +275,7 @@ export default function SuperAdminSetup() {
     e.preventDefault();
     if (!editingTeam) return;
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/teams/${editingTeam.id}/manager`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`}/teams/${editingTeam.id}/manager`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ 
@@ -304,7 +304,7 @@ export default function SuperAdminSetup() {
       message: "Are you sure you want to delete this franchise and its manager?",
       onConfirm: async () => {
         setConfirmDialog(null);
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/teams/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`}/teams/${id}`, {
           method: 'DELETE',
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -320,7 +320,7 @@ export default function SuperAdminSetup() {
 
   const createStaffAccount = async (e: React.FormEvent) => {
     e.preventDefault();
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`auth/staff', {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/staff`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ name: staffName, email: staffEmail, password: staffPassword, role: staffRole })
@@ -343,7 +343,7 @@ export default function SuperAdminSetup() {
       message: "Are you sure you want to delete this staff member?",
       onConfirm: async () => {
         setConfirmDialog(null);
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/auth/staff/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`}/auth/staff/${id}`, {
           method: 'DELETE',
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -387,7 +387,7 @@ export default function SuperAdminSetup() {
   const updatePlayerDetails = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedPlayer) return;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/players/${selectedPlayer.id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`}/players/${selectedPlayer.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({
@@ -415,7 +415,7 @@ export default function SuperAdminSetup() {
       message: "Are you sure you want to completely delete this player? This cannot be undone.",
       onConfirm: async () => {
         setConfirmDialog(null);
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/players/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`}/players/${id}`, {
           method: 'DELETE',
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -441,7 +441,7 @@ export default function SuperAdminSetup() {
       return;
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/players/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`}/players/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ status: 'UNSOLD' })
@@ -458,7 +458,7 @@ export default function SuperAdminSetup() {
       message: `WARNING: You are about to execute a Level ${level} System Reset. This action is irreversible. Are you sure?`,
       onConfirm: async () => {
         setConfirmDialog(null);
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/system/reset/level${level}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`}/system/reset/level${level}`, {
           method: 'POST',
           headers: { Authorization: `Bearer ${token}` }
         });

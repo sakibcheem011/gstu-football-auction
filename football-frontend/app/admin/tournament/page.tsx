@@ -33,8 +33,8 @@ export default function TournamentAdmin() {
   const fetchData = async (t: string) => {
     try {
       const [resTeams, resFixtures] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`teams'),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`tournament/fixtures')
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams`),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/tournament/fixtures`)
       ]);
       setTeams(await resTeams.json());
       setFixtures(await resFixtures.json());
@@ -50,7 +50,7 @@ export default function TournamentAdmin() {
       toast.error('Invalid teams selected.');
       return;
     }
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`tournament/fixtures', {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/tournament/fixtures`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ teamAId, teamBId, isTwoLegged, venue })
@@ -59,7 +59,7 @@ export default function TournamentAdmin() {
   };
 
   const updateMatchScore = async (matchId: string, scoreA: string, scoreB: string, status: string) => {
-    await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/tournament/matches/${matchId}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`}/tournament/matches/${matchId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ scoreA: parseInt(scoreA), scoreB: parseInt(scoreB), status })

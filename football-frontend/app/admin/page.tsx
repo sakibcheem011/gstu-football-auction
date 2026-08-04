@@ -22,7 +22,7 @@ export default function SuperAdminDashboard() {
     }
 
     // Verify Role
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`auth/me', {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/me`, {
       headers: { Authorization: `Bearer ${t}` }
     })
     .then(res => res.json())
@@ -43,7 +43,7 @@ export default function SuperAdminDashboard() {
 
   useEffect(() => {
     if (!token) return;
-    const socket: Socket = io(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`');
+    const socket: Socket = io(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`);
     socket.on('player_sold', () => {
       fetchData(token);
     });
@@ -58,9 +58,9 @@ export default function SuperAdminDashboard() {
   const fetchData = async (t: string) => {
     try {
       const [resTeams, resPlayers, resConfig] = await Promise.all([
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`teams'),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`auction/players', { headers: { Authorization: `Bearer ${t}` }}),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`'}/`rules/config')
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams`),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auction/players`, { headers: { Authorization: `Bearer ${t}` }}),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/config`)
       ]);
       const dataTeams = await resTeams.json();
       const dataPlayers = await resPlayers.json();
