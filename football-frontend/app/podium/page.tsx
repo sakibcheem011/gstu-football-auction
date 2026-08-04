@@ -74,6 +74,18 @@ export default function AdminAuctionDashboard() {
         fetchTeams();
       });
       
+      newSocket.on('manager_passed', (data: { teamId: string, teamName: string }) => {
+        toast.custom((t) => (
+          <div className="bg-ink border-2 border-danger text-white p-4 rounded-xl shadow-2xl flex items-center gap-4">
+            <XOctagon className="text-danger" size={24} />
+            <div>
+              <div className="font-bold uppercase tracking-widest text-sm text-danger">{data.teamName}</div>
+              <div className="text-xs text-chalkMuted">Has passed on the current player</div>
+            </div>
+          </div>
+        ), { duration: 5000 });
+      });
+      
       setSocket(newSocket);
       
       return () => {

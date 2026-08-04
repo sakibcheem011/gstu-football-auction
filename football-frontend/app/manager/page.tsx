@@ -15,6 +15,7 @@ export default function ManagerDashboard() {
   const [team, setTeam] = useState<any>(null);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [auctionState, setAuctionState] = useState<any>(null);
+  const [hasFolded, setHasFolded] = useState(false);
   const [config, setConfig] = useState<any>(null);
   const [bidAmount, setBidAmount] = useState<string>('');
   const [isBidding, setIsBidding] = useState(false);
@@ -60,6 +61,9 @@ export default function ManagerDashboard() {
   const initSocket = (t: string) => {
     const s = io(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`, { auth: { token: t } });
     s.on('auction_state_sync', (data) => {
+      if (auctionState?.activePlayer?.id !== data?.activePlayer?.id) {
+        setHasFolded(false);
+      }
       setAuctionState(data);
       setIsBidding(false);
     });
@@ -80,9 +84,14 @@ export default function ManagerDashboard() {
   };
 
   const handleBid = (amount: number) => {
-    if (isBidding) return;
+    if (isBidding || hasFolded) return;
     setIsBidding(true);
     socket?.emit('place_bid', { amount });
+  };
+
+  const handleFold = () => {
+    setHasFolded(true);
+    socket?.emit('manager_pass');
   };
 
   const toggleWishlist = (playerId: string) => {
@@ -251,37 +260,55 @@ export default function ManagerDashboard() {
 
                     {/* Bidding Controls */}
                     <div className="mt-12">
-                      <motion.button
-                        whileHover={(!isLeading && canAfford && !isBidding) ? { scale: 1.02 } : {}}
-                        whileTap={(!isLeading && canAfford && !isBidding) ? { scale: 0.98 } : {}}
-                        onClick={() => handleBid(nextBidAmount)}
-                        disabled={isLeading || !canAfford || isBidding}
-                        className={`w-full py-6 rounded-2xl font-display text-3xl md:text-4xl tracking-widest uppercase transition-all flex items-center justify-center gap-4 ${
-                          isLeading 
-                            ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)]'
-                            : !canAfford 
-                              ? 'bg-white/5 text-chalkMuted border border-white/5 opacity-50 cursor-not-allowed'
-                              : 'bg-gold text-ink hover:bg-yellow-400 shadow-[0_8px_30px_rgba(244,196,83,0.3)]'
-                        }`}
-                      >
-                        {isBidding ? (
-                          <>
-                            <div className="w-8 h-8 border-4 border-ink/30 border-t-ink rounded-full animate-spin"></div>
-                            Bidding...
-                          </>
-                        ) : isLeading ? (
-                          <>
-                            <CheckCircle2 size={32} /> Winning
-                          </>
-                        ) : !canAfford ? (
-                          'Insufficient Funds'
-                        ) : (
-                          <>
-                            <HandMetal size={32} /> Bid TK {nextBidAmount.toLocaleString()}
-                          </>
+                      <div className="flex gap-4">
+                        <motion.button
+                          whileHover={(!isLeading && canAfford && !isBidding && !hasFolded) ? { scale: 1.02 } : {}}
+                          whileTap={(!isLeading && canAfford && !isBidding && !hasFolded) ? { scale: 0.98 } : {}}
+                          onClick={() => handleBid(nextBidAmount)}
+                          disabled={isLeading || !canAfford || isBidding || hasFolded}
+                          className={`flex-1 py-6 rounded-2xl font-display text-3xl md:text-4xl tracking-widest uppercase transition-all flex items-center justify-center gap-4 ${
+                            isLeading 
+                              ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)]'
+                              : !canAfford 
+                                ? 'bg-white/5 text-chalkMuted border border-white/5 opacity-50 cursor-not-allowed'
+                                : hasFolded
+                                  ? 'bg-danger/10 text-danger border border-danger/30 opacity-50 cursor-not-allowed'
+                                  : 'bg-gold text-ink hover:bg-yellow-400 shadow-[0_8px_30px_rgba(244,196,83,0.3)]'
+                          }`}
+                        >
+                          {isBidding ? (
+                            <>
+                              <div className="w-8 h-8 border-4 border-ink/30 border-t-ink rounded-full animate-spin"></div>
+                              Bidding...
+                            </>
+                          ) : isLeading ? (
+                            <>
+                              <CheckCircle2 size={32} /> Winning
+                            </>
+                          ) : !canAfford ? (
+                            'Insufficient Funds'
+                          ) : hasFolded ? (
+                            'Folded'
+                          ) : (
+                            <>
+                              <HandMetal size={32} /> Bid TK {nextBidAmount.toLocaleString()}
+                            </>
+                          )}
+                        </motion.button>
+
+                        {!isLeading && canAfford && !hasFolded && (
+                          <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={handleFold}
+                            className="px-8 py-6 rounded-2xl font-display text-xl tracking-widest uppercase transition-all flex flex-col items-center justify-center gap-1 bg-white/5 text-chalkMuted hover:bg-danger/20 hover:text-danger border border-white/10 hover:border-danger/30"
+                          >
+                            <AlertCircle size={24} />
+                            Fold
+                          </motion.button>
                         )}
-                      </motion.button>
-                      {!isLeading && canAfford && !isBidding && (
+                      </div>
+                      {!isLeading && canAfford && !isBidding && !hasFolded && (
                         <p className="text-center text-[10px] uppercase tracking-widest text-chalkMuted mt-4 font-bold">
                           Next valid bid increment applied automatically
                         </p>

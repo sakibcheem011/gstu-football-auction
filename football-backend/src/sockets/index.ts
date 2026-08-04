@@ -132,6 +132,16 @@ export const setupSockets = (io: Server) => {
       }
     });
 
+    socket.on('manager_pass', async () => {
+      const user = socket.data.user;
+      if (!user || user.role !== 'TEAM_MANAGER') return;
+      
+      const team = await prisma.team.findUnique({ where: { managerId: user.id } });
+      if (!team) return;
+
+      io.emit('manager_passed', { teamId: team.id, teamName: team.name });
+    });
+
     socket.on('place_bid', async (data: { amount: number }) => {
       const user = socket.data.user;
       if (!user || user.role !== 'TEAM_MANAGER') {
