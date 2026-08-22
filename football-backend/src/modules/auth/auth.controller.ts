@@ -29,6 +29,15 @@ export const login = async (req: Request, res: Response): Promise<any> => {
       return res.status(403).json({ error: 'Account pending admin approval. Please wait for an Admin to verify your registration.' });
     }
 
+    if (!user.passwordHash) {
+      console.error(`Login Error: user ${user.email} has no passwordHash`);
+      return res.status(401).json({ error: 'Invalid credentials (hash missing)' });
+    }
+
+    if (!password) {
+      return res.status(400).json({ error: 'Password is required' });
+    }
+
     const isValid = await bcrypt.compare(password, user.passwordHash);
     if (!isValid) {
       return res.status(401).json({ error: 'Invalid credentials' });
@@ -41,9 +50,9 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     );
 
     return res.json({ token, user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role } });
-  } catch (error) {
-    console.error('Login Error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+  } catch (error: any) {
+    console.error('Login Error details:', error?.message || error);
+    return res.status(500).json({ error: 'Internal server error', details: error?.message });
   }
 };
 
