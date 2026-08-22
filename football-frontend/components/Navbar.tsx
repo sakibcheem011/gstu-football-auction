@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { LogOut, MonitorPlay, Settings, UserCircle, LogIn, Trophy, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { ThemeToggle } from './ThemeToggle';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -39,7 +40,7 @@ export default function Navbar() {
     { name: 'Players', href: '/players', icon: UserCircle }
   ];
 
-  if (!token || (role !== 'SUPER_ADMIN' && role !== 'PODIUM_ADMIN')) {
+  if (!token || (role !== 'SUPER_ADMIN' && role !== 'PODIUM_ADMIN' && role !== 'TEAM_MANAGER')) {
     navLinks.push({ name: 'Player Draft', href: '/register', icon: UserCircle });
     navLinks.push({ name: 'Franchise', href: '/manager-registration', icon: Shield });
   }
@@ -55,56 +56,66 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 pt-4 px-4 sm:px-6">
+    <header className="sticky top-0 z-50 pt-6 px-6 md:px-12">
       <motion.nav 
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="max-w-6xl mx-auto glass-panel rounded-2xl px-5 py-3 border border-white/10 flex items-center justify-between shadow-2xl"
+        className="max-w-screen-2xl mx-auto flex items-center justify-between"
       >
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center text-gold group-hover:scale-105 transition-transform">
+        {/* LOGO */}
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/10 flex items-center justify-center text-zinc-400 group-hover:scale-105 transition-transform">
             <Trophy size={16} strokeWidth={2.5} />
           </div>
-          <span className="font-display font-bold text-xl tracking-tight text-chalk">GSTU <span className="text-gold">LIGA</span></span>
+          <span className="font-display text-xl font-bold tracking-tight text-white">
+            GSTU<span className="text-zinc-400 ml-1">LIGA</span>
+          </span>
         </Link>
         
-        <div className="flex items-center gap-1.5 text-xs font-semibold text-chalkMuted">
+        {/* CENTER LINKS */}
+        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-white/80">
           {navLinks.map((link) => {
-            const Icon = link.icon;
             const isActive = pathname === link.href;
             return (
               <Link 
                 key={link.href} 
                 href={link.href} 
-                className={`relative px-3.5 py-2 rounded-xl transition-all duration-200 flex items-center gap-2 ${
-                  isActive ? 'text-chalk font-bold' : 'text-chalkMuted hover:text-chalk hover:bg-white/5'
-                }`}
+                className={`transition-colors ${isActive ? 'text-white font-bold' : 'hover:text-white'}`}
               >
-                <Icon size={15} className={isActive ? "text-gold" : "opacity-70"} />
-                <span>{link.name}</span>
-                {isActive && (
-                  <motion.div
-                    layoutId="activeNavPill"
-                    className="absolute inset-0 bg-white/10 border border-white/10 rounded-xl -z-10"
-                    transition={{ type: "spring", stiffness: 400, damping: 35 }}
-                  />
-                )}
+                {link.name}
               </Link>
             );
           })}
-          
+        </div>
+        
+        {/* RIGHT ACTIONS */}
+        <div className="flex items-center gap-4">
           {token ? (
-            <button 
-              onClick={logout} 
-              className="ml-2 flex items-center gap-1.5 text-xs text-danger/80 hover:text-danger hover:bg-danger/10 px-3 py-2 rounded-xl transition-all font-semibold"
-            >
-              <LogOut size={15} /> <span className="hidden sm:inline">Logout</span>
-            </button>
+            <>
+              {role === 'TEAM_MANAGER' && (
+                <Link href="/manager" className="hidden sm:flex px-5 py-2 bg-white text-black rounded-lg text-sm font-semibold items-center gap-2 hover:bg-zinc-200 transition">
+                  Manager Console
+                </Link>
+              )}
+              {(role === 'SUPER_ADMIN' || role === 'PODIUM_ADMIN') && (
+                <Link href="/podium" className="hidden sm:flex px-5 py-2 bg-white/20 text-white rounded-lg text-sm font-semibold items-center gap-2 hover:bg-white/20 transition">
+                  <span className="w-2 h-2 rounded-full bg-danger animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
+                  Auction Live
+                </Link>
+              )}
+              <button 
+                onClick={logout} 
+                className="text-zinc-400 hover:text-white transition p-2"
+                title="Logout"
+              >
+                <LogOut size={18} />
+              </button>
+            </>
           ) : (
             <Link 
               href="/login" 
-              className="ml-2 px-4 py-2 bg-gold hover:bg-yellow-400 text-ink rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(244,196,83,0.2)]"
+              className="flex px-5 py-2 bg-white/20 text-white rounded-lg text-sm font-semibold items-center gap-2 hover:bg-white/20 transition shadow-lg shadow-blue-500/20"
             >
               Login
             </Link>

@@ -76,10 +76,10 @@ export default function AdminAuctionDashboard() {
       
       newSocket.on('manager_passed', (data: { teamId: string, teamName: string }) => {
         toast.custom((t) => (
-          <div className="bg-ink border-2 border-danger text-white p-4 rounded-xl shadow-2xl flex items-center gap-4">
-            <XOctagon className="text-danger" size={24} />
+          <div className="bg-ink border-2 border-zinc-700 text-white p-4 rounded-xl shadow-2xl flex items-center gap-4">
+            <XOctagon className="text-zinc-400" size={24} />
             <div>
-              <div className="font-bold uppercase tracking-widest text-sm text-danger">{data.teamName}</div>
+              <div className="font-bold uppercase tracking-widest text-sm text-zinc-400">{data.teamName}</div>
               <div className="text-xs text-chalkMuted">Has passed on the current player</div>
             </div>
           </div>
@@ -158,7 +158,7 @@ export default function AdminAuctionDashboard() {
 
   if (!token) return (
     <div className="flex-1 flex flex-col items-center justify-center p-10 font-sans text-chalk relative overflow-hidden bg-ink">
-      <h1 className="text-4xl font-display text-danger mb-4 tracking-widest uppercase">ACCESS DENIED</h1>
+      <h1 className="text-4xl font-display text-zinc-400 mb-4 tracking-widest uppercase">ACCESS DENIED</h1>
       <p className="text-chalkMuted">Please login as Super Admin to access the Auctioneer Console.</p>
     </div>
   );
@@ -169,19 +169,26 @@ export default function AdminAuctionDashboard() {
     <div className="flex-1 p-6 md:p-10 text-chalk font-body relative z-0 flex flex-col">
       <div className={`absolute top-0 left-0 w-full h-96 transition-colors duration-1000 -z-10 ${isActive ? 'bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-900/10 via-ink to-ink' : 'bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gold/5 via-ink to-ink'}`} />
 
-      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col">
+      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col pt-4">
+        <div className="flex justify-end mb-4">
+          <Link href="/admin">
+            <button className="px-6 py-2.5 bg-white/10 text-white rounded-xl hover:bg-white/20 font-bold transition text-sm">
+              Back to Admin
+            </button>
+          </Link>
+        </div>
         {/* Header */}
         <div className="bg-panel rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-center mb-8 gap-6 border border-white/10 shadow-2xl">
           <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border border-gold/20">
-              <Activity className="text-gold" size={28} />
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border border-white/20">
+              <Activity className="text-white" size={28} />
             </div>
             <div>
               <h1 className="font-display text-3xl md:text-4xl text-white tracking-wide flex items-center gap-3">
                 Auctioneer Console
               </h1>
-              <p className="text-chalkMuted mt-1 tracking-wider uppercase text-xs font-semibold flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)] animate-pulse" /> Live Broadcast Control
+              <p className="text-danger mt-1 tracking-wider uppercase text-xs font-semibold flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-danger animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]" /> Live Broadcast Control
               </p>
             </div>
           </div>
@@ -192,7 +199,7 @@ export default function AdminAuctionDashboard() {
               whileTap={{ scale: isActive ? 0.98 : 1 }}
               onClick={sellPlayer} 
               disabled={!isActive}
-              className={`px-8 py-3.5 rounded-xl font-bold transition-all uppercase tracking-widest flex items-center gap-2 text-sm ${isActive ? 'bg-gold text-ink shadow-[0_4px_20px_rgba(244,196,83,0.3)] hover:bg-yellow-400 cursor-pointer' : 'bg-white/5 text-chalkMuted cursor-not-allowed border border-white/5'}`}
+              className={`px-8 py-3.5 rounded-xl font-bold transition-all uppercase tracking-widest flex items-center gap-2 text-sm ${isActive ? 'bg-white text-black text-ink shadow-[0_4px_20px_rgba(244,196,83,0.3)] hover:bg-zinc-200 hover:text-black cursor-pointer' : 'bg-white/5 text-chalkMuted cursor-not-allowed border border-white/5'}`}
             >
               <Gavel size={18} /> Final Sale
             </motion.button>
@@ -201,7 +208,7 @@ export default function AdminAuctionDashboard() {
               whileTap={{ scale: isActive ? 0.98 : 1 }}
               onClick={markUnsold} 
               disabled={!isActive}
-              className={`px-6 py-3.5 rounded-xl font-bold transition-all uppercase tracking-widest flex items-center gap-2 text-sm ${isActive ? 'bg-panel border border-danger text-danger hover:bg-danger/10 shadow-[0_4px_20px_rgba(228,72,59,0.15)] cursor-pointer' : 'bg-white/5 text-chalkMuted border border-white/5 cursor-not-allowed'}`}
+              className={`px-6 py-3.5 rounded-xl font-bold transition-all uppercase tracking-widest flex items-center gap-2 text-sm ${isActive ? 'bg-panel border border-zinc-700 text-zinc-400 hover:bg-white/5 shadow-[0_4px_20px_rgba(228,72,59,0.15)] cursor-pointer' : 'bg-white/5 text-chalkMuted border border-white/5 cursor-not-allowed'}`}
             >
               <XOctagon size={18} /> Mark Unsold
             </motion.button>
@@ -223,7 +230,7 @@ export default function AdminAuctionDashboard() {
             <div className="lg:col-span-8 bg-panel p-8 md:p-12 rounded-3xl border border-white/10 flex flex-col items-center relative overflow-hidden shadow-2xl">
               <div className="absolute top-0 right-0 p-6 flex gap-3">
                 <div className="bg-ink/80 backdrop-blur-md px-4 py-1.5 rounded-full font-display text-xs tracking-widest uppercase border border-white/10 text-chalk flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full ${auctionState.status === 'ACTIVE' ? 'bg-emerald-500' : 'bg-gold'}`} />
+                  <span className={`w-2 h-2 rounded-full ${auctionState.status === 'ACTIVE' ? 'bg-white' : 'bg-white text-black'}`} />
                   {auctionState.status}
                 </div>
               </div>
@@ -232,20 +239,20 @@ export default function AdminAuctionDashboard() {
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: 'spring', stiffness: 200, damping: 20 }}
-                className="w-56 h-56 rounded-full p-2 border-2 border-gold/30 mb-8 bg-ink/50 relative group"
+                className="w-56 h-56 rounded-full p-2 border-2 border-white/20 mb-8 bg-ink/50 relative group"
               >
-                <div className="absolute inset-0 rounded-full border-t-2 border-gold animate-[spin_4s_linear_infinite]" />
+                <div className="absolute inset-0 rounded-full border-t-2 border-white animate-[spin_4s_linear_infinite]" />
                 <img src={auctionState.activePlayer.imageUrl} alt={auctionState.activePlayer.name} className="w-full h-full rounded-full object-cover shadow-2xl" />
-                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-gold text-ink font-bold px-5 py-1.5 rounded-full text-xs uppercase tracking-widest shadow-lg">
+                <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-white text-black text-ink font-bold px-5 py-1.5 rounded-full text-xs uppercase tracking-widest shadow-lg">
                   {auctionState.activePlayer.positions?.sort((a: any, b: any) => (b.isPrimary ? 1 : 0) - (a.isPrimary ? 1 : 0)).map((p: any) => `${p.position}${p.isPrimary ? '' : ' (S)'}`).join(', ') || 'N/A'}
                 </div>
               </motion.div>
               
               <div className="text-center mb-10">
-                <h2 className="text-5xl md:text-6xl font-display text-white tracking-wide mb-3">{auctionState.activePlayer.name}</h2>
+                <h2 className="text-3xl sm:text-5xl md:text-6xl font-display text-white tracking-wide mb-3">{auctionState.activePlayer.name}</h2>
                 <div className="flex items-center justify-center gap-3">
                   {auctionState.activePlayer.category && (
-                    <span className="bg-white/5 text-gold border border-white/10 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider">
+                    <span className="bg-white/5 text-white border border-white/10 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wider">
                       {auctionState.activePlayer.category.name}
                     </span>
                   )}
@@ -257,25 +264,25 @@ export default function AdminAuctionDashboard() {
 
               <div className="w-full grid grid-cols-2 gap-4">
                 <div className="bg-ink border border-white/5 rounded-2xl p-8 flex flex-col items-center justify-center relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-gold/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                   <span className="text-xs uppercase tracking-widest text-chalkMuted mb-2 font-semibold">Current Bid</span>
                   <div className="flex items-end gap-2">
-                    <span className="text-sm font-bold text-gold mb-2">TK</span>
+                    <span className="text-sm font-bold text-white mb-2">TK</span>
                     <span className="text-5xl font-display text-white tracking-tight">{auctionState.currentBid?.toLocaleString() || 0}</span>
                   </div>
-                  <span className="text-sm uppercase tracking-wider text-gold mt-3 font-bold flex items-center gap-1 bg-gold/10 px-3 py-1 rounded-full">
+                  <span className="text-sm uppercase tracking-wider text-white mt-3 font-bold flex items-center gap-1 bg-white/10 px-3 py-1 rounded-full">
                     {auctionState.bidHistory?.[0]?.teamName || 'NO BIDS YET'}
                   </span>
                 </div>
                 
-                <div className={`bg-ink border rounded-2xl p-8 flex flex-col items-center justify-center transition-all duration-300 relative overflow-hidden ${auctionState.timer <= 5 ? 'border-danger/30 bg-danger/5' : 'border-white/5'}`}>
-                  {auctionState.timer <= 5 && <div className="absolute inset-0 bg-danger/10 animate-pulse" />}
+                <div className={`bg-ink border rounded-2xl p-8 flex flex-col items-center justify-center transition-all duration-300 relative overflow-hidden ${auctionState.timer <= 5 ? 'border-white/10 bg-white/5' : 'border-white/5'}`}>
+                  {auctionState.timer <= 5 && <div className="absolute inset-0 bg-white/5 animate-pulse" />}
                   <span className="text-xs uppercase tracking-widest text-chalkMuted mb-2 font-semibold z-10">Time Remaining</span>
                   <div className="flex items-end gap-1 z-10">
-                    <span className={`text-6xl font-display tracking-tight tabular-nums ${auctionState.timer <= 5 ? 'text-danger' : 'text-white'}`}>
+                    <span className={`text-6xl font-display tracking-tight tabular-nums ${auctionState.timer <= 5 ? 'text-zinc-400' : 'text-white'}`}>
                       {auctionState.timer}
                     </span>
-                    <span className={`text-xl font-bold mb-2 ${auctionState.timer <= 5 ? 'text-danger' : 'text-chalkMuted'}`}>s</span>
+                    <span className={`text-xl font-bold mb-2 ${auctionState.timer <= 5 ? 'text-zinc-400' : 'text-chalkMuted'}`}>s</span>
                   </div>
                 </div>
               </div>
@@ -295,7 +302,7 @@ export default function AdminAuctionDashboard() {
                       <Pause size={16} /> Pause
                     </button>
                   ) : (
-                    <button onClick={() => socket?.emit('podium_resume')} className="py-3.5 bg-gold hover:bg-yellow-400 text-ink rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all">
+                    <button onClick={() => socket?.emit('podium_resume')} className="py-3.5 bg-white text-black hover:bg-zinc-200 hover:text-black text-ink rounded-xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 transition-all">
                       <Play size={16} /> Resume
                     </button>
                   )}
@@ -309,13 +316,13 @@ export default function AdminAuctionDashboard() {
 
               {/* Admin Override */}
               <div className="bg-panel p-6 rounded-3xl border border-white/10 shadow-xl">
-                <h3 className="text-xs uppercase tracking-widest font-bold text-danger mb-4 flex items-center gap-2">
+                <h3 className="text-xs uppercase tracking-widest font-bold text-zinc-400 mb-4 flex items-center gap-2">
                   <RotateCcw size={16} /> Admin Override
                 </h3>
                 
                 <button 
                   onClick={() => socket?.emit('podium_rollback_bid')}
-                  className="w-full py-3.5 bg-danger/10 text-danger hover:bg-danger/20 border border-danger/20 rounded-xl font-bold uppercase text-xs tracking-widest flex items-center justify-center gap-2 transition-all"
+                  className="w-full py-3.5 bg-white/5 text-zinc-400 hover:bg-white/5 border border-white/10 rounded-xl font-bold uppercase text-xs tracking-widest flex items-center justify-center gap-2 transition-all"
                 >
                   <RotateCcw size={16} /> Undo Last Bid
                 </button>
@@ -333,10 +340,10 @@ export default function AdminAuctionDashboard() {
                         key={`${bid.teamId}-${bid.amount}-${index}`}
                         initial={{ opacity: 0, y: -20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        className={`p-4 rounded-xl border ${index === 0 ? 'bg-gold/10 border-gold/30' : 'bg-ink border-white/5'}`}
+                        className={`p-4 rounded-xl border ${index === 0 ? 'bg-white/10 border-white/20' : 'bg-ink border-white/5'}`}
                       >
                         <div className="flex justify-between items-center">
-                          <span className={`text-sm font-bold uppercase tracking-wider ${index === 0 ? 'text-gold' : 'text-chalk'}`}>
+                          <span className={`text-sm font-bold uppercase tracking-wider ${index === 0 ? 'text-white' : 'text-chalk'}`}>
                             {bid.teamName}
                           </span>
                           <span className={`font-display tracking-wider ${index === 0 ? 'text-white' : 'text-chalkMuted'}`}>
@@ -407,7 +414,7 @@ export default function AdminAuctionDashboard() {
               </button>
               
               <div className="text-center mb-6">
-                <div className="w-20 h-20 mx-auto rounded-full bg-ink border-2 border-gold/30 p-1 mb-4">
+                <div className="w-20 h-20 mx-auto rounded-full bg-ink border-2 border-white/20 p-1 mb-4">
                   <img src={selectedForPodium.imageUrl} alt={selectedForPodium.name} className="w-full h-full rounded-full object-cover" />
                 </div>
                 <h2 className="text-2xl font-display text-white mb-1 tracking-wide">{selectedForPodium.name}</h2>
@@ -416,7 +423,7 @@ export default function AdminAuctionDashboard() {
               
               <div className="bg-ink rounded-2xl p-6 border border-white/5 mb-6">
                 <label className="text-[10px] uppercase tracking-widest font-bold text-chalkMuted mb-4 flex items-center justify-center gap-2">
-                  <Clock size={12} /> Set Timer {config?.timerLocked && <span className="text-gold">(Locked)</span>}
+                  <Clock size={12} /> Set Timer {config?.timerLocked && <span className="text-white">(Locked)</span>}
                 </label>
                 <div className="flex items-center justify-center gap-3">
                   <button 
@@ -429,7 +436,7 @@ export default function AdminAuctionDashboard() {
                     disabled={config?.timerLocked}
                     value={timerDuration || ''} 
                     onChange={(e) => setTimerDuration(parseInt(e.target.value) || 0)} 
-                    className="w-24 bg-transparent text-center text-4xl font-display text-gold tabular-nums outline-none hide-arrows disabled:opacity-50" 
+                    className="w-24 bg-transparent text-center text-4xl font-display text-white tabular-nums outline-none hide-arrows disabled:opacity-50" 
                   />
                   <button 
                     disabled={config?.timerLocked} 
@@ -441,7 +448,7 @@ export default function AdminAuctionDashboard() {
               
               <button 
                 onClick={() => startAuction(selectedForPodium.id, timerDuration)}
-                className="w-full py-4 bg-gold hover:bg-yellow-400 text-ink rounded-xl font-bold uppercase tracking-widest transition-all shadow-[0_4px_20px_rgba(244,196,83,0.3)] flex justify-center items-center gap-2"
+                className="w-full py-4 bg-white text-black hover:bg-zinc-200 hover:text-black text-ink rounded-xl font-bold uppercase tracking-widest transition-all shadow-[0_4px_20px_rgba(244,196,83,0.3)] flex justify-center items-center gap-2"
               >
                 <Play size={18} /> Confirm Start
               </button>

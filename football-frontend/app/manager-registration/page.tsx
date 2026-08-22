@@ -23,7 +23,16 @@ export default function ManagerRegistration() {
       .then(res => res.json())
       .then(data => setPhase(data.currentPhase))
       .catch(console.error);
-  }, []);
+
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        if (payload.role === 'TEAM_MANAGER') router.push('/manager');
+        if (payload.role === 'SUPER_ADMIN' || payload.role === 'PODIUM_ADMIN') router.push('/admin');
+      } catch (e) {}
+    }
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,8 +138,7 @@ export default function ManagerRegistration() {
                 placeholder="e.g. Red Dragons FC"
                 value={formData.desiredTeamName}
                 onChange={e => {
-                  const val = e.target.value.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
-                  setFormData({...formData, desiredTeamName: val});
+                  setFormData({...formData, desiredTeamName: e.target.value});
                 }}
               />
             </div>

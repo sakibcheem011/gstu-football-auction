@@ -91,10 +91,10 @@ export default function Register() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="max-w-3xl w-full mx-auto glass-panel p-6 sm:p-8 rounded-[2rem] border-gold/20 shadow-[0_0_50px_rgba(232,184,75,0.05)] relative overflow-hidden"
+        className="max-w-3xl w-full mx-auto glass-panel p-6 sm:p-8 rounded-[2rem] border-white/20  relative overflow-hidden"
       >
         <div className="absolute inset-0 bg-gradient-to-br from-gold/5 to-transparent pointer-events-none" />
-        <div className="absolute -right-20 -top-20 w-64 h-64 bg-gold/10 blur-[60px] pointer-events-none" />
+        <div className="absolute -right-20 -top-20 w-64 h-64 bg-white/10 blur-[60px] pointer-events-none" />
         
         <h1 className="font-display text-4xl md:text-5xl tracking-widest text-white mb-6 uppercase text-center relative z-10">
           PLAYER REGISTRATION
@@ -104,10 +104,10 @@ export default function Register() {
           <div className="text-center py-20 text-chalkMuted animate-pulse font-bold tracking-widest uppercase">Initializing...</div>
         ) : phase !== 'REGISTRATION' ? (
           <div className="text-center py-10 relative z-10">
-            <h2 className="font-display text-3xl tracking-widest text-danger mb-4">REGISTRATION CLOSED</h2>
+            <h2 className="font-display text-3xl tracking-widest text-zinc-400 mb-4">REGISTRATION CLOSED</h2>
             <p className="text-chalkMuted max-w-md mx-auto leading-relaxed">
               Player registration is only open during the <strong className="text-white">REGISTRATION</strong> phase. 
-              The system is currently in the <strong className="text-gold">{phase}</strong> phase. 
+              The system is currently in the <strong className="text-white">{phase}</strong> phase. 
               <br/><br/>
               Please check back later or contact the organizers.
             </p>
@@ -184,11 +184,11 @@ export default function Register() {
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
                 onChange={e => setFile(e.target.files?.[0] || null)} 
               />
-              <div className={`w-full border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center transition-colors ${file ? 'border-gold bg-gold/5' : 'border-white/20 bg-ink/30 group-hover:border-white/40'}`}>
+              <div className={`w-full border-2 border-dashed rounded-xl p-4 flex flex-col items-center justify-center transition-colors ${file ? 'border-white bg-white/10' : 'border-white/20 bg-ink/30 group-hover:border-white/40'}`}>
                 {file ? (
                   <>
-                    <CheckCircle2 size={32} className="text-gold mb-2" />
-                    <span className="text-gold font-bold">{file.name}</span>
+                    <CheckCircle2 size={32} className="text-white mb-2" />
+                    <span className="text-white font-bold">{file.name}</span>
                   </>
                 ) : (
                   <>
@@ -205,7 +205,7 @@ export default function Register() {
             whileTap={{ scale: 0.98 }}
             disabled={loading} 
             type="submit" 
-            className="w-full mt-4 py-3.5 bg-gold text-ink text-lg font-display tracking-widest rounded-xl transition shadow-[0_0_20px_rgba(232,184,75,0.3)] hover:shadow-[0_0_40px_rgba(232,184,75,0.5)] disabled:opacity-50 flex justify-center items-center gap-2"
+            className="w-full mt-4 py-3.5 bg-white text-black text-ink text-lg font-display tracking-widest rounded-xl transition  hover: disabled:opacity-50 flex justify-center items-center gap-2"
           >
             {loading ? 'TRANSMITTING...' : 'REGISTER FOR DRAFT'}
           </motion.button>

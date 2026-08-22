@@ -228,3 +228,47 @@ export const toggleWishlist = async (req: Request, res: Response): Promise<any> 
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+export const uploadTeamLogo = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const user = (req as any).user;
+    const id = req.params.id as string;
+    
+    if (!user) return res.status(403).json({ error: 'Unauthorized' });
+    if (user.role !== Role.SUPER_ADMIN) {
+      const team = await prisma.team.findUnique({ where: { id } });
+      if (!team || team.managerId !== user.id) {
+        return res.status(403).json({ error: 'You are not authorized to update this team' });
+      }
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'Image file is required' });
+    }
+
+    const { uploadFromBuffer } = require('../../lib/cloudinary');
+    const uploadResult = await uploadFromBuffer(req.file.buffer, 'gstu_liga_teams');
+    const logoUrl = uploadResult.secure_url;
+    const logoPublicId = uploadResult.public_id;
+
+    const existingTeam = await prisma.team.findUnique({ where: { id } });
+    if (existingTeam?.logoPublicId) {
+      const cloudinary = require('../../lib/cloudinary').default;
+      await cloudinary.uploader.destroy(existingTeam.logoPublicId).catch(console.error);
+    }
+
+    const updatedTeam = await prisma.team.update({
+      where: { id },
+      data: { logoUrl, logoPublicId }
+    });
+
+    ioInstance.emit('data_updated', { entity: 'teams' });
+    return res.json(updatedTeam);
+  } catch (error: any) {
+    console.error('UPLOAD TEAM LOGO ERROR:', error);
+    if (error.http_code === 400 && error.message) {
+      return res.status(400).json({ error: `Image Upload Error: ${error.message}` });
+    }
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};

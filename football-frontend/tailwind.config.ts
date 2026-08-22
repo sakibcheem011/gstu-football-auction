@@ -8,19 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
-        ink: '#14161F',
-        panel: '#1B1E29',
-        panelLight: '#242837',
-        chalk: '#ECEAE3',
-        chalkMuted: '#8B8FA3',
-        gold: '#E8B84B',
-        silver: '#A8AEB8',
-        platinum: '#C9D3DC',
-        danger: '#E4483B',
-      },
+      colors: {},
       fontFamily: {
-        display: ['var(--font-bebas-neue)', 'sans-serif'],
+        display: ['var(--font-jakarta)', 'sans-serif'],
         body: ['var(--font-inter)', 'sans-serif'],
       },
     },

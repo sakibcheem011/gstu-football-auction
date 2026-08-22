@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { io, Socket } from 'socket.io-client';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Users, DollarSign, Target, Shield, Loader2, Settings, Trophy, MonitorPlay } from 'lucide-react';
+import { Users, DollarSign, Target, Shield, Loader2, Settings, Trophy, MonitorPlay, Wallet, Activity, Zap, BarChart3 } from 'lucide-react';
 
 export default function SuperAdminDashboard() {
   const router = useRouter();
@@ -75,7 +75,7 @@ export default function SuperAdminDashboard() {
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center text-gold">
+      <div className="flex-1 flex items-center justify-center text-white">
         <Loader2 className="animate-spin mr-3" size={32} />
         <span className="font-display tracking-widest text-2xl">LOADING COMMAND CENTER...</span>
       </div>
@@ -94,44 +94,64 @@ export default function SuperAdminDashboard() {
       <div className="max-w-6xl mx-auto w-full flex-1 flex flex-col">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="font-display text-4xl text-white tracking-[0.2em] mb-1">DASHBOARD</h1>
-            <p className="text-chalkMuted text-sm font-bold tracking-widest uppercase">Overview & Analytics</p>
+            <h1 className="font-display text-3xl text-white font-bold tracking-tight mb-1">Dashboard</h1>
+            <p className="text-zinc-500 text-sm font-semibold tracking-wider uppercase">Overview & Analytics</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-          <div className="glass-panel rounded-2xl p-6 relative overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <DollarSign className="text-gold mb-4" size={32} />
-            <div className="text-sm uppercase tracking-widest text-chalkMuted font-bold mb-1">Total Market Spend</div>
-            <div className="text-4xl font-display text-white tabular">TK {totalSpent.toLocaleString()}</div>
-          </div>
-          
-          <div className="glass-panel rounded-2xl p-6 relative overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <Users className="text-cyan-400 mb-4" size={32} />
-            <div className="text-sm uppercase tracking-widest text-chalkMuted font-bold mb-1">Players in Queue</div>
-            <div className="text-4xl font-display text-white tabular">{totalPlayers}</div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
+          {/* Box 1: System Phase */}
+          <div className="glass-panel p-8 col-span-1 md:col-span-2 md:row-span-2 relative overflow-hidden group border border-zinc-800/80 bg-zinc-900/40">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4 pointer-events-none transition-transform duration-700 group-hover:scale-110" />
+            
+            <div className="relative z-10 flex flex-col h-full justify-between">
+              <div className="flex justify-between items-start mb-12">
+                <div className="text-sm uppercase tracking-widest text-zinc-500 font-bold mb-2 flex items-center gap-2">
+                   Current Phase
+                </div>
+              </div>
+              
+              <div>
+                <div className="text-4xl lg:text-5xl font-display text-white font-bold tracking-tight">
+                  {config?.currentPhase?.replace('_', ' ') || 'LOADING'}
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="glass-panel rounded-2xl p-6 relative overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-br from-silver/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <Shield className="text-silver mb-4" size={32} />
-            <div className="text-sm uppercase tracking-widest text-chalkMuted font-bold mb-1">Active Franchises</div>
-            <div className="text-4xl font-display text-white tabular">{teams.length}</div>
+          {/* Box 2: Total Market Spend */}
+          <div className="glass-panel p-8 col-span-1 md:col-span-2 relative overflow-hidden group hover:border-zinc-700 transition-all duration-300 bg-zinc-900/40">
+            <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/0 via-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+            <div className="flex items-center justify-between relative z-10">
+              <div>
+                <div className="text-sm uppercase tracking-widest text-zinc-500 font-bold mb-2 flex items-center gap-2">
+                  Total Market Spend
+                </div>
+                <div className="text-3xl font-display text-white font-bold tabular-nums tracking-tight">TK {totalSpent.toLocaleString()}</div>
+              </div>
+            </div>
           </div>
-          
-          <div className="glass-panel rounded-2xl p-6 relative overflow-hidden group border-danger/30">
-            <div className="absolute inset-0 bg-gradient-to-br from-danger/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-            <Target className="text-danger mb-4" size={32} />
-            <div className="text-sm uppercase tracking-widest text-chalkMuted font-bold mb-1">System Phase</div>
-            <div className="text-2xl font-display text-danger tabular mt-2">{config?.currentPhase || 'LOADING'}</div>
+
+          {/* Box 3: Players in Queue */}
+          <div className="glass-panel p-6 col-span-1 flex flex-col justify-center group hover:border-zinc-700 transition-all duration-300 relative overflow-hidden bg-zinc-900/40">
+            <div>
+              <div className="text-xs uppercase tracking-widest text-zinc-500 font-bold mb-1">Players Queue</div>
+              <div className="text-3xl font-display text-white font-bold tabular-nums">{totalPlayers}</div>
+            </div>
+          </div>
+
+          {/* Box 4: Active Franchises */}
+          <div className="glass-panel p-6 col-span-1 flex flex-col justify-center group hover:border-zinc-700 transition-all duration-300 relative overflow-hidden bg-zinc-900/40">
+            <div>
+              <div className="text-xs uppercase tracking-widest text-zinc-500 font-bold mb-1">Franchises</div>
+              <div className="text-3xl font-display text-white font-bold tabular-nums">{teams.length}</div>
+            </div>
           </div>
         </div>
 
 
-        <div className="glass-panel rounded-[2rem] p-8 flex-1 mb-10">
-          <h2 className="text-lg uppercase tracking-[0.2em] font-bold text-chalk mb-6 border-b border-white/10 pb-4">Franchise Economy</h2>
+        <div className="glass-panel p-8 flex-1 mb-10">
+          <h2 className="text-xl font-display font-bold text-white mb-6 border-b border-zinc-800 pb-4">Franchise Economy</h2>
           
           {safeTeams.length === 0 ? (
             <div className="text-center py-10">
@@ -149,20 +169,25 @@ export default function SuperAdminDashboard() {
               const colorCode = TEAM_COLORS[idx % TEAM_COLORS.length];
               const squadSize = team.players?.length || 0;
               return (
-                <div key={team.id} className="bg-white/5 border border-white/10 rounded-2xl p-6 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-32 h-32 blur-[40px] opacity-20 pointer-events-none" style={{ background: colorCode }} />
+                <div key={team.id} className="bg-zinc-800/30 border border-zinc-700/50 rounded-xl p-5 relative overflow-hidden">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-3 h-3 rounded-full" style={{ background: colorCode }} />
-                    <h3 className="text-xl font-bold text-white">{team.name}</h3>
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-zinc-800/80 border border-zinc-700/50 overflow-hidden shrink-0">
+                      {team.logoUrl ? (
+                        <img src={team.logoUrl} alt={team.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <Shield className="text-zinc-500 w-4 h-4" />
+                      )}
+                    </div>
+                    <h3 className="text-lg font-bold text-zinc-200">{team.name}</h3>
                   </div>
                   <div className="flex justify-between items-end">
                     <div>
-                      <div className="text-xs text-chalkMuted uppercase tracking-widest mb-1">Treasury</div>
-                      <div className="text-2xl font-display tabular tracking-wider" style={{ color: colorCode }}>TK {team.remainingBudget.toLocaleString()}</div>
+                      <div className="text-xs text-zinc-500 uppercase tracking-widest font-semibold mb-1">Treasury</div>
+                      <div className="text-xl font-display tabular-nums tracking-wider text-white">TK {team.remainingBudget.toLocaleString()}</div>
                     </div>
                     <div className="text-right">
-                      <div className="text-xs text-chalkMuted uppercase tracking-widest mb-1">Squad</div>
-                      <div className="text-xl font-bold tabular text-white">{squadSize} / 20</div>
+                      <div className="text-xs text-zinc-500 uppercase tracking-widest font-semibold mb-1">Squad</div>
+                      <div className="text-lg font-bold tabular-nums text-zinc-400">{squadSize} / 20</div>
                     </div>
                   </div>
                 </div>

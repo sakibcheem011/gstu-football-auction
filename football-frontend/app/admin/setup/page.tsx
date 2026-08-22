@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { Settings, Shield, Users, CheckCircle, ArrowLeft, BadgeCheck, Activity, DollarSign, Plus, UserPlus, Database, Trash2, Edit2, X } from 'lucide-react';
+import { Settings, Shield, Users, CheckCircle, ArrowLeft, BadgeCheck, Activity, DollarSign, Plus, UserPlus, Database, Trash2, Edit2, X, Image as ImageIcon } from 'lucide-react';
 import { io } from 'socket.io-client';
 import PlayerDirectory from '../../../components/PlayerDirectory';
 import Dropdown from '../../../components/Dropdown';
@@ -80,6 +80,10 @@ export default function SuperAdminSetup() {
 
   // Confirmation Modal State
   const [confirmDialog, setConfirmDialog] = useState<{ isOpen: boolean, message: string, onConfirm: () => void } | null>(null);
+
+  // Logo Upload Modal State
+  const [logoDialog, setLogoDialog] = useState<{ isOpen: boolean, team: any } | null>(null);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
 
   // Approve Manager Modal State
   const [approveDialog, setApproveDialog] = useState<{ isOpen: boolean, manager: any } | null>(null);
@@ -318,6 +322,31 @@ export default function SuperAdminSetup() {
     });
   };
 
+  const uploadLogo = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!logoDialog || !logoFile) return;
+
+    const formData = new FormData();
+    formData.append('image', logoFile);
+
+    const toastId = toast.loading('Uploading logo...');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams/${logoDialog.team.id}/logo`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData
+    });
+
+    if (res.ok) {
+      toast.success('Logo uploaded successfully!', { id: toastId });
+      setLogoDialog(null);
+      setLogoFile(null);
+      fetchData(token!);
+    } else {
+      const err = await res.json();
+      toast.error(err.error || 'Failed to upload logo', { id: toastId });
+    }
+  };
+
   const createStaffAccount = async (e: React.FormEvent) => {
     e.preventDefault();
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/staff`, {
@@ -506,36 +535,75 @@ export default function SuperAdminSetup() {
               <p className="text-xs text-chalkMuted uppercase tracking-widest mb-6">Update franchise and manager info</p>
               
               <form onSubmit={updateManager} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Team Name</label>
+                    <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Team Name</label>
                     <input type="text" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={editTeamName} onChange={e => setEditTeamName(e.target.value)} />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Purse Budget (TK )</label>
+                    <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Purse Budget (TK )</label>
                     <input type="number" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={editTeamPurse} onChange={e => setEditTeamPurse(e.target.value)} />
                   </div>
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Manager Name</label>
+                  <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Manager Name</label>
                   <input type="text" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={editManagerName} onChange={e => setEditManagerName(e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Email / Login ID</label>
+                  <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Email / Login ID</label>
                   <input type="email" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={editManagerEmail} onChange={e => setEditManagerEmail(e.target.value)} />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Phone Number (Optional)</label>
+                  <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Phone Number (Optional)</label>
                   <input type="text" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={editManagerPhone} onChange={e => setEditManagerPhone(e.target.value)} placeholder="01XXXXXXXXX" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">New Password (Optional)</label>
+                  <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">New Password (Optional)</label>
                   <input type="password" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={editManagerPassword} onChange={e => setEditManagerPassword(e.target.value)} placeholder="Leave blank to keep current" />
                 </div>
                 <div className="pt-4">
-                  <button type="submit" className="w-full px-8 py-3.5 bg-gold hover:bg-yellow-400 text-ink rounded-xl font-bold uppercase tracking-widest transition-all shadow-lg shadow-gold/20">
+                  <button type="submit" className="w-full px-8 py-3.5 bg-white text-black hover:bg-zinc-200 hover:text-black text-ink rounded-xl font-bold uppercase tracking-widest transition-all shadow-lg">
                     Save Changes
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Logo Upload Modal */}
+      <AnimatePresence>
+        {logoDialog && (
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+          >
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-panel border border-white/10 rounded-3xl p-6 w-full max-w-sm shadow-2xl relative"
+            >
+              <button onClick={() => { setLogoDialog(null); setLogoFile(null); }} className="absolute top-6 right-6 text-chalkMuted hover:text-white transition">
+                <X size={24} />
+              </button>
+              
+              <h2 className="text-xl font-display text-white mb-2">Upload Logo for {logoDialog.team.name}</h2>
+              <p className="text-xs text-chalkMuted uppercase tracking-widest mb-6">Choose an image file</p>
+              
+              <form onSubmit={uploadLogo} className="space-y-4">
+                <div className="space-y-2">
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    required 
+                    onChange={e => setLogoFile(e.target.files?.[0] || null)}
+                    className="w-full text-sm text-chalkMuted file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-white/10 file:text-white hover:file:bg-white/20 transition cursor-pointer"
+                  />
+                </div>
+                <div className="pt-4">
+                  <button type="submit" className="w-full px-8 py-3.5 bg-white text-black hover:bg-white text-black text-ink rounded-xl font-bold uppercase tracking-widest transition-all shadow-lg">
+                    Upload
                   </button>
                 </div>
               </form>
@@ -584,13 +652,13 @@ export default function SuperAdminSetup() {
                   <div className="flex items-center gap-2">
                     <button 
                       onClick={() => setIsEditingPlayer(!isEditingPlayer)} 
-                      className={`px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors ${isEditingPlayer ? 'bg-white text-ink' : 'bg-white/5 hover:bg-white/10 text-chalk'}`}
+                      className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors ${isEditingPlayer ? 'bg-white text-ink' : 'bg-white/5 hover:bg-white/10 text-chalk'}`}
                     >
                       {isEditingPlayer ? 'Cancel Edit' : 'Edit Profile'}
                     </button>
                     <button 
                       onClick={() => deletePlayer(selectedPlayer.id)}
-                      className="px-4 py-2 bg-danger/10 hover:bg-danger/20 text-danger rounded-xl text-[10px] font-bold uppercase tracking-widest transition-colors flex items-center gap-1"
+                      className="px-4 py-2 bg-white/5 hover:bg-white/5 text-zinc-400 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center gap-1"
                     >
                       <Trash2 size={14} /> Delete
                     </button>
@@ -599,26 +667,26 @@ export default function SuperAdminSetup() {
 
                 {isEditingPlayer ? (
                   <form onSubmit={updatePlayerDetails} className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Full Name</label>
+                        <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Full Name</label>
                         <input type="text" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={editPlayerName} onChange={e => setEditPlayerName(e.target.value)} />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Student ID</label>
+                        <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Student ID</label>
                         <input type="text" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={editPlayerStudentId} onChange={e => setEditPlayerStudentId(e.target.value)} />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Session</label>
+                        <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Session</label>
                         <input type="text" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={editPlayerSessionId} onChange={e => setEditPlayerSessionId(e.target.value)} />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Jersey Name</label>
+                        <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Jersey Name</label>
                         <input type="text" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={editPlayerJerseyName} onChange={e => setEditPlayerJerseyName(e.target.value)} />
                       </div>
                     </div>
                     <div className="space-y-2 relative z-50">
-                      <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Player Category (Required for Auction)</label>
+                      <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Player Category (Required for Auction)</label>
                       <Dropdown
                         options={categories.map(c => ({
                           label: `${c.name} (Base: TK ${c.basePrice.toLocaleString()})`,
@@ -630,7 +698,7 @@ export default function SuperAdminSetup() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Playing Positions</label>
+                      <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Playing Positions</label>
                       <div className="flex flex-wrap gap-2">
                         {['GK', 'CB', 'LB', 'RB', 'CDM', 'CM', 'CAM', 'LW', 'RW', 'ST'].map(pos => {
                           const selectedPos = editPlayerPositions.find(p => p.position === pos);
@@ -641,7 +709,7 @@ export default function SuperAdminSetup() {
                               key={pos}
                               type="button"
                               onClick={() => togglePosition(pos)}
-                              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-colors border flex items-center gap-1 ${isSelected ? (isPrimary ? 'bg-gold text-ink border-gold' : 'bg-gold/20 text-gold border-gold/50') : 'bg-white/5 text-chalkMuted border-white/10 hover:border-white/30 hover:text-white'}`}
+                              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-colors border flex items-center gap-1 ${isSelected ? (isPrimary ? 'bg-white text-black text-ink border-white' : 'bg-white/10 text-white border-white/20') : 'bg-white/5 text-chalkMuted border-white/10 hover:border-white/30 hover:text-white'}`}
                             >
                               {pos}
                               {isSelected && (
@@ -655,22 +723,22 @@ export default function SuperAdminSetup() {
                       </div>
                     </div>
                     <div className="pt-2">
-                      <button type="submit" className="w-full px-8 py-3.5 bg-gold hover:bg-yellow-400 text-ink rounded-xl font-bold uppercase tracking-widest transition-all">
+                      <button type="submit" className="w-full px-8 py-3.5 bg-white text-black hover:bg-zinc-200 hover:text-black text-ink rounded-xl font-bold uppercase tracking-widest transition-all">
                         Save Changes
                       </button>
                     </div>
                   </form>
                 ) : (
                   <div className="space-y-6">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="bg-white/5 rounded-xl p-4">
-                        <div className="text-[10px] font-bold text-chalkMuted uppercase tracking-widest mb-1">Status</div>
-                        <div className={`text-sm font-bold uppercase tracking-widest ${selectedPlayer.status === 'SOLD' ? 'text-gold' : selectedPlayer.status === 'UNSOLD' ? 'text-cyan-400' : 'text-chalk'}`}>
+                        <div className="text-xs font-bold text-chalkMuted uppercase tracking-widest mb-1">Status</div>
+                        <div className={`text-sm font-bold uppercase tracking-widest ${selectedPlayer.status === 'SOLD' ? 'text-white' : selectedPlayer.status === 'UNSOLD' ? 'text-white' : 'text-chalk'}`}>
                           {selectedPlayer.status}
                         </div>
                       </div>
                       <div className="bg-white/5 rounded-xl p-4">
-                        <div className="text-[10px] font-bold text-chalkMuted uppercase tracking-widest mb-1">Team</div>
+                        <div className="text-xs font-bold text-chalkMuted uppercase tracking-widest mb-1">Team</div>
                         <div className="text-sm font-bold uppercase tracking-widest text-white">
                           {selectedPlayer.team ? selectedPlayer.team.name : 'None'}
                         </div>
@@ -683,14 +751,13 @@ export default function SuperAdminSetup() {
           </motion.div>
         )}
       </AnimatePresence>
-
       <div className="max-w-[1600px] mx-auto w-full flex-1 flex flex-col lg:flex-row gap-8 pb-10">
         
         {/* Sidebar Tabs */}
         <div className="w-full lg:w-64 shrink-0">
-          <h1 className="font-display text-4xl text-white tracking-[0.2em] mb-8 lg:mb-12">CONFIG HUB</h1>
+          <h1 className="font-display text-5xl text-white tracking-[0.2em] mb-8 lg:mb-12">CONFIG HUB</h1>
           
-          <div className="flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible gap-2 pb-4 lg:pb-0 scrollbar-hide sticky top-24">
+          <div className="flex flex-row lg:flex-col flex-wrap gap-2 pb-4 lg:pb-0 sticky top-24">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -700,7 +767,7 @@ export default function SuperAdminSetup() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-4 px-5 py-4 rounded-xl font-bold tracking-widest text-xs uppercase transition-all duration-300 shrink-0 text-left group ${
                     isActive 
-                      ? 'bg-gold text-ink shadow-[0_4px_20px_rgba(232,184,75,0.3)]' 
+                      ? 'bg-white text-black text-ink shadow-[0_4px_20px_rgba(232,184,75,0.3)]' 
                       : 'bg-panel text-chalkMuted hover:bg-white/10 hover:text-white border border-white/5'
                   }`}
                 >
@@ -717,182 +784,202 @@ export default function SuperAdminSetup() {
           <AnimatePresence mode="wait">
             
             {activeTab === 'config' && (
-              <motion.div key="config" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
+              
+              <motion.div key="config" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-6">
                 
-                <section className="bg-panel p-8 rounded-3xl border border-white/10 shadow-xl">
-                  <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-chalk mb-8 flex items-center gap-3">
-                    <Activity className="text-cyan-400" size={18} /> Tournament Pipeline
-                  </h2>
+                {/* 1. TOURNAMENT PIPELINE (MACRO CONTROL) */}
+                <section className="glass-panel p-8">
+                  <div className="flex items-center justify-between mb-8">
+                    <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-zinc-400 flex items-center gap-3">
+                      <Activity className="text-white" size={16} /> System Pipeline Status
+                    </h2>
+                    <div className="px-3 py-1 bg-white/10 rounded-full text-xs font-bold uppercase tracking-widest text-white border border-white/10">
+                      Live Control
+                    </div>
+                  </div>
                   
-                  <div className="relative flex justify-between items-center max-w-2xl mx-auto">
-                    {/* Background Line */}
-                    <div className="absolute top-1/2 left-0 w-full h-1 bg-white/10 -translate-y-1/2 z-0 rounded-full"></div>
+                  <div className="relative flex justify-between items-center max-w-3xl mx-auto py-4">
+                    <div className="absolute top-1/2 left-0 w-full h-px bg-white/10 -translate-y-1/2 z-0"></div>
                     
-                    {['SETUP', 'REGISTRATION', 'AUCTION'].map((phase, index) => {
+                    {['SETUP', 'REGISTRATION', 'AUCTION', 'TOURNAMENT'].map((phase, index) => {
                       const isCurrent = config?.currentPhase === phase;
-                      const isPast = ['SETUP', 'REGISTRATION', 'AUCTION'].indexOf(config?.currentPhase || 'SETUP') > index;
+                      const isPast = ['SETUP', 'REGISTRATION', 'AUCTION', 'TOURNAMENT'].indexOf(config?.currentPhase || 'SETUP') > index;
                       
                       return (
                         <div key={phase} className="relative z-10 flex flex-col items-center gap-4">
                           <button
                             onClick={() => updatePhase(phase)}
-                            className={`w-12 h-12 rounded-full flex items-center justify-center font-bold transition-all duration-300 shadow-xl
-                              ${isCurrent ? 'bg-cyan-500 text-ink ring-4 ring-cyan-500/30 scale-110' : 
-                                isPast ? 'bg-gold text-ink' : 'bg-ink border-2 border-white/20 text-chalk hover:border-gold/50'}`}
+                            className={`w-14 h-14 rounded-full flex items-center justify-center font-bold transition-all duration-300 shadow-xl
+                              ${isCurrent ? 'bg-white text-black ring-4 ring-white/20 scale-110' : 
+                                isPast ? 'bg-zinc-800 text-white border border-white/20' : 'bg-ink border border-white/10 text-zinc-600 hover:border-white/30'}`}
                           >
-                            {isPast ? <CheckCircle size={20} /> : index + 1}
+                            {isPast ? <CheckCircle size={24} /> : index + 1}
                           </button>
-                          <span className={`text-[10px] font-bold uppercase tracking-[0.2em] ${isCurrent ? 'text-cyan-400' : isPast ? 'text-gold' : 'text-chalkMuted'}`}>
+                          <span className={`text-xs font-bold uppercase tracking-[0.2em] ${isCurrent ? 'text-white' : isPast ? 'text-zinc-300' : 'text-zinc-600'}`}>
                             {phase}
                           </span>
                         </div>
                       );
                     })}
                   </div>
-                  
-                  <div className="mt-10 grid grid-cols-2 gap-4 max-w-lg mx-auto">
-                    <div className="bg-ink border border-white/5 rounded-xl p-4 shadow-lg text-center shadow-inner">
-                      <div className="text-[10px] uppercase tracking-widest text-chalkMuted font-bold mb-1">Min Roster Size</div>
-                      <div className="text-2xl font-bold text-white">{config?.minRosterSize || 15}</div>
-                    </div>
-                    <div className="bg-ink border border-white/5 rounded-xl p-4 shadow-lg text-center shadow-inner relative overflow-hidden group">
-                      <div className="absolute inset-0 bg-gradient-to-t from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                      <div className="text-[10px] uppercase tracking-widest text-chalkMuted font-bold mb-1 relative z-10">Max Roster Size</div>
-                      <div className="text-2xl font-bold text-cyan-400 relative z-10">{config?.maxRosterSize || 18}</div>
-                      <div className="text-[9px] text-chalkMuted mt-1 relative z-10">Dynamically Calculated</div>
-                    </div>
-                  </div>
                 </section>
 
-
-                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-                  <section className="bg-panel p-8 rounded-3xl border border-white/10 shadow-xl">
-                    <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-chalk mb-8">Player Categories (Tiers)</h2>
-                    <form onSubmit={createCategory} className="flex flex-wrap gap-4 mb-6">
-                      <input type="text" placeholder="Tier Name (e.g. Platinum)" required className="flex-1 min-w-[180px] bg-ink/50 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={catName} onChange={e => setCatName(e.target.value)} />
-                      <input type="number" placeholder="Base Price" required className="flex-1 sm:flex-none sm:w-32 min-w-[120px] bg-ink/50 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={catPrice} onChange={e => setCatPrice(e.target.value)} />
-                      <button type="submit" className="px-6 py-3 bg-gold hover:bg-yellow-400 text-ink rounded-xl font-bold text-xs uppercase tracking-widest whitespace-nowrap shrink-0 transition-colors">Add</button>
-                    </form>
-                    <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
-                      {categories.map(c => (
-                        <div key={c.id} className="flex justify-between items-center bg-white/5 p-4 rounded-xl">
-                          <div>
-                            <span className="font-bold text-white mr-4">{c.name}</span>
-                            <span className="text-cyan-400 font-semibold">TK {c.basePrice.toLocaleString()}</span>
+                {/* 2. CORE CONSTRAINTS (TIMER, BUDGET, ROSTER) */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  
+                  {/* Timer Settings */}
+                  <section className="glass-panel p-8 flex flex-col justify-between">
+                    <div>
+                      <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-zinc-400 mb-6 flex items-center gap-3">
+                        <Settings className="text-white" size={16} /> Auction Timer
+                      </h2>
+                      <form id="timerForm" onSubmit={updateTimerConfig} className="space-y-6">
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Base Duration (Sec)</label>
+                          <input 
+                            type="number" required 
+                            className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-white outline-none font-display text-xl" 
+                            value={defaultTimer} onChange={e => setDefaultTimer(parseInt(e.target.value) || 0)} 
+                          />
+                        </div>
+                        <label className="flex items-center gap-4 cursor-pointer group p-3 rounded-xl border border-white/5 hover:bg-white/5 transition-colors">
+                          <div className={`w-10 h-5 rounded-full transition-colors relative ${timerLocked ? 'bg-white' : 'bg-white/10'}`}>
+                            <div className={`absolute top-1 left-1 w-3 h-3 rounded-full bg-black transition-transform ${timerLocked ? 'translate-x-5' : 'bg-zinc-400'}`} />
                           </div>
-                          <button onClick={() => deleteCategory(c.id)} className="text-danger hover:text-red-400"><Trash2 size={16}/></button>
+                          <input type="checkbox" className="hidden" checked={timerLocked} onChange={e => setTimerLocked(e.target.checked)} />
+                          <div>
+                            <div className="font-bold text-white text-xs tracking-wide">Lock Controls</div>
+                            <div className="text-[9px] text-zinc-500 uppercase tracking-widest mt-0.5">Prevent podium edits</div>
+                          </div>
+                        </label>
+                      </form>
+                    </div>
+                    <button type="submit" form="timerForm" className="w-full mt-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl font-bold text-sm uppercase tracking-widest transition-colors border border-white/10">
+                      Save Timer
+                    </button>
+                  </section>
+
+                  {/* League Budget */}
+                  <section className="glass-panel p-8 flex flex-col justify-between">
+                    <div>
+                      <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-zinc-400 mb-6 flex items-center gap-3">
+                        <DollarSign className="text-white" size={16} /> Global Budget
+                      </h2>
+                      <form id="budgetForm" onSubmit={updateBudgetConfig} className="space-y-4">
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Standard Purse (TK)</label>
+                          <input 
+                            type="number" required 
+                            className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-white outline-none font-display text-2xl tracking-tight" 
+                            value={totalBudgetInput} onChange={e => setTotalBudgetInput(e.target.value)} 
+                          />
+                        </div>
+                        <p className="text-xs text-zinc-500 leading-relaxed">
+                          Dictates the starting treasury for all franchises and calculates dynamic bidding raise tiers.
+                        </p>
+                      </form>
+                    </div>
+                    <button type="submit" form="budgetForm" className="w-full mt-6 py-3 bg-white hover:bg-zinc-200 text-black rounded-xl font-bold text-sm uppercase tracking-widest transition-colors shadow-lg">
+                      Save Budget
+                    </button>
+                  </section>
+
+                  {/* Roster Size */}
+                  <section className="glass-panel p-8 flex flex-col justify-between">
+                    <div>
+                      <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-zinc-400 mb-6 flex items-center gap-3">
+                        <Users className="text-white" size={16} /> Roster Limits
+                      </h2>
+                      <div className="space-y-4">
+                        <div className="bg-ink/50 border border-white/10 rounded-xl p-4 flex justify-between items-center">
+                          <span className="text-xs uppercase tracking-widest text-zinc-500 font-bold">Min Size</span>
+                          <span className="text-2xl font-display font-bold text-white">{config?.minRosterSize || 15}</span>
+                        </div>
+                        <div className="bg-ink/50 border border-white/10 rounded-xl p-4 flex justify-between items-center relative overflow-hidden group">
+                           <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <div>
+                            <span className="text-xs uppercase tracking-widest text-zinc-500 font-bold block mb-1">Max Size</span>
+                            <span className="text-[8px] text-zinc-600 uppercase tracking-widest">Calculated</span>
+                          </div>
+                          <span className="text-2xl font-display font-bold text-white relative z-10">{config?.maxRosterSize || 18}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+
+                {/* 3. TAXONOMY (TIERS & CATEGORIES) */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  
+                  {/* Bidding Raise Tiers */}
+                  <section className="glass-panel p-8">
+                    <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-zinc-400 mb-6 flex items-center gap-3">
+                      <Activity className="text-white" size={16} /> Bidding Engine Logic
+                    </h2>
+                    <form onSubmit={createTier} className="flex flex-wrap sm:flex-nowrap gap-3 mb-6">
+                      <div className="flex gap-2 w-full sm:w-auto flex-1">
+                        <input type="number" step="0.1" placeholder="Min %" required className="w-1/2 bg-ink/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-white/30" value={tierMin} onChange={e => setTierMin(e.target.value)} />
+                        <input type="number" step="0.1" placeholder="Max %" required className="w-1/2 bg-ink/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-white/30" value={tierMax} onChange={e => setTierMax(e.target.value)} />
+                      </div>
+                      <input type="number" step="0.01" placeholder="Raise %" required className="w-full sm:w-28 bg-ink/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-white/30" value={tierRaise} onChange={e => setTierRaise(e.target.value)} />
+                      <button type="submit" className="px-4 py-2 bg-white text-black hover:bg-zinc-200 rounded-lg font-bold text-xs uppercase tracking-widest shrink-0 transition-colors">Add</button>
+                    </form>
+                    <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
+                      {tiers.map(t => (
+                        <div key={t.id} className="flex justify-between items-center bg-white/5 border border-white/5 p-4 rounded-xl group hover:border-white/10 transition-colors">
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+                            <span className="font-bold text-white text-sm">{t.minPct}% &rarr; {t.maxPct}%</span>
+                            <span className="text-xs text-zinc-400 uppercase tracking-widest bg-white/10 px-2 py-0.5 rounded-full">Raise {t.raisePct}%</span>
+                          </div>
+                          <button onClick={() => deleteTier(t.id)} className="text-zinc-600 hover:text-white transition-colors p-2"><Trash2 size={14}/></button>
                         </div>
                       ))}
                     </div>
                   </section>
 
-                  <div className="space-y-8">
-                    <section className="bg-panel p-8 rounded-3xl border border-white/10 shadow-xl">
-                      <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-chalk mb-8">Bidding Raise Tiers</h2>
-                      <form onSubmit={createTier} className="flex flex-wrap gap-4 mb-6">
-                        <div className="flex gap-4 flex-1 min-w-[180px]">
-                          <input type="number" step="0.1" placeholder="Min %" required className="w-1/2 bg-ink/50 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={tierMin} onChange={e => setTierMin(e.target.value)} />
-                          <input type="number" step="0.1" placeholder="Max %" required className="w-1/2 bg-ink/50 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={tierMax} onChange={e => setTierMax(e.target.value)} />
+                  {/* Player Categories */}
+                  <section className="glass-panel p-8">
+                    <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-zinc-400 mb-6 flex items-center gap-3">
+                      <BadgeCheck className="text-white" size={16} /> Player Taxonomies
+                    </h2>
+                    <form onSubmit={createCategory} className="flex flex-wrap sm:flex-nowrap gap-3 mb-6">
+                      <input type="text" placeholder="Tier Name (e.g. A)" required className="w-full sm:flex-1 bg-ink/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-white/30" value={catName} onChange={e => setCatName(e.target.value)} />
+                      <input type="number" placeholder="Base Price" required className="w-full sm:w-32 bg-ink/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-white/30" value={catPrice} onChange={e => setCatPrice(e.target.value)} />
+                      <button type="submit" className="px-4 py-2 bg-white text-black hover:bg-zinc-200 rounded-lg font-bold text-xs uppercase tracking-widest shrink-0 transition-colors">Add</button>
+                    </form>
+                    <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
+                      {categories.map(c => (
+                        <div key={c.id} className="flex justify-between items-center bg-white/5 border border-white/5 p-4 rounded-xl group hover:border-white/10 transition-colors">
+                          <div className="flex items-center justify-between w-full pr-4">
+                            <span className="font-bold text-white text-sm">{c.name}</span>
+                            <span className="text-sm font-bold text-zinc-400">TK {c.basePrice.toLocaleString()}</span>
+                          </div>
+                          <button onClick={() => deleteCategory(c.id)} className="text-zinc-600 hover:text-white transition-colors p-2 shrink-0"><Trash2 size={14}/></button>
                         </div>
-                        <input type="number" step="0.01" placeholder="Raise %" required className="flex-1 sm:flex-none sm:w-32 min-w-[120px] bg-ink/50 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={tierRaise} onChange={e => setTierRaise(e.target.value)} />
-                        <button type="submit" className="px-6 py-3 bg-gold hover:bg-yellow-400 text-ink rounded-xl font-bold text-xs uppercase tracking-widest whitespace-nowrap shrink-0 transition-colors">Add</button>
-                      </form>
-                      <div className="space-y-2">
-                        {tiers.map(t => (
-                          <div key={t.id} className="flex justify-between items-center bg-white/5 p-4 rounded-xl">
-                            <div>
-                              <span className="font-bold text-white mr-4">{t.minPct}% - {t.maxPct}%</span>
-                              <span className="text-cyan-400 font-semibold">Raise {t.raisePct}%</span>
-                            </div>
-                            <button onClick={() => deleteTier(t.id)} className="text-danger hover:text-red-400"><Trash2 size={16}/></button>
-                          </div>
-                        ))}
-                      </div>
-                    </section>
-
-                    <section className="bg-panel p-8 rounded-3xl border border-white/10 shadow-xl">
-                      <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-chalk mb-8">Academic Sessions</h2>
-                      <form onSubmit={createSession} className="flex flex-wrap gap-4 mb-6">
-                        <input type="text" placeholder="e.g. 2020-21" required className="flex-1 min-w-[180px] bg-ink/50 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={sessionName} onChange={e => setSessionName(e.target.value)} />
-                        <button type="submit" className="px-6 py-3 bg-gold hover:bg-yellow-400 text-ink rounded-xl font-bold text-xs uppercase tracking-widest whitespace-nowrap shrink-0 transition-colors">Add</button>
-                      </form>
-                      <div className="flex flex-wrap gap-2">
-                        {sessions.map(s => (
-                          <div key={s.id} className="flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-2 rounded-lg text-sm text-chalk">
-                            {s.name}
-                            <button onClick={() => deleteSession(s.id)} className="text-danger hover:text-red-400 ml-2"><X size={14}/></button>
-                          </div>
-                        ))}
-                      </div>
-                    </section>
-                  </div>
+                      ))}
+                    </div>
+                  </section>
                 </div>
 
-                <section className="bg-panel p-8 rounded-3xl border border-white/10 shadow-xl max-w-2xl">
-                  <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-chalk mb-8 flex items-center gap-3">
-                    <Settings className="text-gold" size={18} /> Auction Timer Settings
+                {/* 4. MISCELLANEOUS (SESSIONS) */}
+                <section className="glass-panel p-8">
+                  <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-zinc-400 mb-6 flex items-center gap-3">
+                    <Database className="text-white" size={16} /> Academic Sessions
                   </h2>
-                  <form onSubmit={updateTimerConfig} className="space-y-6">
-                    <div className="flex flex-col md:flex-row gap-6">
-                      <div className="flex-1 space-y-2">
-                        <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Default Timer Duration (Sec)</label>
-                        <input 
-                          type="number" 
-                          required 
-                          className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" 
-                          value={defaultTimer} 
-                          onChange={e => setDefaultTimer(parseInt(e.target.value) || 0)} 
-                        />
-                      </div>
-                      <div className="flex-1 flex flex-col justify-end pb-3">
-                        <label className="flex items-center gap-3 cursor-pointer group">
-                          <div className={`w-12 h-6 rounded-full transition-colors relative ${timerLocked ? 'bg-gold' : 'bg-white/10'}`}>
-                            <div className={`absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform ${timerLocked ? 'translate-x-6' : ''}`} />
-                          </div>
-                          <input 
-                            type="checkbox" 
-                            className="hidden" 
-                            checked={timerLocked} 
-                            onChange={e => setTimerLocked(e.target.checked)} 
-                          />
-                          <div>
-                            <div className="font-bold text-white text-sm">Lock Timer Duration</div>
-                            <div className="text-[10px] text-chalkMuted">Prevent Podium from changing timer</div>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                    <button type="submit" className="w-full px-8 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl font-bold text-xs uppercase tracking-widest transition-colors border border-white/10">
-                      Save Timer Settings
-                    </button>
+                  <form onSubmit={createSession} className="flex flex-wrap sm:flex-nowrap gap-3 mb-6 max-w-sm">
+                    <input type="text" placeholder="e.g. 2020-21" required className="w-full sm:flex-1 bg-ink/50 border border-white/10 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-white/30" value={sessionName} onChange={e => setSessionName(e.target.value)} />
+                    <button type="submit" className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg font-bold text-xs uppercase tracking-widest border border-white/10 shrink-0 transition-colors">Add</button>
                   </form>
+                  <div className="flex flex-wrap gap-2">
+                    {sessions.map(s => (
+                      <div key={s.id} className="flex items-center gap-2 bg-white/5 border border-white/10 pl-4 pr-2 py-1.5 rounded-full text-xs font-bold tracking-wide text-zinc-300">
+                        {s.name}
+                        <button onClick={() => deleteSession(s.id)} className="text-zinc-600 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors"><X size={12}/></button>
+                      </div>
+                    ))}
+                  </div>
                 </section>
 
-                <section className="bg-panel p-8 rounded-3xl border border-white/10 shadow-xl max-w-2xl">
-                  <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-chalk mb-8 flex items-center gap-3">
-                    <DollarSign className="text-gold" size={18} /> League Standard Total Budget
-                  </h2>
-                  <form onSubmit={updateBudgetConfig} className="space-y-6">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">
-                        Global Standard Purse Budget (TK)
-                      </label>
-                      <input 
-                        type="number" 
-                        required 
-                        className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" 
-                        value={totalBudgetInput} 
-                        onChange={e => setTotalBudgetInput(e.target.value)} 
-                      />
-                      <p className="text-[11px] text-chalkMuted mt-1">
-                        This budget is used to calculate percentage-based bidding raise tiers for all auction blocks.
-                      </p>
-                    </div>
-                    <button type="submit" className="w-full px-8 py-3 bg-gold hover:bg-yellow-400 text-ink rounded-xl font-bold text-xs uppercase tracking-widest transition-colors shadow-[0_0_20px_rgba(232,184,75,0.2)]">
-                      Save League Budget
-                    </button>
-                  </form>
-                </section>
               </motion.div>
             )}
 
@@ -900,25 +987,25 @@ export default function SuperAdminSetup() {
               <motion.div key="teams" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
                 <section className="bg-panel p-8 rounded-3xl border border-white/10 shadow-xl">
                   <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-chalk mb-8 flex items-center gap-3">
-                    <UserPlus className="text-gold" size={18} /> Pending Manager Registrations
+                    <UserPlus className="text-white" size={18} /> Pending Manager Registrations
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {pendingManagers.map(m => (
-                      <div key={m.id} className="bg-ink border border-gold/30 shadow-lg rounded-2xl p-5 flex flex-col justify-between">
+                      <div key={m.id} className="bg-ink border border-white/20 shadow-lg rounded-2xl p-5 flex flex-col justify-between">
                         <div className="flex items-start justify-between mb-4">
                           <div>
                             <span className="font-bold text-lg text-white block mb-1">{m.name}</span>
-                            <div className="text-[10px] text-chalkMuted">
+                            <div className="text-xs text-chalkMuted">
                               <div>Email: {m.email}</div>
                               <div>Phone: {m.phone || 'N/A'}</div>
                             </div>
                           </div>
-                          <button onClick={() => openApproveModal(m)} className="px-4 py-2 bg-gold hover:bg-yellow-400 text-ink rounded-lg font-bold uppercase tracking-widest text-xs transition">
+                          <button onClick={() => openApproveModal(m)} className="px-4 py-2 bg-white text-black hover:bg-zinc-200 hover:text-black text-ink rounded-lg font-bold uppercase tracking-widest text-xs transition">
                             Approve
                           </button>
                         </div>
                         <div className="bg-white/5 p-3 rounded-xl mt-2">
-                          <span className="text-[10px] text-chalkMuted uppercase tracking-widest mb-1 block">Desired Franchise</span>
+                          <span className="text-xs text-chalkMuted uppercase tracking-widest mb-1 block">Desired Franchise</span>
                           <span className="text-white font-bold">{m.desiredTeamName || 'Not Specified'}</span>
                         </div>
                       </div>
@@ -931,30 +1018,38 @@ export default function SuperAdminSetup() {
                   <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-chalk mb-8">Active Franchises ({teams.length})</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {teams.map(t => (
-                      <div key={t.id} className="bg-ink border border-white/5 shadow-lg hover:border-gold/30 rounded-2xl p-5 flex flex-col justify-between transition-colors group">
+                      <div key={t.id} className="bg-ink border border-white/5 shadow-lg hover:border-white/20 rounded-2xl p-5 flex flex-col justify-between transition-colors group">
                         <div className="flex items-start justify-between mb-4">
-                          <div>
-                            <span className="font-bold text-lg text-white group-hover:text-gold transition-colors block mb-1">{t.name}</span>
-                            {t.manager && (
-                              <div className="text-[10px] text-chalkMuted">
-                                <div>Mgr: {t.manager.name}</div>
-                                <div>ID: {t.manager.phone || t.manager.email}</div>
-                              </div>
-                            )}
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-zinc-800/50 rounded-full flex items-center justify-center border border-white/10 overflow-hidden shrink-0 shadow-inner">
+                              {t.logoUrl ? <img src={t.logoUrl} alt={t.name} className="w-full h-full object-cover" /> : <Shield size={20} className="text-zinc-500" />}
+                            </div>
+                            <div>
+                              <span className="font-bold text-lg text-white group-hover:text-white transition-colors block mb-1">{t.name}</span>
+                              {t.manager && (
+                                <div className="text-xs text-chalkMuted leading-tight">
+                                  <div className="mb-0.5">Mgr: {t.manager.name}</div>
+                                  <div>ID: {t.manager.phone || t.manager.email}</div>
+                                </div>
+                              )}
+                            </div>
                           </div>
                           <div className="flex items-center gap-2">
+                            <button onClick={() => setLogoDialog({ isOpen: true, team: t })} className="p-2 bg-white/5 hover:bg-white/10 hover:text-white text-chalkMuted rounded-lg transition" title="Upload Logo">
+                              <ImageIcon size={16} />
+                            </button>
                             <button onClick={() => openEditManager(t)} className="p-2 bg-white/5 hover:bg-white/10 hover:text-white text-chalkMuted rounded-lg transition" title="Edit Manager">
                               <Edit2 size={16} />
                             </button>
-                            <button onClick={() => deleteTeam(t.id)} className="p-2 bg-danger/10 hover:bg-danger/20 text-danger rounded-lg transition" title="Delete Franchise">
+                            <button onClick={() => deleteTeam(t.id)} className="p-2 bg-white/5 hover:bg-white/5 text-zinc-400 rounded-lg transition" title="Delete Franchise">
                               <Trash2 size={16} />
                             </button>
                           </div>
                         </div>
                         
                         <div className="flex flex-col items-start bg-white/5 p-3 rounded-xl">
-                          <span className="text-[10px] text-chalkMuted uppercase tracking-widest mb-1">Purse</span>
-                          <span className="text-cyan-400 font-mono font-bold">TK {t.remainingBudget.toLocaleString()}</span>
+                          <span className="text-xs text-chalkMuted uppercase tracking-widest mb-1">Purse</span>
+                          <span className="text-white text-sm font-bold">TK {t.remainingBudget.toLocaleString()}</span>
                         </div>
                       </div>
                     ))}
@@ -969,7 +1064,7 @@ export default function SuperAdminSetup() {
                 <div className="bg-panel rounded-3xl border border-white/10 shadow-xl p-8 h-[calc(100vh-250px)]">
                   <div className="border-b border-white/5 pb-4 mb-4">
                     <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-chalk flex items-center gap-3">
-                      <CheckCircle className="text-cyan-400" size={18} /> Approval Queue & Database
+                      <CheckCircle className="text-white" size={18} /> Approval Queue & Database
                     </h2>
                   </div>
                   <PlayerDirectory 
@@ -989,47 +1084,47 @@ export default function SuperAdminSetup() {
               <motion.div key="staff" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
                 <section className="bg-panel p-8 rounded-3xl border border-white/10 shadow-xl">
                   <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-chalk mb-8 flex items-center gap-3">
-                    <UserPlus className="text-gold" size={18} /> Invite Staff Member
+                    <UserPlus className="text-white" size={18} /> Invite Staff Member
                   </h2>
                   <form onSubmit={createStaffAccount} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Name</label>
+                      <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Name</label>
                       <input type="text" required className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:ring-2 focus:ring-gold outline-none transition-all" value={staffName} onChange={e => {
                         const val = e.target.value.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
                         setStaffName(val);
                       }} />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Email</label>
+                      <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Email</label>
                       <input type="email" required className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:ring-2 focus:ring-gold outline-none transition-all" value={staffEmail} onChange={e => setStaffEmail(e.target.value.toLowerCase())} />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Password</label>
+                      <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Password</label>
                       <input type="password" required className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:ring-2 focus:ring-gold outline-none transition-all" value={staffPassword} onChange={e => setStaffPassword(e.target.value)} />
                     </div>
                     <div className="space-y-2 col-span-full">
-                      <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Access Level</label>
-                      <div className="grid grid-cols-2 gap-4">
+                      <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Access Level</label>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <button
                           type="button"
                           onClick={() => setStaffRole('PODIUM_ADMIN')}
-                          className={`p-4 rounded-xl border text-left transition-all ${staffRole === 'PODIUM_ADMIN' ? 'bg-gold/10 border-gold/50 text-white shadow-[0_0_15px_rgba(232,184,75,0.1)]' : 'bg-ink/50 border-white/10 text-chalkMuted hover:border-white/30'}`}
+                          className={`p-4 rounded-xl border text-left transition-all ${staffRole === 'PODIUM_ADMIN' ? 'bg-white/10 border-white/20 text-white ' : 'bg-ink/50 border-white/10 text-chalkMuted hover:border-white/30'}`}
                         >
-                          <div className={`font-bold text-sm mb-1 ${staffRole === 'PODIUM_ADMIN' ? 'text-gold' : 'text-chalk'}`}>Podium Admin</div>
-                          <div className="text-[10px] uppercase tracking-widest opacity-80">Auctioneer Access</div>
+                          <div className={`font-bold text-sm mb-1 ${staffRole === 'PODIUM_ADMIN' ? 'text-white' : 'text-chalk'}`}>Podium Admin</div>
+                          <div className="text-xs uppercase tracking-widest opacity-80">Auctioneer Access</div>
                         </button>
                         <button
                           type="button"
                           onClick={() => setStaffRole('SUPER_ADMIN')}
-                          className={`p-4 rounded-xl border text-left transition-all ${staffRole === 'SUPER_ADMIN' ? 'bg-cyan-500/10 border-cyan-500/50 text-white shadow-[0_0_15px_rgba(34,211,238,0.1)]' : 'bg-ink/50 border-white/10 text-chalkMuted hover:border-white/30'}`}
+                          className={`p-4 rounded-xl border text-left transition-all ${staffRole === 'SUPER_ADMIN' ? 'bg-white/10 border-white/20 text-white ' : 'bg-ink/50 border-white/10 text-chalkMuted hover:border-white/30'}`}
                         >
-                          <div className={`font-bold text-sm mb-1 ${staffRole === 'SUPER_ADMIN' ? 'text-cyan-400' : 'text-chalk'}`}>Super Admin</div>
-                          <div className="text-[10px] uppercase tracking-widest opacity-80">Full System Control</div>
+                          <div className={`font-bold text-sm mb-1 ${staffRole === 'SUPER_ADMIN' ? 'text-white' : 'text-chalk'}`}>Super Admin</div>
+                          <div className="text-xs uppercase tracking-widest opacity-80">Full System Control</div>
                         </button>
                       </div>
                     </div>
                     <div className="col-span-full pt-2">
-                      <button type="submit" className="w-full md:w-auto px-8 py-3.5 bg-gold hover:bg-yellow-400 text-ink rounded-xl font-bold uppercase tracking-widest transition-all text-xs shadow-lg shadow-gold/20">
+                      <button type="submit" className="w-full md:w-auto px-8 py-3.5 bg-white text-black hover:bg-zinc-200 hover:text-black text-ink rounded-xl font-bold uppercase tracking-widest transition-all text-xs shadow-lg">
                         Create Access
                       </button>
                     </div>
@@ -1043,12 +1138,12 @@ export default function SuperAdminSetup() {
                       <div key={s.id} className="bg-ink border border-white/5 shadow-lg rounded-2xl p-5 flex items-center justify-between">
                         <div>
                           <span className="font-bold text-lg text-white block mb-1">{s.name}</span>
-                          <span className="text-[10px] text-chalkMuted uppercase tracking-widest">{s.email}</span>
-                          <span className={`mt-2 block text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg w-max ${s.role === 'SUPER_ADMIN' ? 'bg-gold/10 text-gold border border-gold/20' : 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'}`}>
+                          <span className="text-xs text-chalkMuted uppercase tracking-widest">{s.email}</span>
+                          <span className={`mt-2 block text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-lg w-max ${s.role === 'SUPER_ADMIN' ? 'bg-white/10 text-white border border-white/20' : 'bg-white/10 text-white border border-white/20'}`}>
                             {s.role.replace('_', ' ')}
                           </span>
                         </div>
-                        <button onClick={() => deleteStaff(s.id)} className="p-3 bg-danger/10 hover:bg-danger/20 text-danger rounded-xl transition" title="Delete Staff">
+                        <button onClick={() => deleteStaff(s.id)} className="p-3 bg-white/5 hover:bg-white/5 text-zinc-400 rounded-xl transition" title="Delete Staff">
                           <Trash2 size={18} />
                         </button>
                       </div>
@@ -1061,8 +1156,8 @@ export default function SuperAdminSetup() {
 
             {activeTab === 'danger' && (
               <motion.div key="danger" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
-                <section className="glass-panel p-8 rounded-[2rem] border-danger/30 bg-danger/5">
-                  <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-danger mb-8 flex items-center gap-3">
+                <section className="glass-panel p-8 rounded-[2rem] border-white/10 bg-white/5">
+                  <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-zinc-400 mb-8 flex items-center gap-3">
                     <Trash2 size={18} /> System Reset Options
                   </h2>
                   <div className="space-y-6">
@@ -1071,28 +1166,28 @@ export default function SuperAdminSetup() {
                         <h3 className="font-bold text-lg text-white mb-1">Level 1: Soft Reset (Economy & Tournaments)</h3>
                         <p className="text-xs text-chalkMuted tracking-wide">Clears all match fixtures, results, and statistics. Resets franchise budgets and reverts all players to unsold status. Auction history is cleared.</p>
                       </div>
-                      <button onClick={() => executeSystemReset(1)} className="px-6 py-3 bg-white/5 hover:bg-danger/20 text-danger border border-danger/20 hover:border-danger/50 rounded-xl font-bold uppercase tracking-widest text-xs transition whitespace-nowrap">
+                      <button onClick={() => executeSystemReset(1)} className="px-6 py-3 bg-white/5 hover:bg-white/5 text-zinc-400 border border-white/10 hover:border-white/10 rounded-xl font-bold uppercase tracking-widest text-xs transition whitespace-nowrap">
                         Execute Soft Reset
                       </button>
                     </div>
 
                     <div className="bg-ink/50 border border-white/10 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-4">
                       <div>
-                        <h3 className="font-bold text-lg text-gold mb-1">Level 2: Hard Reset (Players & Franchises)</h3>
+                        <h3 className="font-bold text-lg text-white mb-1">Level 2: Hard Reset (Players & Franchises)</h3>
                         <p className="text-xs text-chalkMuted tracking-wide">Performs a soft reset and additionally deletes all player registrations and their uploaded media. Reverts the system phase to Registration.</p>
                       </div>
-                      <button onClick={() => executeSystemReset(2)} className="px-6 py-3 bg-white/5 hover:bg-gold/20 text-gold border border-gold/20 hover:border-gold/50 rounded-xl font-bold uppercase tracking-widest text-xs transition whitespace-nowrap">
+                      <button onClick={() => executeSystemReset(2)} className="px-6 py-3 bg-white/5 hover:bg-white/10 text-white border border-white/20 hover:border-white/20 rounded-xl font-bold uppercase tracking-widest text-xs transition whitespace-nowrap">
                         Execute Hard Reset
                       </button>
                     </div>
 
-                    <div className="bg-ink/50 border border-danger/30 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-4 relative overflow-hidden">
+                    <div className="bg-ink/50 border border-white/10 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-4 relative overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-r from-danger/20 to-transparent pointer-events-none" />
                       <div className="relative z-10">
-                        <h3 className="font-bold text-lg text-danger mb-1">Level 3: Factory Reset</h3>
+                        <h3 className="font-bold text-lg text-zinc-400 mb-1">Level 3: Factory Reset</h3>
                         <p className="text-xs text-chalkMuted tracking-wide">Complete system wipe. Deletes all players, franchises, managers, categories, and settings. Reverts the system to its initial setup state. Only Super Admin accounts are preserved.</p>
                       </div>
-                      <button onClick={() => executeSystemReset(3)} className="px-6 py-3 bg-danger hover:bg-red-600 text-white rounded-xl font-bold uppercase tracking-widest text-xs transition shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.6)] whitespace-nowrap relative z-10">
+                      <button onClick={() => executeSystemReset(3)} className="px-6 py-3 bg-zinc-800 hover:bg-red-600 text-white rounded-xl font-bold uppercase tracking-widest text-xs transition  hover: whitespace-nowrap relative z-10">
                         Factory Reset
                       </button>
                     </div>
@@ -1116,13 +1211,13 @@ export default function SuperAdminSetup() {
               <div className="flex justify-end gap-4">
                 <button 
                   onClick={() => setConfirmDialog(null)}
-                  className="px-6 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl font-bold text-xs uppercase tracking-widest transition"
+                  className="px-6 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl font-bold text-sm uppercase tracking-widest transition"
                 >
                   Cancel
                 </button>
                 <button 
                   onClick={confirmDialog.onConfirm}
-                  className="px-6 py-2 bg-danger hover:bg-red-500 text-white rounded-xl font-bold text-xs uppercase tracking-widest transition"
+                  className="px-6 py-2 bg-zinc-800 hover:bg-red-500 text-white rounded-xl font-bold text-sm uppercase tracking-widest transition"
                 >
                   Confirm
                 </button>
@@ -1141,7 +1236,7 @@ export default function SuperAdminSetup() {
               
               <form onSubmit={executeApproveManager} className="space-y-4">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Franchise Name</label>
+                  <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Franchise Name</label>
                   <input 
                     type="text" 
                     required 
@@ -1152,7 +1247,7 @@ export default function SuperAdminSetup() {
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Team Purse (TK)</label>
+                  <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Team Purse (TK)</label>
                   <input 
                     type="number" 
                     required 
@@ -1166,13 +1261,13 @@ export default function SuperAdminSetup() {
                   <button 
                     type="button"
                     onClick={() => setApproveDialog(null)}
-                    className="px-6 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-bold text-xs uppercase tracking-widest transition"
+                    className="px-6 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-bold text-sm uppercase tracking-widest transition"
                   >
                     Cancel
                   </button>
                   <button 
                     type="submit"
-                    className="px-6 py-3 bg-gold hover:bg-yellow-400 text-ink rounded-xl font-bold text-xs uppercase tracking-widest transition"
+                    className="px-6 py-3 bg-white text-black hover:bg-zinc-200 hover:text-black text-ink rounded-xl font-bold text-sm uppercase tracking-widest transition"
                   >
                     Approve
                   </button>

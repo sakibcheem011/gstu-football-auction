@@ -37,12 +37,12 @@ export default function Dropdown({ options, value, onChange, placeholder = 'Sele
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full h-11 bg-panel border border-white/10 hover:border-gold/30 rounded-xl px-4 text-left flex items-center justify-between transition-all focus:outline-none focus:ring-2 focus:ring-gold/30 text-xs font-semibold"
+        className="w-full h-11 bg-panel border border-borderSubtle hover:border-accent/30 rounded-xl px-4 text-left flex items-center justify-between transition-all focus:outline-none focus:ring-2 focus:ring-accent/30 text-xs font-semibold"
       >
         <span className={`truncate mr-2 ${selectedOption ? 'text-chalk font-bold' : 'text-chalkMuted'}`}>
           {selectedOption ? selectedOption.label : placeholder}
         </span>
-        <ChevronDown size={15} className={`text-chalkMuted shrink-0 transition-transform duration-250 ${isOpen ? 'rotate-180 text-gold' : ''}`} />
+        <ChevronDown size={15} className={`text-chalkMuted shrink-0 transition-transform duration-250 ${isOpen ? 'rotate-180 text-accent' : ''}`} />
       </button>
 
       <AnimatePresence>
@@ -52,7 +52,7 @@ export default function Dropdown({ options, value, onChange, placeholder = 'Sele
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.98 }}
             transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute z-50 w-full mt-2 bg-[#131622] border border-white/15 rounded-xl shadow-2xl overflow-hidden py-1.5 backdrop-blur-xl"
+            className="absolute z-50 w-full mt-2 bg-panelLight border border-borderSubtle rounded-xl shadow-2xl overflow-hidden py-1.5 backdrop-blur-xl"
           >
             <div className="max-h-60 overflow-y-auto custom-scrollbar">
               {options.map((option) => (
@@ -63,12 +63,12 @@ export default function Dropdown({ options, value, onChange, placeholder = 'Sele
                     onChange(option.value);
                     setIsOpen(false);
                   }}
-                  className={`w-full px-4 py-2 text-left text-xs font-semibold flex items-center justify-between hover:bg-white/5 transition-colors ${
-                    value === option.value ? 'text-gold font-bold bg-gold/10' : 'text-chalk'
+                  className={`w-full px-4 py-2 text-left text-xs font-semibold flex items-center justify-between hover:bg-zinc-500/10 transition-colors ${
+                    value === option.value ? 'text-accent font-bold bg-accent/10' : 'text-chalk'
                   }`}
                 >
                   <span className="truncate pr-2">{option.label}</span>
-                  {value === option.value && <Check size={14} className="text-gold shrink-0" />}
+                  {value === option.value && <Check size={14} className="text-accent shrink-0" />}
                 </button>
               ))}
               {options.length === 0 && (

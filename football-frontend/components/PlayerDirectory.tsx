@@ -241,7 +241,7 @@ export default function PlayerDirectory({
                   {onAction && (!actionCondition || actionCondition(p)) && (
                     <button 
                       onClick={(e) => { e.stopPropagation(); onAction(p); }}
-                      className="w-full py-2.5 bg-gold hover:bg-yellow-400 text-ink rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(244,196,83,0.15)]"
+                      className="w-full py-2.5 bg-gold hover:bg-yellow-400 text-[#000000] rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(244,196,83,0.15)]"
                     >
                       {actionLabel || 'Action'} {actionIcon || <ArrowRight size={14} />}
                     </button>

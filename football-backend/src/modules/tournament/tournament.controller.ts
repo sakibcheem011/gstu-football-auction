@@ -15,7 +15,7 @@ export const getFixtures = async (req: Request, res: Response): Promise<any> => 
 
 export const createFixture = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { teamAId, teamBId, isTwoLegged, venue } = req.body;
+    const { teamAId, teamBId, isTwoLegged, venue, scheduledAt1, scheduledAt2 } = req.body;
     
     const fixture = await prisma.fixture.create({
       data: {
@@ -26,11 +26,11 @@ export const createFixture = async (req: Request, res: Response): Promise<any> =
         matches: {
           create: isTwoLegged 
             ? [
-                { legNumber: 1, status: 'SCHEDULED', scheduledAt: new Date() },
-                { legNumber: 2, status: 'SCHEDULED', scheduledAt: new Date() }
+                { legNumber: 1, status: 'SCHEDULED', scheduledAt: scheduledAt1 ? new Date(scheduledAt1) : new Date() },
+                { legNumber: 2, status: 'SCHEDULED', scheduledAt: scheduledAt2 ? new Date(scheduledAt2) : new Date() }
               ]
             : [
-                { legNumber: 1, status: 'SCHEDULED', scheduledAt: new Date() }
+                { legNumber: 1, status: 'SCHEDULED', scheduledAt: scheduledAt1 ? new Date(scheduledAt1) : new Date() }
               ]
         }
       },
@@ -43,14 +43,30 @@ export const createFixture = async (req: Request, res: Response): Promise<any> =
   }
 };
 
+export const deleteFixture = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const id = req.params.id as string;
+    await prisma.fixture.delete({ where: { id } });
+    ioInstance.emit('data_updated', { entity: 'tournament' });
+    return res.json({ success: true });
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 export const updateMatchScore = async (req: Request, res: Response): Promise<any> => {
   try {
     const id = req.params.id as string;
-    const { scoreA, scoreB, status } = req.body; // status: 'SCHEDULED' | 'IN_PROGRESS' | 'COMPLETED'
+    const { scoreA, scoreB, status, scheduledAt } = req.body; 
     
     const match = await prisma.match.update({
       where: { id },
-      data: { scoreA, scoreB, status }
+      data: { 
+        scoreA, 
+        scoreB, 
+        status,
+        ...(scheduledAt && { scheduledAt: new Date(scheduledAt) })
+      }
     });
     ioInstance.emit('data_updated', { entity: 'tournament' });
     return res.json(match);
@@ -110,6 +126,7 @@ export const getStandings = async (req: Request, res: Response): Promise<any> =>
     const standings = teams.map(t => ({
       teamId: t.id,
       teamName: t.name,
+      logoUrl: t.logoUrl,
       played: 0,
       won: 0,
       drawn: 0,

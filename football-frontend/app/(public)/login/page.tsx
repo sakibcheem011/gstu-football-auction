@@ -60,10 +60,10 @@ export default function LoginPage() {
         animate={{ y: 0, opacity: 1 }}
         className="w-full max-w-md glass-panel p-10 rounded-3xl relative overflow-hidden"
       >
-        <div className="absolute top-0 left-0 w-full h-2 bg-gold shadow-[0_0_20px_rgba(232,184,75,0.6)]" />
+        <div className="absolute top-0 left-0 w-full h-2 bg-white text-black" />
         
         <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 bg-gold/10 border border-gold/30 rounded-full flex items-center justify-center text-gold shadow-[0_0_15px_rgba(232,184,75,0.3)]">
+          <div className="w-16 h-16 bg-white/10 border border-white/20 rounded-full flex items-center justify-center text-white">
             <Shield size={32} />
           </div>
         </div>
@@ -96,7 +96,7 @@ export default function LoginPage() {
             whileTap={{ scale: 0.98 }}
             disabled={loading}
             type="submit" 
-            className="w-full mt-4 py-4 bg-white/10 text-white border border-white/20 hover:bg-gold hover:text-ink hover:border-gold rounded-xl font-bold uppercase tracking-widest transition-all duration-300 disabled:opacity-50"
+            className="w-full mt-4 py-4 bg-white/10 text-white border border-white/20 hover:bg-white text-black hover:text-ink hover:border-white rounded-xl font-bold uppercase tracking-widest transition-all duration-300 disabled:opacity-50"
           >
             {loading ? 'Logging in...' : 'Login'}
           </motion.button>

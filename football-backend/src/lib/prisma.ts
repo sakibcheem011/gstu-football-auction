@@ -6,13 +6,7 @@ dotenv.config();
 
 const originalUrl = `${process.env.DATABASE_URL}`;
 
-// Dynamically fix the Supabase pooler issue for Render without exposing credentials
-let connectionString = originalUrl;
-if (connectionString.includes('aws-0-ap-southeast-2.pooler.supabase.com')) {
-  connectionString = connectionString
-    .replace('postgres.lipdcxbwmhjvjsaqoiio', 'postgres')
-    .replace('aws-0-ap-southeast-2.pooler.supabase.com:5432', 'db.lipdcxbwmhjvjsaqoiio.supabase.co:5432');
-}
+const connectionString = originalUrl;
 
 const pool = new Pool({ 
   connectionString,

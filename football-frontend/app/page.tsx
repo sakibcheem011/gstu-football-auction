@@ -1,9 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Trophy, Users, MonitorPlay, LogIn, Clock, Activity, Target, Maximize, Minimize } from 'lucide-react';
+import { ArrowRight, Trophy, Users, MonitorPlay, LogIn, Clock, Activity, Target, Maximize, Minimize, Shield, Calendar } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { io, Socket } from 'socket.io-client';
+import { Accordion, AccordionItem } from '../components/ui/accordion';
 
 export default function Home() {
   const [config, setConfig] = useState<any>({});
@@ -11,8 +12,16 @@ export default function Home() {
   const [teams, setTeams] = useState<any[]>([]);
   const [players, setPlayers] = useState<any[]>([]);
   const [auctionState, setAuctionState] = useState<any>(null);
+  const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
+    const t = localStorage.getItem('token');
+    if (t) {
+      try {
+        const payload = JSON.parse(atob(t.split('.')[1]));
+        setRole(payload.role);
+      } catch (e) {}
+    }
     const fetchData = () => {
       Promise.all([
         fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/config`).then(r => r.json()),
@@ -49,7 +58,7 @@ export default function Home() {
       {/* Phase Conditional Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-6">
         <AnimatePresence mode="wait">
-          {phase === 'SETUP' && <SetupPhase teams={teams} config={config} key="setup" />}
+          {phase === 'SETUP' && <SetupPhase teams={teams} config={config} role={role} key="setup" />}
           {phase === 'REGISTRATION' && <RegistrationPhase config={config} key="reg" />}
           {phase === 'AUCTION' && <AuctionPhase teams={teams} auctionState={auctionState} config={config} key="auc" />}
           {phase === 'TOURNAMENT' && <TournamentPhase key="tourney" />}
@@ -60,69 +69,106 @@ export default function Home() {
 }
 
 // --- PHASE 1: SETUP ---
-function SetupPhase({ teams, config }: { teams: any[], config: any }) {
+function SetupPhase({ teams, config, role }: { teams: any[], config: any, role?: string | null }) {
   return (
     <motion.div initial="hidden" animate="show" exit={{opacity:0}} variants={{show: {transition: {staggerChildren: 0.1}}}} className="space-y-12 py-12">
-      <div className="text-center max-w-4xl mx-auto">
-        <h1 className="font-display text-5xl md:text-7xl tracking-wider mb-6 leading-none">
-          THE <span className="text-glow-gold text-gold">ULTIMATE</span><br /> FRANCHISE AUCTION
+      <div className="max-w-6xl mx-auto relative z-10 text-center">
+        <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tight text-white leading-tight">
+          The <span className="text-zinc-400">Ultimate</span><br />Franchise Auction
         </h1>
-        <p className="text-xl text-chalkMuted leading-relaxed mb-10">
+        <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto mt-6">
           The event is currently in the setup phase. Organizers are preparing the rules, budget, and franchises. Player registration will open shortly.
         </p>
       </div>
 
-      <div className="text-center max-w-4xl mx-auto glass-panel p-12 rounded-3xl border-gold/30 shadow-[0_0_50px_rgba(232,184,75,0.1)] relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-gold/10 blur-[100px] pointer-events-none" />
+      <div className="max-w-6xl mx-auto glass-panel p-12 relative overflow-hidden mt-20">
         
-        <div className="inline-block px-4 py-1 bg-gold/20 text-gold rounded-full font-bold uppercase tracking-widest text-sm mb-6 relative z-10">
-          Attention Managers
-        </div>
-        <h2 className="font-display text-4xl md:text-5xl tracking-wider mb-6 relative z-10 text-white">
-          FRANCHISE <span className="text-gold">REGISTRATION</span> IS LIVE
-        </h2>
-        <p className="text-lg text-chalkMuted mb-10 max-w-2xl mx-auto relative z-10">
-          Ready to build your dream squad? Submit your application to become a franchise manager and prepare for the biggest bidding war.
-        </p>
-        <div className="flex justify-center gap-4 relative z-10">
-          <Link href="/manager-registration">
-            <button className="px-8 py-4 bg-gold hover:bg-yellow-400 text-ink rounded-xl font-bold uppercase tracking-widest transition text-lg flex items-center gap-3 shadow-[0_0_20px_rgba(232,184,75,0.2)]">
-              Apply For Franchise <ArrowRight size={20} />
-            </button>
-          </Link>
-        </div>
+        {role === 'TEAM_MANAGER' ? (
+          <div className="text-center">
+            <div className="inline-block px-3 py-1 bg-white/10 text-zinc-300 rounded-full text-xs font-semibold uppercase tracking-wider mb-6 relative z-10">
+              Welcome Manager
+            </div>
+            <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight mb-4 relative z-10 text-white">
+              Your Portal is Ready
+            </h2>
+            <p className="text-zinc-400 mb-8 max-w-xl mx-auto relative z-10">
+              Head over to your Manager Console to customize your team logo, review your wishlist, and prepare your bidding strategy.
+            </p>
+            <div className="flex justify-center relative z-10">
+              <Link href="/manager">
+                <button className="px-6 py-3 bg-white text-black hover:bg-zinc-200 rounded-lg font-semibold transition flex items-center gap-2">
+                  Manager Console <ArrowRight size={18} />
+                </button>
+              </Link>
+            </div>
+          </div>
+        ) : role === 'SUPER_ADMIN' || role === 'PODIUM_ADMIN' ? (
+          <div className="text-center">
+            <div className="inline-block px-3 py-1 bg-white/10 text-zinc-400 rounded-full text-xs font-semibold uppercase tracking-wider mb-6 relative z-10">
+              System Admin
+            </div>
+            <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight mb-4 relative z-10 text-white">
+              League Setup Active
+            </h2>
+            <p className="text-zinc-400 mb-8 max-w-xl mx-auto relative z-10">
+              The setup phase is active. Configure teams, approve managers, and set the tournament rules from the Admin Dashboard.
+            </p>
+            <div className="flex justify-center relative z-10">
+              <Link href="/admin">
+                <button className="px-6 py-3 bg-white/20 text-white hover:bg-white/20 rounded-lg font-semibold transition flex items-center gap-2">
+                  Admin Dashboard <ArrowRight size={18} />
+                </button>
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center">
+            <div className="inline-block px-3 py-1 bg-white/10 text-zinc-300 rounded-full text-xs font-semibold uppercase tracking-wider mb-6 relative z-10">
+              Attention Managers
+            </div>
+            <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight mb-4 relative z-10 text-white">
+              Franchise Registration is Live
+            </h2>
+            <p className="text-zinc-400 mb-8 max-w-xl mx-auto relative z-10">
+              Ready to build your dream squad? Submit your application to become a franchise manager and prepare for the biggest bidding war.
+            </p>
+            <div className="flex justify-center relative z-10">
+              <Link href="/manager-registration">
+                <button className="px-6 py-3 bg-white text-black hover:bg-zinc-200 rounded-lg font-semibold transition flex items-center gap-2">
+                  Apply For Franchise <ArrowRight size={18} />
+                </button>
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <motion.div variants={{hidden: {opacity:0, y:20}, show: {opacity:1, y:0}}} className="glass-panel p-8 rounded-3xl text-center">
-          <MonitorPlay className="mx-auto text-cyan-400 mb-4" size={48} />
-          <div className="font-display text-4xl text-white mb-2">TK {(config?.totalBudget || 0).toLocaleString()}</div>
-          <div className="text-sm uppercase tracking-widest text-chalkMuted font-bold">Franchise Budget</div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10 mt-12 max-w-6xl mx-auto">
+        <motion.div variants={{hidden: {opacity:0, y:20}, show: {opacity:1, y:0}}} className="glass-panel p-8 text-center">
+          <MonitorPlay className="mx-auto text-zinc-400 mb-4" size={32} />
+          <div className="font-display text-3xl font-bold text-white mb-2">TK {(config?.totalBudget || 0).toLocaleString()}</div>
+          <div className="text-xs uppercase tracking-wider text-zinc-500 font-semibold">Franchise Budget</div>
         </motion.div>
-        <motion.div variants={{hidden: {opacity:0, y:20}, show: {opacity:1, y:0}}} className="glass-panel p-8 rounded-3xl text-center">
-          <Users className="mx-auto text-silver mb-4" size={48} />
-          <div className="font-display text-4xl text-white mb-2">{config?.minRosterSize || 0}</div>
-          <div className="text-sm uppercase tracking-widest text-chalkMuted font-bold">Minimum Squad Size</div>
+        <motion.div variants={{hidden: {opacity:0, y:20}, show: {opacity:1, y:0}}} className="glass-panel p-8 text-center">
+          <Users className="mx-auto text-zinc-400 mb-4" size={32} />
+          <div className="font-display text-3xl font-bold text-white mb-2">{config?.minRosterSize || 0}</div>
+          <div className="text-xs uppercase tracking-wider text-zinc-500 font-semibold">Minimum Squad Size</div>
         </motion.div>
-        <motion.div variants={{hidden: {opacity:0, y:20}, show: {opacity:1, y:0}}} className="glass-panel p-8 rounded-3xl text-center">
-          <Trophy className="mx-auto text-gold mb-4" size={48} />
-          <div className="font-display text-4xl text-white mb-2">{teams.length}</div>
-          <div className="text-sm uppercase tracking-widest text-chalkMuted font-bold">Active Franchises</div>
+        <motion.div variants={{hidden: {opacity:0, y:20}, show: {opacity:1, y:0}}} className="glass-panel p-8 text-center">
+          <Trophy className="mx-auto text-white mb-4" size={32} />
+          <div className="font-display text-3xl font-bold text-white mb-2">{teams.length}</div>
+          <div className="text-xs uppercase tracking-wider text-zinc-500 font-semibold">Active Franchises</div>
         </motion.div>
       </div>
 
-      <div className="glass-panel p-8 rounded-3xl">
-        <h2 className="font-display text-2xl tracking-widest mb-6">REGISTERED FRANCHISES</h2>
+      <div className="glass-panel p-8 relative z-10 max-w-6xl mx-auto">
+        <h2 className="font-display text-xl font-bold tracking-tight mb-6">Registered Franchises</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {teams.map((t, idx) => {
-            const TEAM_COLORS = ['#E8B84B', '#38BDF8', '#E4483B', '#A8AEB8', '#10B981', '#F472B6'];
-            const color = TEAM_COLORS[idx % TEAM_COLORS.length];
             return (
-              <div key={t.id} className="bg-white/5 border border-white/10 p-4 rounded-xl flex items-center gap-4 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-16 h-16 blur-[20px] opacity-20 pointer-events-none" style={{ background: color }} />
-                <div className="w-4 h-4 rounded-full" style={{ background: color }} />
-                <span className="font-bold text-lg">{t.name}</span>
+              <div key={t.id} className="bg-zinc-800/30 border border-zinc-700/50 p-4 rounded-xl flex items-center gap-4 hover:bg-zinc-800/60 transition">
+                <div className="w-3 h-3 rounded-full bg-white/20" />
+                <span className="font-semibold text-zinc-200">{t.name}</span>
               </div>
             );
           })}
@@ -136,51 +182,47 @@ function SetupPhase({ teams, config }: { teams: any[], config: any }) {
 function RegistrationPhase({ config }: { config: any }) {
   return (
     <motion.div initial="hidden" animate="show" exit={{opacity:0}} variants={{show: {transition: {staggerChildren: 0.1}}}} className="py-12 space-y-12">
-      <motion.div variants={{hidden: {opacity:0, y:20}, show: {opacity:1, y:0}}} className="text-center max-w-4xl mx-auto glass-panel p-12 rounded-3xl border-gold/30 shadow-[0_0_50px_rgba(232,184,75,0.1)]">
-        <div className="inline-block px-4 py-1 bg-gold/20 text-gold rounded-full font-bold uppercase tracking-widest text-sm mb-6">
+      <motion.div variants={{hidden: {opacity:0, y:20}, show: {opacity:1, y:0}}} className="max-w-6xl mx-auto glass-panel p-12 relative overflow-hidden">
+        <div className="inline-block px-3 py-1 bg-white/10 text-zinc-400 rounded-full font-semibold text-xs mb-6 uppercase tracking-wider">
           Phase 2 is Active
         </div>
-        <h1 className="font-display text-5xl md:text-7xl tracking-wider mb-6">
-          PLAYER <span className="text-gold">REGISTRATION</span> OPEN
+        <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight mb-4 text-white">
+          Player Registration Open
         </h1>
-        <p className="text-lg text-chalkMuted mb-10 max-w-2xl mx-auto">
+        <p className="text-zinc-400 mb-8 max-w-2xl text-lg">
           Calling all athletes! Register now to enter the auction pool. Set your profile, playing positions, and get verified by the organizers to be eligible for bidding.
         </p>
-        <div className="flex justify-center gap-4">
+        <div className="flex gap-4">
           <Link href="/register">
-            <button className="px-8 py-4 bg-gold hover:bg-yellow-400 text-ink rounded-xl font-bold uppercase tracking-widest transition text-lg flex items-center gap-3">
-              Register Now <ArrowRight size={20} />
+            <button className="px-6 py-3 bg-white hover:bg-zinc-200 text-black rounded-lg font-semibold transition flex items-center gap-2">
+              Register Now <ArrowRight size={18} />
             </button>
           </Link>
         </div>
       </motion.div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <motion.div variants={{hidden: {opacity:0, y:20}, show: {opacity:1, y:0}}} className="glass-panel p-8 rounded-3xl">
-          <h2 className="font-display tracking-widest text-xl mb-4">NOTICE BOARD</h2>
-          <ul className="space-y-4 text-chalkMuted">
-            <li className="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/5">
-              <Activity className="shrink-0 text-cyan-400" />
-              <div>
-                <strong className="text-white block mb-1">Registration Deadline</strong>
-                Make sure to submit your profile before the deadline. Late submissions will not be accepted.
-              </div>
-            </li>
-            <li className="flex gap-4 p-4 bg-white/5 rounded-xl border border-white/5">
-              <Target className="shrink-0 text-gold" />
-              <div>
-                <strong className="text-white block mb-1">Profile Verification</strong>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-6xl mx-auto">
+        <motion.div variants={{hidden: {opacity:0, y:20}, show: {opacity:1, y:0}}} className="glass-panel p-8">
+          <h2 className="font-display font-bold text-xl mb-4 text-white">Notice Board</h2>
+          <Accordion type="multiple" defaultValue={['deadline']}>
+            <AccordionItem id="deadline" title="Registration Deadline" icon={Activity}>
+              <p className="text-zinc-400 text-sm mt-2">
+                Make sure to submit your profile before the deadline. Late submissions will not be accepted under any circumstances.
+              </p>
+            </AccordionItem>
+            <AccordionItem id="verification" title="Profile Verification" icon={Target}>
+              <p className="text-zinc-400 text-sm mt-2">
                 All profiles are subject to review by the Super Admin before appearing in the auction draft.
-              </div>
-            </li>
-          </ul>
+              </p>
+            </AccordionItem>
+          </Accordion>
         </motion.div>
-        <motion.div variants={{hidden: {opacity:0, y:20}, show: {opacity:1, y:0}}} className="glass-panel p-8 rounded-3xl flex flex-col items-center justify-center text-center">
-          <h2 className="font-display tracking-widest text-xl mb-6">EVENT COUNTDOWN</h2>
-          <div className="flex gap-4 font-display text-4xl text-white">
-            <div className="flex flex-col"><span className="text-5xl text-gold">05</span><span className="text-xs uppercase tracking-widest text-chalkMuted">Days</span></div>
-            <span>:</span>
-            <div className="flex flex-col"><span className="text-5xl text-gold">12</span><span className="text-xs uppercase tracking-widest text-chalkMuted">Hours</span></div>
+        <motion.div variants={{hidden: {opacity:0, y:20}, show: {opacity:1, y:0}}} className="glass-panel p-8 flex flex-col items-center justify-center text-center">
+          <h2 className="font-display font-bold text-xl mb-6 text-white">Event Countdown</h2>
+          <div className="flex gap-6 font-display text-4xl text-white">
+            <div className="flex flex-col"><span className="text-5xl font-bold text-white">05</span><span className="text-xs uppercase tracking-wider text-zinc-500 mt-1">Days</span></div>
+            <span className="text-zinc-600 font-light">:</span>
+            <div className="flex flex-col"><span className="text-5xl font-bold text-white">12</span><span className="text-xs uppercase tracking-wider text-zinc-500 mt-1">Hours</span></div>
           </div>
         </motion.div>
       </div>
@@ -226,11 +268,11 @@ function AuctionPhase({ teams, auctionState, config }: { teams: any[], auctionSt
         }
       `}</style>
       {/* Live Banner */}
-      <div className="bg-danger/20 border border-danger/50 text-danger p-4 rounded-2xl flex items-center justify-between">
+      <div className="bg-white/5 border border-white/10 text-zinc-400 p-4 rounded-2xl flex items-center justify-between">
         <div className="w-10 hidden sm:block"></div>
         <div className="flex items-center gap-3 animate-pulse">
-          <div className="w-3 h-3 bg-danger rounded-full" />
-          <span className="font-display tracking-widest text-lg sm:text-xl">LIVE AUCTION IN PROGRESS</span>
+          <div className="w-3 h-3 bg-danger rounded-full shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
+          <span className="font-display tracking-widest text-lg sm:text-xl text-danger">LIVE AUCTION IN PROGRESS</span>
         </div>
         <button 
            onClick={() => {
@@ -243,7 +285,7 @@ function AuctionPhase({ teams, auctionState, config }: { teams: any[], auctionSt
                }
              }
            }}
-           className="p-2 bg-danger/20 hover:bg-danger/40 rounded-xl text-danger transition flex items-center gap-2"
+           className="p-2 bg-white/5 hover:bg-white/5 rounded-xl text-zinc-400 transition flex items-center gap-2"
            title="Toggle Fullscreen"
         >
           <span className="text-xs font-bold uppercase tracking-widest hidden sm:block fs-text-normal">Fullscreen</span>
@@ -270,7 +312,7 @@ function AuctionPhase({ teams, auctionState, config }: { teams: any[], auctionSt
                    {teams.map(t => (
                      <div key={t.id} className="bg-ink/50 border border-white/10 p-5 rounded-2xl">
                        <div className="flex justify-between items-center mb-4 border-b border-white/5 pb-2">
-                         <span className="font-bold text-gold tracking-widest truncate max-w-[150px]">{t.name}</span>
+                         <span className="font-bold text-white tracking-widest truncate max-w-[150px]">{t.name}</span>
                          <span className="bg-white/10 text-xs px-2 py-1 rounded-md">{t.players?.length || 0} Players</span>
                        </div>
                        <div className="space-y-2 max-h-[200px] overflow-y-auto custom-scrollbar pr-1">
@@ -282,7 +324,7 @@ function AuctionPhase({ teams, auctionState, config }: { teams: any[], auctionSt
                                </div>
                                <span className="text-white truncate">{p.name}</span>
                              </div>
-                             <span className="text-cyan-400 font-mono font-bold shrink-0">TK {p.soldPrice?.toLocaleString()}</span>
+                             <span className="text-white font-mono font-bold shrink-0">TK {p.soldPrice?.toLocaleString()}</span>
                            </div>
                          ))}
                          {(!t.players || t.players.length === 0) && (
@@ -295,7 +337,7 @@ function AuctionPhase({ teams, auctionState, config }: { teams: any[], auctionSt
                </div>
              </div>
           ) : status === 'PAUSED' ? (
-             <div className="text-center text-gold opacity-80">
+             <div className="text-center text-white opacity-80">
                <Clock size={64} className="mx-auto mb-6" />
                <h2 className="text-3xl font-display tracking-widest">AUCTION PAUSED</h2>
              </div>
@@ -305,19 +347,19 @@ function AuctionPhase({ teams, auctionState, config }: { teams: any[], auctionSt
                  {activePlayer.imageUrl ? <img src={activePlayer.imageUrl} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-white/20"><Users size={64}/></div>}
               </div>
               <div className="flex-1 py-2 text-center md:text-left">
-                <div className="text-xs uppercase tracking-widest text-gold font-bold mb-2">Player</div>
+                <div className="text-xs uppercase tracking-widest text-white font-bold mb-2">Player</div>
                 <h2 className="text-5xl font-display text-white mb-2">{activePlayer.name}</h2>
                 <div className="text-sm text-chalkMuted uppercase tracking-widest mb-10">Base Price: TK {(auctionState?.basePrice || 5000).toLocaleString()}</div>
                 
                 <div className="flex items-end justify-between bg-white/5 p-6 rounded-2xl border border-white/10">
                   <div>
                     <div className="text-xs uppercase tracking-widest text-chalkMuted font-bold mb-2">Current Bid</div>
-                    <div className="text-6xl font-display text-gold tabular">TK {currentBid?.toLocaleString()}</div>
-                    <div className="text-sm font-bold text-cyan-400 uppercase tracking-widest mt-2">{leadingTeam ? `by ${leadingTeam.name}` : 'No Bids Yet'}</div>
+                    <div className="text-6xl font-display text-white tabular">TK {currentBid?.toLocaleString()}</div>
+                    <div className="text-sm font-bold text-white uppercase tracking-widest mt-2">{leadingTeam ? `by ${leadingTeam.name}` : 'No Bids Yet'}</div>
                   </div>
                   <div className="text-right">
                     <div className="text-xs uppercase tracking-widest text-chalkMuted font-bold mb-2">Timer</div>
-                    <div className={`text-6xl font-display tabular ${timer <= 5 ? 'text-danger' : 'text-white'}`}>{timer}</div>
+                    <div className={`text-6xl font-display tabular ${timer <= 5 ? 'text-zinc-400' : 'text-white'}`}>{timer}</div>
                   </div>
                 </div>
               </div>
@@ -339,8 +381,8 @@ function AuctionPhase({ teams, auctionState, config }: { teams: any[], auctionSt
                     <span className="font-bold text-white">{t.name}</span>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs uppercase tracking-widest text-chalkMuted">Remaining</div>
-                    <div className="font-display text-gold tabular">TK {t.remainingBudget?.toLocaleString()}</div>
+                    <div className="text-xs uppercase tracking-widest text-white/60">Remaining</div>
+                    <div className="font-display text-white tabular text-xl">TK {t.remainingBudget?.toLocaleString()}</div>
                   </div>
                 </div>
               );
@@ -365,79 +407,155 @@ function TournamentPhase() {
   }, []);
 
   return (
-    <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="py-12 space-y-8">
-      <div className="text-center mb-12">
-        <h1 className="font-display text-5xl tracking-widest mb-4">TOURNAMENT <span className="text-cyan-400">DASHBOARD</span></h1>
-        <p className="text-chalkMuted uppercase tracking-widest">Live Standings and Fixtures</p>
+    <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="py-12 space-y-6 max-w-6xl mx-auto">
+      <div className="mb-10 text-center">
+        <h1 className="font-display text-3xl md:text-4xl font-bold tracking-tight mb-2 text-white">Tournament Dashboard</h1>
+        <p className="text-zinc-400 uppercase tracking-wider text-xs font-semibold">Live Matches & Standings</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="glass-panel p-8 rounded-3xl h-fit">
-          <h2 className="font-display tracking-widest text-xl text-gold mb-6 flex items-center gap-2"><Trophy size={20}/> POINTS TABLE</h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-white/10 text-xs uppercase tracking-widest text-chalkMuted">
-                  <th className="pb-3 px-2">Team</th>
-                  <th className="pb-3 px-2 text-center">P</th>
-                  <th className="pb-3 px-2 text-center">W</th>
-                  <th className="pb-3 px-2 text-center">D</th>
-                  <th className="pb-3 px-2 text-center">L</th>
-                  <th className="pb-3 px-2 text-center">GD</th>
-                  <th className="pb-3 px-2 text-center text-cyan-400 font-bold">PTS</th>
-                </tr>
-              </thead>
-              <tbody>
-                {standings.map((s, idx) => (
-                  <tr key={s.teamId} className="border-b border-white/5 last:border-0 hover:bg-white/5 transition-colors">
-                    <td className="py-3 px-2 font-bold text-white flex items-center gap-2">
-                      <span className="text-xs text-chalkMuted">{idx + 1}.</span> {s.teamName}
-                    </td>
-                    <td className="py-3 px-2 text-center text-chalkMuted tabular">{s.played}</td>
-                    <td className="py-3 px-2 text-center text-gold tabular">{s.won}</td>
-                    <td className="py-3 px-2 text-center text-chalkMuted tabular">{s.drawn}</td>
-                    <td className="py-3 px-2 text-center text-danger tabular">{s.lost}</td>
-                    <td className="py-3 px-2 text-center tabular">{s.gd > 0 ? `+${s.gd}` : s.gd}</td>
-                    <td className="py-3 px-2 text-center text-cyan-400 font-bold font-display text-xl tabular">{s.points}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {standings.length === 0 && <div className="text-center text-chalkMuted py-4 text-sm uppercase tracking-widest opacity-50">No Data Available</div>}
-          </div>
-        </div>
+      {/* Featured Match Card */}
+      {fixtures.length > 0 && (
+        <div className="glass-panel p-8 relative overflow-hidden">
 
-        <div className="glass-panel p-8 rounded-3xl h-fit">
-          <h2 className="font-display tracking-widest text-xl text-cyan-400 mb-6">FIXTURES & RESULTS</h2>
-          <div className="space-y-4">
-            {fixtures.map(fix => {
+
+          {(() => {
+            const featuredFixture = fixtures.find(f => f.matches.some((m:any) => m.status === 'IN_PROGRESS' || m.status === 'SCHEDULED')) || fixtures[fixtures.length - 1];
+            const featuredMatch = featuredFixture?.matches.find((m:any) => m.status === 'IN_PROGRESS' || m.status === 'SCHEDULED') || featuredFixture?.matches[0];
+            const tA = teams.find(t => t.id === featuredFixture?.teamAId);
+            const tB = teams.find(t => t.id === featuredFixture?.teamBId);
+            
+            if (!tA || !tB) return null;
+
+
+            const dateStr = featuredMatch?.scheduledAt 
+              ? new Date(featuredMatch.scheduledAt).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+              : 'Upcoming Match';
+
+            return (
+              <>
+                <div className="text-xs text-zinc-400 uppercase tracking-wider mb-6 border-b border-zinc-800 pb-4 flex justify-between absolute top-6 left-6 right-6">
+                  <span>GSTU League · {dateStr}</span>
+                  <span className="text-danger font-bold tracking-widest flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-danger animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]" /> LIVE</span>
+                </div>
+                
+                <div className="flex items-center justify-between px-10 mb-10 mt-12">
+                  <div className="flex flex-col items-center gap-4 w-1/3">
+                    <div className="w-20 h-20 bg-zinc-800/50 rounded-full flex items-center justify-center border border-zinc-700 overflow-hidden">
+                      {tA.logoUrl ? <img src={tA.logoUrl} alt={tA.name} className="w-full h-full object-cover" /> : <Shield size={32} className="text-zinc-600" />}
+                    </div>
+                    <div className="font-display font-bold text-xl text-white">{tA.name}</div>
+                  </div>
+
+                  <div className="flex flex-col items-center w-1/3">
+                    <div className="text-3xl font-display font-bold text-white mb-2">
+                      {featuredMatch.scoreA} - {featuredMatch.scoreB}
+                    </div>
+                    <div className={`text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full border ${featuredMatch.status === 'IN_PROGRESS' ? 'text-danger bg-danger/10 border-danger/20 animate-pulse' : featuredMatch.status === 'COMPLETED' ? 'text-success bg-success/10 border-success/20' : 'text-zinc-500 bg-zinc-800/50 border-zinc-700/50'}`}>
+                      {featuredMatch.status.replace('_', ' ')}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col items-center gap-4 w-1/3">
+                    <div className="w-20 h-20 bg-zinc-800/50 rounded-full flex items-center justify-center border border-zinc-700 overflow-hidden">
+                      {tB.logoUrl ? <img src={tB.logoUrl} alt={tB.name} className="w-full h-full object-cover" /> : <Shield size={32} className="text-zinc-600" />}
+                    </div>
+                    <div className="font-display font-bold text-xl text-white">{tB.name}</div>
+                  </div>
+                </div>
+
+
+              </>
+            );
+          })()}
+        </div>
+      )}
+
+      {/* Standings Table */}
+      <div className="glass-panel p-8 h-fit">
+        <h2 className="font-display font-bold text-xl text-white mb-6 border-b border-zinc-800 pb-4">Standings</h2>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="border-b border-zinc-800 text-[10px] uppercase tracking-widest text-zinc-500">
+                <th className="pb-3 px-3">Club</th>
+                <th className="pb-3 px-2 text-center">MP</th>
+                <th className="pb-3 px-2 text-center">W</th>
+                <th className="pb-3 px-2 text-center">D</th>
+                <th className="pb-3 px-2 text-center">L</th>
+                <th className="pb-3 px-2 text-center">GF</th>
+                <th className="pb-3 px-2 text-center">GA</th>
+                <th className="pb-3 px-2 text-center">GD</th>
+                <th className="pb-3 px-3 text-center text-white font-bold">Pts</th>
+              </tr>
+            </thead>
+            <tbody>
+              {standings.map((s, idx) => (
+                <tr key={s.teamId} className="border-b border-zinc-800/50 last:border-0 hover:bg-zinc-800/30 transition-colors group">
+                  <td className="py-3 px-3 font-bold text-white flex items-center gap-3">
+                    <span className="text-xs w-4 text-zinc-500">{idx + 1}</span> 
+                    {s.logoUrl ? <img src={s.logoUrl} alt={s.teamName} className="w-6 h-6 rounded-full object-cover" /> : <Shield size={16} className="text-zinc-500 group-hover:text-zinc-400 transition-colors" />}
+                    {s.teamName}
+                  </td>
+                  <td className="py-3 px-2 text-center text-zinc-400 text-sm">{s.played}</td>
+                  <td className="py-3 px-2 text-center text-zinc-400 text-sm">{s.won}</td>
+                  <td className="py-3 px-2 text-center text-zinc-400 text-sm">{s.drawn}</td>
+                  <td className="py-3 px-2 text-center text-zinc-400 text-sm">{s.lost}</td>
+                  <td className="py-3 px-2 text-center text-zinc-400 text-sm">{s.gf}</td>
+                  <td className="py-3 px-2 text-center text-zinc-400 text-sm">{s.ga}</td>
+                  <td className="py-3 px-2 text-center text-zinc-400 text-sm">{s.gd > 0 ? `+${s.gd}` : s.gd}</td>
+                  <td className="py-3 px-3 text-center text-white font-bold text-lg">{s.points}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {standings.length === 0 && <div className="text-center text-zinc-500 py-8 text-sm uppercase tracking-widest font-semibold">No Data Available</div>}
+        </div>
+      </div>
+
+      {/* Full Fixtures List */}
+      <div className="glass-panel p-8 h-fit">
+        <h2 className="font-display font-bold text-xl text-white mb-6 border-b border-zinc-800 pb-4">All Fixtures</h2>
+        <div className="space-y-4">
+          <Accordion type="single">
+            {fixtures.sort((a, b) => {
+              const dateA = a.matches[0]?.scheduledAt ? new Date(a.matches[0].scheduledAt).getTime() : 0;
+              const dateB = b.matches[0]?.scheduledAt ? new Date(b.matches[0].scheduledAt).getTime() : 0;
+              return dateA - dateB;
+            }).map(fix => {
               const tA = teams.find(t => t.id === fix.teamAId)?.name;
               const tB = teams.find(t => t.id === fix.teamBId)?.name;
               return (
-                <div key={fix.id} className="bg-white/5 border border-white/10 rounded-xl p-4">
-                  <div className="text-xs text-chalkMuted uppercase tracking-widest mb-2 flex justify-between">
-                    <span>{fix.venue}</span>
-                    <span className="text-gold">{fix.isTwoLegged ? 'Two-Legged' : 'Single Tie'}</span>
-                  </div>
-                  {fix.matches.map((m: any) => (
-                    <div key={m.id} className="flex items-center justify-between py-2 border-t border-white/5 first:border-0">
-                      <div className="font-bold w-1/3 text-right">{tA}</div>
-                      <div className="flex flex-col items-center px-4 w-1/3">
-                        <div className="bg-ink px-3 py-1 rounded font-display tracking-wider text-xl text-white">
-                          {m.status === 'SCHEDULED' ? 'v' : `${m.scoreA ?? 0} - ${m.scoreB ?? 0}`}
+                <AccordionItem 
+                  key={fix.id} 
+                  id={fix.id} 
+                  title={`Matchday: ${fix.venue} ${fix.isTwoLegged ? '(Two-Legged)' : '(Single Tie)'}`}
+                  icon={Calendar}
+                >
+                  <div className="space-y-2 mt-2">
+                    {fix.matches.sort((a:any, b:any) => a.legNumber - b.legNumber).map((m: any) => (
+                      <div key={m.id} className="flex items-center justify-between p-3 rounded-lg bg-black/40 border border-zinc-800 hover:bg-black/60 transition-colors">
+                        <div className="flex flex-col w-1/4">
+                          <div className="font-semibold text-zinc-300 text-sm">{m.scheduledAt ? new Date(m.scheduledAt).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : 'TBD'}</div>
+                          <div className="text-xs text-zinc-500">{m.scheduledAt ? new Date(m.scheduledAt).toLocaleString('en-US', { hour: 'numeric', minute: '2-digit' }) : ''}</div>
                         </div>
-                        <div className={`text-[10px] uppercase mt-1 tracking-widest font-bold ${m.status === 'COMPLETED' ? 'text-chalkMuted' : m.status === 'IN_PROGRESS' ? 'text-danger' : 'text-cyan-400'}`}>
-                          {m.status === 'IN_PROGRESS' ? 'Live' : m.status}
+                        <div className="font-semibold w-1/4 text-right text-zinc-200 text-sm lg:text-base">{tA}</div>
+                        <div className="flex flex-col items-center px-4 w-1/4">
+                          <div className="bg-zinc-800 px-4 py-1.5 rounded-lg font-display tracking-wider text-lg text-white shadow-inner border border-zinc-700">
+                            {m.status === 'SCHEDULED' ? 'v' : `${m.scoreA ?? 0} - ${m.scoreB ?? 0}`}
+                          </div>
+                          <div className={`text-[10px] uppercase mt-1 tracking-widest font-bold ${m.status === 'COMPLETED' ? 'text-success' : m.status === 'IN_PROGRESS' ? 'text-danger animate-pulse' : 'text-zinc-400'}`}>
+                            {m.status === 'IN_PROGRESS' ? 'Live' : m.status.replace('_', ' ')}
+                          </div>
                         </div>
+                        <div className="font-semibold w-1/4 text-left text-zinc-200 text-sm lg:text-base">{tB}</div>
                       </div>
-                      <div className="font-bold w-1/3 text-left">{tB}</div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                </AccordionItem>
               );
             })}
-            {fixtures.length === 0 && <div className="text-center text-chalkMuted py-4 text-sm uppercase tracking-widest opacity-50">No Fixtures Generated</div>}
-          </div>
+          </Accordion>
+          {fixtures.length === 0 && <div className="text-center text-zinc-500 py-4 text-sm uppercase tracking-widest font-semibold opacity-50">No Fixtures Scheduled</div>}
         </div>
       </div>
     </motion.div>

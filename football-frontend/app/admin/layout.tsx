@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { LayoutDashboard, Settings, Trophy, MonitorPlay, LogOut, Loader2, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { ThemeToggle } from '../../components/ThemeToggle';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -39,9 +40,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-ink text-gold min-h-screen">
+      <div className="flex-1 flex items-center justify-center text-zinc-500 min-h-screen">
         <Loader2 className="animate-spin mr-3" size={32} />
-        <span className="font-display tracking-widest text-2xl">LOADING COMMAND CENTER...</span>
+        <span className="font-display tracking-widest text-xl font-bold uppercase">Loading Command Center...</span>
       </div>
     );
   }
@@ -54,17 +55,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   ];
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-ink text-chalk">
+    <div className="flex flex-col md:flex-row min-h-screen bg-ink text-chalk pb-20 md:pb-0 relative">
       
-      {/* Sidebar Navigation */}
+      {/* Desktop Sidebar Navigation */}
       <motion.aside 
         initial={{ x: -50, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        className="w-full md:w-64 bg-white/5 border-b md:border-b-0 md:border-r border-white/10 flex flex-col shrink-0"
+        className="hidden md:flex w-64 bg-white/5 border-r border-white/10 flex-col shrink-0 h-screen sticky top-0"
       >
-        <div className="p-6 border-b border-white/10 flex items-center gap-3">
-          <ShieldCheck className="text-gold" size={28} />
-          <h1 className="font-display text-xl tracking-widest text-white">ADMIN</h1>
+        <div className="p-6 border-b border-white/5 flex items-center gap-3">
+          <ShieldCheck className="text-accent" size={32} />
+          <h1 className="font-display font-bold text-2xl tracking-wider text-white">ADMIN</h1>
         </div>
 
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
@@ -74,12 +75,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             
             return (
               <Link key={item.href} href={item.href}>
-                <div className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all font-bold tracking-widest uppercase text-xs ${
+                <div className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-base ${
                   isActive 
-                    ? 'bg-gold text-ink shadow-[0_0_20px_rgba(232,184,75,0.2)]' 
-                    : 'text-chalkMuted hover:bg-white/10 hover:text-white'
+                    ? 'bg-accent/10 text-accent border border-accent/20' 
+                    : 'text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'
                 }`}>
-                  <Icon size={18} className={isActive ? 'text-ink' : 'text-gold'} />
+                  <Icon size={20} className={isActive ? 'text-accent' : 'text-zinc-500'} />
                   {item.label}
                 </div>
               </Link>
@@ -87,11 +88,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           })}
         </nav>
 
-        <div className="p-4 border-t border-white/10">
-          <div className="bg-white/5 p-4 rounded-xl mb-4">
-            <div className="text-[10px] font-bold uppercase tracking-widest text-chalkMuted mb-1">Logged In As</div>
-            <div className="text-sm font-bold text-white truncate">{user?.email}</div>
-            <div className="text-xs text-gold mt-1 uppercase tracking-widest">{user?.role?.replace('_', ' ')}</div>
+        <div className="p-4 border-t border-white/5">
+          <div className="bg-white/5 border border-white/10 p-4 rounded-xl mb-4">
+            <div className="text-sm font-semibold text-zinc-500 mb-1">Logged In As</div>
+            <div className="text-base font-bold text-zinc-200 truncate">{user?.email}</div>
+            <div className="text-xs text-zinc-400 mt-1 uppercase tracking-wider font-bold">{user?.role?.replace('_', ' ')}</div>
           </div>
           
           <button 
@@ -99,15 +100,29 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               localStorage.removeItem('token');
               router.push('/login');
             }}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-danger/10 hover:bg-danger/20 text-danger rounded-xl font-bold tracking-widest uppercase text-xs transition"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 hover:bg-white/10 text-zinc-400 hover:text-white border border-white/10 rounded-xl font-semibold text-base transition"
           >
-            <LogOut size={16} /> Logout
+            <LogOut size={18} /> Logout
           </button>
         </div>
       </motion.aside>
 
+      {/* Mobile Bottom Navigation */}
+      <div className="md:hidden fixed bottom-0 left-0 w-full bg-ink/95 backdrop-blur-xl border-t border-white/10 flex items-center justify-around p-2 z-[9999] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] safe-area-bottom">
+        {navItems.map((item) => {
+          const isActive = pathname === item.href;
+          const Icon = item.icon;
+          return (
+            <Link key={item.href} href={item.href} className={`flex flex-col items-center p-2 rounded-xl transition ${isActive ? 'text-accent' : 'text-zinc-500 hover:text-white'}`}>
+              <Icon size={22} className={isActive ? 'text-accent drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]' : ''} />
+              <span className={`text-[10px] font-bold uppercase tracking-wider mt-1 ${isActive ? 'text-accent' : 'text-zinc-500'}`}>{item.label}</span>
+            </Link>
+          );
+        })}
+      </div>
+
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
+      <main className="flex-1 flex flex-col min-w-0 md:h-screen md:overflow-y-auto">
         {children}
       </main>
       

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { io, Socket } from 'socket.io-client';
-import { User, Coins, AlertCircle, Clock, CheckCircle2, Crown, EyeOff, Shield, Search, ListOrdered, ChevronRight, Activity, HandMetal, TrendingUp } from 'lucide-react';
+import { User, Coins, AlertCircle, Clock, CheckCircle2, Crown, EyeOff, Shield, ShieldAlert, Search, ListOrdered, ChevronRight, Activity, HandMetal, TrendingUp, Image as ImageIcon, X } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import PlayerDirectory from '../../components/PlayerDirectory';
@@ -23,6 +23,8 @@ export default function ManagerDashboard() {
   const [activeTab, setActiveTab] = useState<'auction' | 'database' | 'wishlist'>('auction');
   const [allPlayers, setAllPlayers] = useState<any[]>([]);
   const [wishlistIds, setWishlistIds] = useState<string[]>([]);
+  const [logoDialog, setLogoDialog] = useState(false);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
 
   useEffect(() => {
     const t = localStorage.getItem('token');
@@ -110,6 +112,34 @@ export default function ManagerDashboard() {
     }).catch(console.error);
   };
 
+  const uploadLogo = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const t = localStorage.getItem('token');
+    if (!logoFile || !t || !team) return;
+
+    const formData = new FormData();
+    formData.append('image', logoFile);
+
+    const toastId = toast.loading('Uploading logo...');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams/${team.id}/logo`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${t}` },
+      body: formData
+    });
+
+    if (res.ok) {
+      toast.success('Logo uploaded successfully!', { id: toastId });
+      setLogoDialog(false);
+      setLogoFile(null);
+      // Fetch fresh team data
+      const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/me`, { headers: { Authorization: `Bearer ${t}` }}).then(r => r.json());
+      if (data.team) setTeam(data.team);
+    } else {
+      const err = await res.json();
+      toast.error(err.error || 'Failed to upload logo', { id: toastId });
+    }
+  };
+
   if (loading || !team) return <div className="min-h-screen bg-ink flex items-center justify-center p-10 text-chalk text-2xl font-display uppercase tracking-widest">INITIALIZING MANAGER CONSOLE...</div>;
 
   const TEAM_COLORS = ['#E8B84B', '#38BDF8', '#E4483B', '#A8AEB8', '#10B981', '#F472B6'];
@@ -130,11 +160,25 @@ export default function ManagerDashboard() {
       <header className="border-b border-white/10 bg-panel/80 backdrop-blur-xl sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center">
-              <ShieldAlert color={teamColor} />
-            </div>
+            <button 
+              onClick={() => setLogoDialog(true)} 
+              className="relative w-14 h-14 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center overflow-hidden shrink-0 group transition-transform hover:scale-105 shadow-xl"
+              title="Edit Team Logo"
+            >
+              {team.logoUrl ? (
+                <img src={team.logoUrl} alt={team.name} className="w-full h-full object-cover" />
+              ) : (
+                <ShieldAlert color={teamColor} />
+              )}
+              {/* Hover Overlay */}
+              <div className="absolute inset-0 bg-ink/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity backdrop-blur-sm">
+                <ImageIcon size={20} className="text-white drop-shadow-md" />
+              </div>
+            </button>
             <div>
-              <div className="text-[10px] uppercase tracking-widest text-chalkMuted font-bold mb-0.5">Franchise Portal</div>
+              <div className="text-[10px] uppercase tracking-widest text-chalkMuted font-bold mb-0.5">
+                Franchise Portal
+              </div>
               <div className="text-xl md:text-2xl font-display text-white tracking-wide">{team.name}</div>
             </div>
           </div>
@@ -142,7 +186,7 @@ export default function ManagerDashboard() {
           <div className="flex items-center gap-6">
             <div className="bg-ink border border-white/10 rounded-2xl px-6 py-2 flex flex-col items-end">
               <div className="text-[10px] uppercase tracking-widest text-chalkMuted font-bold mb-1">Remaining Purse</div>
-              <div className="text-2xl font-display tabular-nums text-gold">TK {team.remainingBudget.toLocaleString()}</div>
+              <div className="text-2xl font-display tabular-nums text-white">TK {team.remainingBudget.toLocaleString()}</div>
             </div>
           </div>
         </div>
@@ -175,6 +219,45 @@ export default function ManagerDashboard() {
         </div>
       </header>
 
+      {/* Logo Upload Modal */}
+      <AnimatePresence>
+        {logoDialog && (
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+          >
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-panel border border-white/10 rounded-3xl p-6 w-full max-w-sm shadow-2xl relative"
+            >
+              <button onClick={() => { setLogoDialog(false); setLogoFile(null); }} className="absolute top-6 right-6 text-chalkMuted hover:text-white transition">
+                <X size={24} />
+              </button>
+              
+              <h2 className="text-xl font-display text-white mb-2">Upload Team Logo</h2>
+              <p className="text-xs text-chalkMuted uppercase tracking-widest mb-6">Choose an image file for {team.name}</p>
+              
+              <form onSubmit={uploadLogo} className="space-y-4">
+                <div className="space-y-2">
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    required 
+                    onChange={e => setLogoFile(e.target.files?.[0] || null)}
+                    className="w-full text-sm text-chalkMuted file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-white/10 file:text-white hover:file:bg-white/20 transition cursor-pointer"
+                  />
+                </div>
+                <div className="pt-4">
+                  <button type="submit" className="w-full px-8 py-3.5 bg-white text-black hover:bg-white text-black text-ink rounded-xl font-bold uppercase tracking-widest transition-all shadow-lg">
+                    Upload Logo
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="flex-1 max-w-7xl w-full mx-auto px-6 py-8">
         
         {activeTab === 'auction' ? (
@@ -183,7 +266,7 @@ export default function ManagerDashboard() {
             <div className="lg:col-span-8 space-y-6">
               <div className="bg-panel p-8 md:p-12 rounded-3xl border border-white/10 relative overflow-hidden flex flex-col items-center justify-center min-h-[500px] shadow-2xl">
                 {mode === 'BLIND' && (
-                  <div className="absolute top-6 left-6 bg-danger/10 text-danger border border-danger/20 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg backdrop-blur-md">
+                  <div className="absolute top-6 left-6 bg-white/5 text-zinc-400 border border-white/10 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg backdrop-blur-md">
                     <EyeOff size={16} /> Blind Mode
                   </div>
                 )}
@@ -198,8 +281,8 @@ export default function ManagerDashboard() {
                   </div>
                 ) : status === 'PAUSED' ? (
                   <div className="text-center">
-                    <div className="w-20 h-20 mx-auto bg-gold/10 rounded-full flex items-center justify-center mb-6 border border-gold/20">
-                      <AlertCircle size={32} className="text-gold" />
+                    <div className="w-20 h-20 mx-auto bg-white/10 rounded-full flex items-center justify-center mb-6 border border-white/20">
+                      <AlertCircle size={32} className="text-white" />
                     </div>
                     <h2 className="text-3xl tracking-widest font-display text-white uppercase mb-2">Paused</h2>
                     <p className="text-sm text-chalkMuted tracking-wider uppercase font-semibold">Auction temporarily paused</p>
@@ -226,8 +309,8 @@ export default function ManagerDashboard() {
                       
                       <div className="flex-1 flex flex-col justify-between py-2">
                         <div>
-                          <div className="text-xs uppercase tracking-widest text-gold font-bold mb-2 flex items-center gap-2 justify-center md:justify-start">
-                            <span className="w-2 h-2 rounded-full bg-gold animate-pulse" /> Live Now
+                          <div className="text-xs uppercase tracking-widest text-white font-bold mb-2 flex items-center gap-2 justify-center md:justify-start">
+                            <span className="w-2 h-2 rounded-full bg-danger animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]" /> Live Now
                           </div>
                           <h2 className="text-4xl md:text-5xl font-display text-white tracking-wide mb-2">{activePlayer.name}</h2>
                           <div className="text-sm text-chalkMuted uppercase tracking-wider font-semibold">Base Price: TK {basePrice.toLocaleString()}</div>
@@ -240,7 +323,7 @@ export default function ManagerDashboard() {
                               {mode === 'BLIND' && !isLeading ? '???' : `TK ${currentBid.toLocaleString()}`}
                             </div>
                             {isLeading && (
-                              <motion.div initial={{opacity:0,y:5}} animate={{opacity:1,y:0}} className="text-emerald-400 font-bold uppercase text-xs mt-3 tracking-widest flex items-center justify-center sm:justify-start gap-1.5 bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/20 w-fit sm:mx-0 mx-auto">
+                              <motion.div initial={{opacity:0,y:5}} animate={{opacity:1,y:0}} className="text-white font-bold uppercase text-xs mt-3 tracking-widest flex items-center justify-center sm:justify-start gap-1.5 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 w-fit sm:mx-0 mx-auto">
                                 <CheckCircle2 size={14} /> You are leading
                               </motion.div>
                             )}
@@ -250,7 +333,7 @@ export default function ManagerDashboard() {
                             <div className="text-[10px] uppercase tracking-widest text-chalkMuted font-bold mb-2 flex items-center gap-1.5">
                               <Clock size={12} /> Timer
                             </div>
-                            <div className={`text-6xl font-display tabular-nums leading-none ${timer <= 5 ? 'text-danger' : 'text-gold'}`}>
+                            <div className={`text-6xl font-display tabular-nums leading-none ${timer <= 5 ? 'text-zinc-400' : 'text-white'}`}>
                               {timer}
                             </div>
                           </div>
@@ -268,12 +351,12 @@ export default function ManagerDashboard() {
                           disabled={isLeading || !canAfford || isBidding || hasFolded}
                           className={`flex-1 py-6 rounded-2xl font-display text-3xl md:text-4xl tracking-widest uppercase transition-all flex items-center justify-center gap-4 ${
                             isLeading 
-                              ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.1)]'
+                              ? 'bg-white/10 text-white border border-white/20 '
                               : !canAfford 
                                 ? 'bg-white/5 text-chalkMuted border border-white/5 opacity-50 cursor-not-allowed'
                                 : hasFolded
-                                  ? 'bg-danger/10 text-danger border border-danger/30 opacity-50 cursor-not-allowed'
-                                  : 'bg-gold text-ink hover:bg-yellow-400 shadow-[0_8px_30px_rgba(244,196,83,0.3)]'
+                                  ? 'bg-white/5 text-zinc-400 border border-white/10 opacity-50 cursor-not-allowed'
+                                  : 'bg-white text-black text-ink hover:bg-zinc-200 hover:text-black shadow-[0_8px_30px_rgba(244,196,83,0.3)]'
                           }`}
                         >
                           {isBidding ? (
@@ -301,7 +384,7 @@ export default function ManagerDashboard() {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={handleFold}
-                            className="px-8 py-6 rounded-2xl font-display text-xl tracking-widest uppercase transition-all flex flex-col items-center justify-center gap-1 bg-white/5 text-chalkMuted hover:bg-danger/20 hover:text-danger border border-white/10 hover:border-danger/30"
+                            className="px-8 py-6 rounded-2xl font-display text-xl tracking-widest uppercase transition-all flex flex-col items-center justify-center gap-1 bg-white/5 text-chalkMuted hover:bg-white/5 hover:text-zinc-400 border border-white/10 hover:border-white/10"
                           >
                             <AlertCircle size={24} />
                             Fold
@@ -335,9 +418,9 @@ export default function ManagerDashboard() {
                           key={`${bid.teamId}-${bid.amount}-${idx}`}
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className={`flex justify-between items-center text-sm p-3 rounded-xl border ${idx === 0 ? 'bg-gold/10 border-gold/20' : 'bg-ink border-white/5'}`}
+                          className={`flex justify-between items-center text-sm p-3 rounded-xl border ${idx === 0 ? 'bg-white/10 border-white/20' : 'bg-ink border-white/5'}`}
                         >
-                          <span className={`font-bold tracking-wide ${idx === 0 ? 'text-gold' : 'text-white'}`}>{bid.teamName}</span>
+                          <span className={`font-bold tracking-wide ${idx === 0 ? 'text-white' : 'text-white'}`}>{bid.teamName}</span>
                           <span className={`font-display tracking-widest ${idx === 0 ? 'text-white' : 'text-chalkMuted'}`}>TK {bid.amount.toLocaleString()}</span>
                         </motion.div>
                       ))}
@@ -365,7 +448,7 @@ export default function ManagerDashboard() {
                       </div>
                       <div className="text-right shrink-0">
                         <div className="text-[10px] text-chalkMuted uppercase tracking-widest mb-1 font-semibold">Bought For</div>
-                        <div className="text-gold font-display tracking-wider text-sm tabular-nums">TK {p.soldPrice?.toLocaleString()}</div>
+                        <div className="text-white font-display tracking-wider text-sm tabular-nums">TK {p.soldPrice?.toLocaleString()}</div>
                       </div>
                     </div>
                   )) : (
@@ -408,11 +491,3 @@ export default function ManagerDashboard() {
   );
 }
 
-// Simple fallback icon
-function ShieldAlert({ color }: { color: string }) {
-  return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-    </svg>
-  );
-}
