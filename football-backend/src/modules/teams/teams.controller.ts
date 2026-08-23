@@ -115,7 +115,7 @@ export const approveManager = async (req: Request, res: Response): Promise<any> 
 
 export const rejectManager = async (req: Request, res: Response): Promise<any> => {
   try {
-    const userId = req.params.id;
+    const userId = req.params.id as string;
     if (!userId) return res.status(400).json({ error: 'User ID is required' });
 
     // Ensure user exists and is a pending manager
