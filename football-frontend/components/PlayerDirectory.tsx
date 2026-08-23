@@ -171,7 +171,7 @@ export default function PlayerDirectory({
       </div>
 
       {/* Player Grid */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-[400px]">
+      <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
         {filteredAndSortedPlayers.length > 0 ? (
           <motion.div 
             initial={{ opacity: 0 }}

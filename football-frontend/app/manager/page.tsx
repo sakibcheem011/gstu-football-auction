@@ -490,7 +490,7 @@ export default function ManagerDashboard() {
             </div>
           </div>
         ) : activeTab === 'database' ? (
-          <div className="h-[calc(100vh-220px)]">
+          <div className="h-[calc(100vh-220px)] flex flex-col overflow-hidden">
             {config?.auctionMode === 'ROUND_ROBIN' && config?.draftOrder?.[config?.currentDraftTurn] === team?.id && (
                <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-4 rounded-2xl mb-4 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
                  <ListOrdered size={24} />

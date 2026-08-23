@@ -35,7 +35,7 @@ export default function PlayersPage() {
           <span className="font-display tracking-widest text-xl">LOADING PLAYERS...</span>
         </div>
       ) : (
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 flex flex-col overflow-hidden">
           <PlayerDirectory players={players} showStatusFilter={true} enablePlayerModal={true} />
         </div>
       )}

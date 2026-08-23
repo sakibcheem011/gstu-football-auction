@@ -402,7 +402,7 @@ export default function AdminAuctionDashboard() {
               </div>
             </div>
             
-            <div className="flex-1">
+            <div className="flex-1 flex flex-col min-h-0">
               {config?.auctionMode === 'ROUND_ROBIN' && config?.draftOrder?.length > 0 && (
                 <div className="bg-white/5 border border-white/10 text-white p-4 rounded-2xl mb-4 flex items-center justify-between shadow-lg">
                   <div className="flex items-center gap-3">

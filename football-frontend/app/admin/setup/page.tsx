@@ -1157,8 +1157,8 @@ export default function SuperAdminSetup() {
 
             {activeTab === 'players' && (
               <motion.div key="players" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                <div className="bg-panel rounded-3xl border border-white/10 shadow-xl p-8 h-[calc(100vh-250px)]">
-                  <div className="border-b border-white/5 pb-4 mb-4">
+                <div className="bg-panel rounded-3xl border border-white/10 shadow-xl p-8 h-[calc(100vh-250px)] flex flex-col overflow-hidden">
+                  <div className="border-b border-white/5 pb-4 mb-4 shrink-0">
                     <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-chalk flex items-center gap-3">
                       <CheckCircle className="text-white" size={18} /> Approval Queue & Database
                     </h2>
