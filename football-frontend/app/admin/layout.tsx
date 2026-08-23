@@ -21,7 +21,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       return;
     }
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/me`, {
+    fetch(`/auth/me`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => res.json())

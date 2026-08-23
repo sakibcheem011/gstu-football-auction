@@ -8,7 +8,7 @@ export default function FranchisesPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams`)
+    fetch(`/teams`)
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) setTeams(data);

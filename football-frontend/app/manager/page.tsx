@@ -30,7 +30,7 @@ export default function ManagerDashboard() {
     const t = localStorage.getItem('token');
     if (!t) { router.push('/login'); return; }
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/me`, { headers: { Authorization: `Bearer ${t}` }})
+    fetch(`/auth/me`, { headers: { Authorization: `Bearer ${t}` }})
       .then(res => res.json())
       .then(data => {
         if (data.role !== 'TEAM_MANAGER' || !data.team) {
@@ -43,16 +43,16 @@ export default function ManagerDashboard() {
         }
       }).catch(() => router.push('/login'));
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/config`).then(res => res.json()).then(data => setConfig(data)).catch(console.error);
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/players/public`).then(res => res.json()).then(data => setAllPlayers(data)).catch(console.error);
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams/wishlist`, { headers: { Authorization: `Bearer ${t}` }})
+    fetch(`/rules/config`).then(res => res.json()).then(data => setConfig(data)).catch(console.error);
+    fetch(`/players/public`).then(res => res.json()).then(data => setAllPlayers(data)).catch(console.error);
+    fetch(`/teams/wishlist`, { headers: { Authorization: `Bearer ${t}` }})
       .then(res => res.json())
       .then(data => setWishlistIds(Array.isArray(data) ? data : []))
       .catch(console.error);
       
       // Refresh team data on player_sold event to update roster and budget
       const refreshInterval = setInterval(() => {
-        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/me`, { headers: { Authorization: `Bearer ${t}` }})
+        fetch(`/auth/me`, { headers: { Authorization: `Bearer ${t}` }})
         .then(res => res.json())
         .then(data => { if(data.team) setTeam(data.team); })
         .catch(console.error);
@@ -67,7 +67,7 @@ export default function ManagerDashboard() {
     }, [config?.auctionMode, activeTab]);
 
   const initSocket = (t: string) => {
-    const s = io(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`, { auth: { token: t } });
+    const s = io(``, { auth: { token: t } });
     s.on('auction_state_sync', (data) => {
       if (auctionState?.activePlayer?.id !== data?.activePlayer?.id) {
         setHasFolded(false);
@@ -79,7 +79,7 @@ export default function ManagerDashboard() {
       setAuctionState((prev: any) => prev ? { ...prev, timer: data.timer } : null);
     });
     s.on('data_updated', () => {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/me`, { headers: { Authorization: `Bearer ${t}` }})
+      fetch(`/auth/me`, { headers: { Authorization: `Bearer ${t}` }})
         .then(res => res.json())
         .then(data => { if(data.team) setTeam(data.team); })
         .catch(console.error);
@@ -105,7 +105,7 @@ export default function ManagerDashboard() {
   const handleDraftPlayer = async (player: any) => {
     const t = localStorage.getItem('token');
     const toastId = toast.loading('Drafting player...');
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auction/draft`, {
+    const res = await fetch(`/auction/draft`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${t}` },
       body: JSON.stringify({ playerId: player.id })
@@ -129,7 +129,7 @@ export default function ManagerDashboard() {
       prev.includes(playerId) ? prev.filter(id => id !== playerId) : [...prev, playerId]
     );
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams/wishlist/toggle`, {
+    fetch(`/teams/wishlist/toggle`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${t}` },
       body: JSON.stringify({ playerId })
@@ -145,7 +145,7 @@ export default function ManagerDashboard() {
     formData.append('image', logoFile);
 
     const toastId = toast.loading('Uploading logo...');
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams/${team.id}/logo`, {
+    const res = await fetch(`/teams/${team.id}/logo`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${t}` },
       body: formData
@@ -156,7 +156,7 @@ export default function ManagerDashboard() {
       setLogoDialog(false);
       setLogoFile(null);
       // Fetch fresh team data
-      const data = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/me`, { headers: { Authorization: `Bearer ${t}` }}).then(r => r.json());
+      const data = await fetch(`/auth/me`, { headers: { Authorization: `Bearer ${t}` }}).then(r => r.json());
       if (data.team) setTeam(data.team);
     } else {
       const err = await res.json();

@@ -23,8 +23,8 @@ export default function Register() {
     const fetchInitData = async () => {
       try {
         const [sessionRes, configRes] = await Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/sessions`),
-          fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/config`)
+          fetch(`/rules/sessions`),
+          fetch(`/rules/config`)
         ]);
         const sessionData = await sessionRes.json();
         const configData = await configRes.json();
@@ -68,7 +68,7 @@ export default function Register() {
     data.append('image', file);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/players`, {
+      const res = await fetch(`/players`, {
         method: 'POST',
         body: data,
       });

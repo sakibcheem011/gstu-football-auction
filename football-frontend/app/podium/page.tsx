@@ -29,7 +29,7 @@ export default function AdminAuctionDashboard() {
 
   const fetchPlayers = async () => {
     if (!token) return;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auction/players`, {
+    const res = await fetch(`/auction/players`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
@@ -38,7 +38,7 @@ export default function AdminAuctionDashboard() {
 
   const fetchTeams = async () => {
     if (!token) return;
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams`, {
+    const res = await fetch(`/teams`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     const data = await res.json();
@@ -49,12 +49,12 @@ export default function AdminAuctionDashboard() {
     if (token) {
       fetchPlayers();
       fetchTeams();
-      fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/config`).then(res => res.json()).then(data => {
+      fetch(`/rules/config`).then(res => res.json()).then(data => {
         setConfig(data);
         if (data?.defaultTimer) setTimerDuration(data.defaultTimer);
       }).catch(console.error);
       
-      const newSocket = io(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`, {
+      const newSocket = io(``, {
         auth: { token }
       });
       
@@ -95,7 +95,7 @@ export default function AdminAuctionDashboard() {
   }, [token]);
 
   const startAuction = async (playerId: string, timer: number) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auction/start`, {
+    const res = await fetch(`/auction/start`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ playerId, timer })
@@ -111,7 +111,7 @@ export default function AdminAuctionDashboard() {
   };
 
   const cancelAuction = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auction/cancel`, {
+    const res = await fetch(`/auction/cancel`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -124,7 +124,7 @@ export default function AdminAuctionDashboard() {
   };
 
   const sellPlayer = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auction/sell`, {
+    const res = await fetch(`/auction/sell`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -138,7 +138,7 @@ export default function AdminAuctionDashboard() {
   };
 
   const markUnsold = async () => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auction/unsold`, {
+    const res = await fetch(`/auction/unsold`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -168,7 +168,7 @@ export default function AdminAuctionDashboard() {
   const handleDraftPlayer = async (player: any) => {
     if (!token) return;
     const toastId = toast.loading('Drafting player...');
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auction/draft`, {
+    const res = await fetch(`/auction/draft`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ playerId: player.id })
