@@ -5,6 +5,7 @@ import { io, Socket } from 'socket.io-client';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Users, DollarSign, Target, Shield, Loader2, Settings, Trophy, MonitorPlay, Wallet, Activity, Zap, BarChart3 } from 'lucide-react';
+import { TournamentDashboard } from '../../components/TournamentDashboard';
 
 export default function SuperAdminDashboard() {
   const router = useRouter();
@@ -196,6 +197,9 @@ export default function SuperAdminDashboard() {
           </div>
           )}
         </div>
+        
+        {/* Render the extracted Tournament Dashboard */}
+        <TournamentDashboard />
       </div>
     </div>
   )

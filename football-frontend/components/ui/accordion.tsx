@@ -20,19 +20,35 @@ export function AccordionItem({ id, title, icon: Icon, children, isOpen, onClick
       <button
         onClick={onClick}
         className={clsx(
-          "flex items-center justify-between py-3 px-2 rounded-lg transition-colors duration-200 text-left w-full",
-          isOpen ? "text-white" : "text-zinc-400 hover:text-white hover:bg-white/5"
+          "flex items-center justify-between p-4 rounded-xl transition-all duration-300 text-left w-full border backdrop-blur-sm group relative overflow-hidden",
+          isOpen 
+            ? "bg-white/10 text-white border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.05)]" 
+            : "bg-black/20 text-zinc-400 border-white/5 hover:text-white hover:bg-white/5 hover:border-white/10"
         )}
       >
-        <div className="flex items-center gap-3">
-          {Icon && <Icon size={18} className={isOpen ? "text-blue-500" : "text-zinc-500"} />}
-          <span className="font-semibold">{title}</span>
+        {isOpen && (
+          <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 translate-x-[-100%] animate-[shimmer_2s_infinite]" />
+        )}
+        <div className="flex items-center gap-4 relative z-10">
+          {Icon && (
+            <div className={clsx(
+              "p-2 rounded-lg transition-colors",
+              isOpen ? "bg-white/20 text-white" : "bg-black/40 text-zinc-500 group-hover:text-zinc-300"
+            )}>
+              <Icon size={18} />
+            </div>
+          )}
+          <span className="font-display font-semibold tracking-wide text-lg">{title}</span>
         </div>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
+          className={clsx(
+            "relative z-10 transition-colors",
+            isOpen ? "text-white" : "text-zinc-500 group-hover:text-white"
+          )}
         >
-          <ChevronDown size={16} className="text-zinc-500" />
+          <ChevronDown size={20} />
         </motion.div>
       </button>
 
