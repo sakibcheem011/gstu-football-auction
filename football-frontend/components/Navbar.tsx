@@ -48,7 +48,7 @@ export default function Navbar() {
 
   if (token) {
     if (role === 'SUPER_ADMIN' || role === 'PODIUM_ADMIN') {
-      navLinks.push({ name: 'Dashboard', href: '/admin', icon: Settings });
+      navLinks.push({ name: 'Dashboard', href: '/admin' });
     }
   }
 
