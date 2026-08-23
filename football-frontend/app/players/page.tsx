@@ -8,7 +8,7 @@ export default function PlayersPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`/players/public`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/players/public`)
       .then(res => res.json())
       .then(data => {
         // Public directory should only show approved or auctioned players

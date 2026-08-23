@@ -10,9 +10,9 @@ export function TournamentDashboard() {
   const [teams, setTeams] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch(`/tournament/standings`).then(r => r.json()).then(setStandings).catch(console.error);
-    fetch(`/tournament/fixtures`).then(r => r.json()).then(setFixtures).catch(console.error);
-    fetch(`/teams`).then(r => r.json()).then(setTeams).catch(console.error);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/tournament/standings`).then(r => r.json()).then(setStandings).catch(console.error);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/tournament/fixtures`).then(r => r.json()).then(setFixtures).catch(console.error);
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams`).then(r => r.json()).then(setTeams).catch(console.error);
   }, []);
 
   return (
