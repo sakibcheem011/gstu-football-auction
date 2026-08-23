@@ -16,7 +16,7 @@ export default function PlayerDashboard() {
       return;
     }
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/me`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL }/auth/me`, {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => res.json())
