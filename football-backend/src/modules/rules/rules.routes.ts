@@ -3,7 +3,8 @@ import {
   getSystemConfig, updateBudget, updatePhase, updateTimerSettings,
   getCategories, createCategory, deleteCategory,
   getRaiseTiers, createRaiseTier, deleteRaiseTier,
-  getSessions, createSession, deleteSession
+  getSessions, createSession, deleteSession,
+  updateAuctionMode, updateDraftOrder
 } from './rules.controller';
 import { requireAuth, requireRole } from '../../middleware/auth';
 import { requirePhase } from '../../middleware/phase';
@@ -16,6 +17,8 @@ router.get('/config', getSystemConfig);
 router.put('/phase', requireAuth, requireRole([Role.SUPER_ADMIN]), updatePhase);
 router.put('/budget', requireAuth, requireRole([Role.SUPER_ADMIN]), updateBudget);
 router.put('/timer', requireAuth, requireRole([Role.SUPER_ADMIN, Role.PODIUM_ADMIN]), updateTimerSettings);
+router.put('/mode', requireAuth, requireRole([Role.SUPER_ADMIN]), updateAuctionMode);
+router.put('/draft-order', requireAuth, requireRole([Role.SUPER_ADMIN, Role.PODIUM_ADMIN]), updateDraftOrder);
 
 // Categories
 router.get('/categories', getCategories);

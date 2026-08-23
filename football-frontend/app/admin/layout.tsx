@@ -40,7 +40,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center text-zinc-500 min-h-screen">
+      <div className="flex-1 flex items-center justify-center text-chalkMuted min-h-screen">
         <Loader2 className="animate-spin mr-3" size={32} />
         <span className="font-display tracking-widest text-xl font-bold uppercase">Loading Command Center...</span>
       </div>
@@ -61,9 +61,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <motion.aside 
         initial={{ x: -50, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        className="hidden md:flex w-64 bg-white/5 border-r border-white/10 flex-col shrink-0 h-screen sticky top-0"
+        className="hidden md:flex w-64 bg-panel border-r border-chalk/10 flex-col shrink-0 h-screen sticky top-0"
       >
-        <div className="p-6 border-b border-white/5 flex items-center gap-3">
+        <div className="p-6 border-b border-chalk/10 flex items-center gap-3">
           <ShieldCheck className="text-accent" size={32} />
           <h1 className="font-display font-bold text-2xl tracking-wider text-white">ADMIN</h1>
         </div>
@@ -78,9 +78,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <div className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-base ${
                   isActive 
                     ? 'bg-accent/10 text-accent border border-accent/20' 
-                    : 'text-zinc-400 hover:bg-white/5 hover:text-white border border-transparent'
+                    : 'text-chalkMuted hover:bg-panel hover:text-chalk border border-transparent'
                 }`}>
-                  <Icon size={20} className={isActive ? 'text-accent' : 'text-zinc-500'} />
+                  <Icon size={20} className={isActive ? 'text-accent' : 'text-chalkMuted'} />
                   {item.label}
                 </div>
               </Link>
@@ -88,11 +88,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           })}
         </nav>
 
-        <div className="p-4 border-t border-white/5">
-          <div className="bg-white/5 border border-white/10 p-4 rounded-xl mb-4">
-            <div className="text-sm font-semibold text-zinc-500 mb-1">Logged In As</div>
-            <div className="text-base font-bold text-zinc-200 truncate">{user?.email}</div>
-            <div className="text-xs text-zinc-400 mt-1 uppercase tracking-wider font-bold">{user?.role?.replace('_', ' ')}</div>
+        <div className="p-4 border-t border-chalk/10">
+          <div className="bg-panel border border-chalk/10 p-4 rounded-xl mb-4">
+            <div className="text-sm font-semibold text-chalkMuted mb-1">Logged In As</div>
+            <div className="text-base font-bold text-chalk truncate">{user?.email}</div>
+            <div className="text-xs text-chalkMuted mt-1 uppercase tracking-wider font-bold">{user?.role?.replace('_', ' ')}</div>
           </div>
           
           <button 
@@ -100,7 +100,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               localStorage.removeItem('token');
               router.push('/login');
             }}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 hover:bg-white/10 text-zinc-400 hover:text-white border border-white/10 rounded-xl font-semibold text-base transition"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 hover:bg-white/10 text-chalkMuted hover:text-chalk border border-chalk/10 rounded-xl font-semibold text-base transition"
           >
             <LogOut size={18} /> Logout
           </button>
@@ -108,14 +108,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </motion.aside>
 
       {/* Mobile Bottom Navigation */}
-      <div className="md:hidden fixed bottom-0 left-0 w-full bg-ink/95 backdrop-blur-xl border-t border-white/10 flex items-center justify-around p-2 z-[9999] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] safe-area-bottom">
+      <div className="md:hidden fixed bottom-0 left-0 w-full bg-ink/95 backdrop-blur-xl border-t border-chalk/10 flex items-center justify-around p-2 z-[9999] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] safe-area-bottom">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
           return (
-            <Link key={item.href} href={item.href} className={`flex flex-col items-center p-2 rounded-xl transition ${isActive ? 'text-accent' : 'text-zinc-500 hover:text-white'}`}>
+            <Link key={item.href} href={item.href} className={`flex flex-col items-center p-2 rounded-xl transition ${isActive ? 'text-accent' : 'text-chalkMuted hover:text-chalk'}`}>
               <Icon size={22} className={isActive ? 'text-accent drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]' : ''} />
-              <span className={`text-[10px] font-bold uppercase tracking-wider mt-1 ${isActive ? 'text-accent' : 'text-zinc-500'}`}>{item.label}</span>
+              <span className={`text-[10px] font-bold uppercase tracking-wider mt-1 ${isActive ? 'text-accent' : 'text-chalkMuted'}`}>{item.label}</span>
             </Link>
           );
         })}
@@ -129,3 +129,4 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     </div>
   );
 }
+

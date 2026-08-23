@@ -113,6 +113,27 @@ export const approveManager = async (req: Request, res: Response): Promise<any> 
   }
 };
 
+export const rejectManager = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const userId = req.params.id;
+    if (!userId) return res.status(400).json({ error: 'User ID is required' });
+
+    // Ensure user exists and is a pending manager
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    if (!user || user.role !== Role.TEAM_MANAGER || user.isApproved) {
+      return res.status(400).json({ error: 'Invalid pending manager' });
+    }
+
+    await prisma.user.delete({ where: { id: userId } });
+    ioInstance.emit('data_updated', { entity: 'teams' });
+    
+    return res.json({ message: 'Manager rejected and removed' });
+  } catch (error: any) {
+    console.error('REJECT MANAGER ERROR:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 export const updateManager = async (req: Request, res: Response): Promise<any> => {
   try {
     const id = req.params.id as string;

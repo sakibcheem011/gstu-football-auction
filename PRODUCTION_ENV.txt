@@ -1,0 +1,13 @@
+# BACKEND ENVIRONMENT VARIABLES (.env for your backend server)
+DATABASE_URL="postgresql://postgres.lipdcxbwmhjvjsaqoiio:%3Fvcx%2353%26%40hS3wLj@aws-0-ap-southeast-2.pooler.supabase.com:5432/postgres"
+JWT_SECRET="gstu-liga-super-secret-key-2026"
+CLIENT_URL="https://gstu-football-auction-six.vercel.app"
+PORT="4000"
+CLOUDINARY_CLOUD_NAME="eb1gut3r"
+CLOUDINARY_API_KEY="723463792525886"
+CLOUDINARY_API_SECRET="YcNJc2bfKM4VmmC05BtAvL7jZWI"
+
+
+# FRONTEND ENVIRONMENT VARIABLES (Add to Vercel Settings)
+NEXT_PUBLIC_API_URL="https://your-deployed-backend-url.com" 
+# (Make sure to replace the NEXT_PUBLIC_API_URL with your actual live backend URL!)

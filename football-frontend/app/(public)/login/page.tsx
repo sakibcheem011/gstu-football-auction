@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
-import { Shield } from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -58,35 +57,32 @@ export default function LoginPage() {
       <motion.div 
         initial={{ y: 30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="w-full max-w-md glass-panel p-10 rounded-3xl relative overflow-hidden"
+        className="w-full max-w-md bg-panel border border-chalk/10 p-10 rounded-[2rem] relative overflow-hidden shadow-2xl"
       >
-        <div className="absolute top-0 left-0 w-full h-2 bg-white text-black" />
-        
-        <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 bg-white/10 border border-white/20 rounded-full flex items-center justify-center text-white">
-            <Shield size={32} />
-          </div>
+        <div className="text-center mb-8">
+          <h2 className="font-display text-3xl font-bold text-chalk mb-1">Welcome Back</h2>
+          <p className="text-chalkMuted text-sm font-medium">Access your franchise dashboard</p>
         </div>
-
-        <h2 className="font-display text-4xl text-white mb-8 tracking-[0.3em] text-center">SECURE LOGIN</h2>
         
-        <form onSubmit={handleLogin} className="space-y-6">
+        <form onSubmit={handleLogin} className="space-y-5">
           <div>
-            <label className="block text-xs font-bold text-chalkMuted mb-2 uppercase tracking-widest">Operator Email</label>
+            <label className="block text-xs font-bold text-chalkMuted mb-2 uppercase tracking-wider">Operator Email</label>
             <input 
               type="email" 
               required
-              className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-4 text-white focus:ring-2 focus:ring-gold outline-none transition shadow-inner" 
+              placeholder="manager@franchise.com"
+              className="w-full bg-ink border border-chalk/10 rounded-xl px-4 py-3.5 text-chalk placeholder:text-chalkMuted/40 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all" 
               value={email}
               onChange={e => setEmail(e.target.value)}
             />
           </div>
           <div>
-            <label className="block text-xs font-bold text-chalkMuted mb-2 uppercase tracking-widest">Passcode</label>
+            <label className="block text-xs font-bold text-chalkMuted mb-2 uppercase tracking-wider">Passcode</label>
             <input 
               type="password" 
               required
-              className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-4 text-white focus:ring-2 focus:ring-gold outline-none transition shadow-inner" 
+              placeholder="••••••••"
+              className="w-full bg-ink border border-chalk/10 rounded-xl px-4 py-3.5 text-chalk placeholder:text-chalkMuted/40 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all" 
               value={password}
               onChange={e => setPassword(e.target.value)}
             />
@@ -96,9 +92,9 @@ export default function LoginPage() {
             whileTap={{ scale: 0.98 }}
             disabled={loading}
             type="submit" 
-            className="w-full mt-4 py-4 bg-white/10 text-white border border-white/20 hover:bg-white text-black hover:text-ink hover:border-white rounded-xl font-bold uppercase tracking-widest transition-all duration-300 disabled:opacity-50"
+            className="w-full mt-6 py-4 bg-emerald-600 hover:bg-emerald-500 text-white shadow-[0_0_20px_rgba(5,150,105,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] rounded-xl font-bold text-lg transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2"
           >
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? 'Authenticating...' : 'Sign In'}
           </motion.button>
         </form>
       </motion.div>

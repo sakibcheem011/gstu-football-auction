@@ -19,13 +19,16 @@ model User {
 }
 
 model SystemConfig {
-  id            String  @id @default("singleton")
-  currentPhase  Phase   @default(SETUP)
-  totalBudget   Int
-  minRosterSize Int
-  defaultTimer  Int     @default(60)
-  maxRosterSize Int     @default(18)
-  timerLocked   Boolean @default(false)
+  id               String       @id @default("singleton")
+  currentPhase     Phase        @default(SETUP)
+  auctionMode      AuctionMode  @default(OPEN)
+  totalBudget      Int
+  minRosterSize    Int
+  defaultTimer     Int          @default(60)
+  maxRosterSize    Int          @default(18)
+  timerLocked      Boolean      @default(false)
+  draftOrder       String[]
+  currentDraftTurn Int          @default(0)
 }
 
 model Session {
@@ -158,4 +161,9 @@ enum PlayerStatus {
 enum BidMode {
   NORMAL
   BLIND
+}
+
+enum AuctionMode {
+  OPEN
+  ROUND_ROBIN
 }

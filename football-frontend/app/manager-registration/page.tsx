@@ -61,41 +61,41 @@ export default function ManagerRegistration() {
   };
 
   return (
-    <div className="min-h-screen bg-ink flex flex-col items-center justify-center p-6 relative overflow-hidden font-body">
-      {/* Background Effects */}
-      <div className="absolute top-0 left-0 w-full h-full bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay pointer-events-none" />
-      <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gold/10 blur-[150px] rounded-full pointer-events-none" />
+    <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 text-chalk font-body relative overflow-hidden py-12 lg:py-20">
       
-      <Link href="/" className="absolute top-8 left-8 p-3 bg-white/5 hover:bg-white/10 rounded-xl transition border border-white/10 group z-10">
-        <ArrowLeft size={20} className="text-chalk group-hover:text-gold transition-colors" />
+      <Link href="/draft" className="absolute top-8 left-8 p-3 bg-white/5 hover:bg-white/10 rounded-xl transition border border-white/10 group z-10">
+        <ArrowLeft size={20} className="text-chalk group-hover:text-blue-400 transition-colors" />
       </Link>
 
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-xl z-10"
+        className="w-full max-w-xl bg-panel border border-chalk/10 p-8 sm:p-10 rounded-[2rem] shadow-2xl relative z-10 overflow-hidden"
       >
-        <div className="text-center mb-6">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gold/10 text-gold mb-6 border border-gold/20 shadow-[0_0_30px_rgba(232,184,75,0.2)]">
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent pointer-events-none" />
+        <div className="absolute -right-20 -top-20 w-64 h-64 bg-blue-500/10 blur-[60px] pointer-events-none" />
+
+        <div className="text-center mb-10 relative z-10">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-500/10 text-blue-400 mb-6 border border-blue-500/20">
             <Shield size={32} />
           </div>
-          <h1 className="text-3xl md:text-5xl font-display text-white mb-4 tracking-[0.1em]">Franchise Application</h1>
-          <p className="text-chalkMuted text-sm max-w-md mx-auto leading-relaxed">
+          <h1 className="text-3xl sm:text-4xl font-display font-bold text-chalk mb-2">Franchise Application</h1>
+          <p className="text-chalkMuted text-sm font-medium max-w-md mx-auto">
             {phase === 'SETUP' 
-              ? 'Register your interest in managing a franchise for the upcoming season. Your application will be reviewed by the League Administration.'
+              ? 'Register your interest in managing a franchise for the upcoming season.'
               : 'Franchise Registration is currently closed.'}
           </p>
         </div>
 
         {phase === 'SETUP' ? (
-          <form onSubmit={handleSubmit} className="glass-panel p-8 md:p-8 rounded-[2rem] border-white/10 shadow-2xl space-y-4 bg-white/[0.02]">
+          <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
             
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Manager Full Name</label>
+              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Manager Full Name</label>
               <input 
                 type="text" 
                 required
-                className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold transition-all outline-none"
+                className="w-full bg-ink border border-chalk/10 rounded-xl px-4 py-3 text-chalk placeholder:text-chalkMuted/40 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all"
                 placeholder="e.g. Pep Guardiola"
                 value={formData.name}
                 onChange={e => {
@@ -106,11 +106,11 @@ export default function ManagerRegistration() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Email Address</label>
+              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Email Address</label>
               <input 
                 type="email" 
                 required
-                className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold transition-all outline-none"
+                className="w-full bg-ink border border-chalk/10 rounded-xl px-4 py-3 text-chalk placeholder:text-chalkMuted/40 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all"
                 placeholder="manager@example.com"
                 value={formData.email}
                 onChange={e => setFormData({...formData, email: e.target.value.toLowerCase()})}
@@ -118,11 +118,11 @@ export default function ManagerRegistration() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Phone Number</label>
+              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Phone Number</label>
               <input 
                 type="text" 
                 required
-                className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold transition-all outline-none"
+                className="w-full bg-ink border border-chalk/10 rounded-xl px-4 py-3 text-chalk placeholder:text-chalkMuted/40 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all"
                 placeholder="01XXXXXXXXX"
                 value={formData.phone}
                 onChange={e => setFormData({...formData, phone: e.target.value})}
@@ -130,11 +130,11 @@ export default function ManagerRegistration() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Desired Franchise Name</label>
+              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Desired Franchise Name</label>
               <input 
                 type="text" 
                 required
-                className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold transition-all outline-none"
+                className="w-full bg-ink border border-chalk/10 rounded-xl px-4 py-3 text-chalk placeholder:text-chalkMuted/40 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all"
                 placeholder="e.g. Red Dragons FC"
                 value={formData.desiredTeamName}
                 onChange={e => {
@@ -144,22 +144,22 @@ export default function ManagerRegistration() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Password</label>
+              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Password</label>
               <input 
                 type="password" 
                 required
-                className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold transition-all outline-none"
+                className="w-full bg-ink border border-chalk/10 rounded-xl px-4 py-3 text-chalk placeholder:text-chalkMuted/40 focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 outline-none transition-all"
                 placeholder="Create a strong password"
                 value={formData.password}
                 onChange={e => setFormData({...formData, password: e.target.value})}
               />
             </div>
 
-            <div className="pt-2">
+            <div className="pt-4">
               <button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-3 px-8 py-3.5 bg-gold hover:bg-yellow-400 text-ink rounded-xl font-bold uppercase tracking-widest transition-all shadow-[0_0_20px_rgba(232,184,75,0.2)] hover:shadow-[0_0_30px_rgba(232,184,75,0.4)] disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold text-[15px] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_0_15px_rgba(37,99,235,0.2)] hover:shadow-[0_0_25px_rgba(37,99,235,0.4)]"
               >
                 {isSubmitting ? (
                   <><Activity className="animate-spin" size={18} /> Submitting...</>
@@ -171,19 +171,19 @@ export default function ManagerRegistration() {
             
           </form>
         ) : (
-          <div className="glass-panel p-8 rounded-3xl border-white/10 shadow-2xl text-center">
-             <div className="text-white/50 mb-6">
+          <div className="text-center relative z-10 py-8">
+             <div className="text-chalkMuted mb-4">
                 <Shield size={48} className="mx-auto opacity-50" />
              </div>
-             <h2 className="text-2xl font-display text-white mb-2">Registration Closed</h2>
+             <h2 className="text-2xl font-display text-chalk mb-2">Registration Closed</h2>
              <p className="text-chalkMuted text-sm max-w-sm mx-auto">
                 We are no longer accepting franchise applications for the current season.
              </p>
           </div>
         )}
         
-        <div className="mt-8 text-center text-xs text-chalkMuted">
-          Already approved? <Link href="/admin" className="text-gold hover:underline">Sign in here</Link>
+        <div className="mt-8 text-center text-sm text-chalkMuted relative z-10">
+          Already approved? <Link href="/draft" className="text-chalk font-bold hover:text-blue-400 transition-colors">Sign in</Link>
         </div>
       </motion.div>
     </div>

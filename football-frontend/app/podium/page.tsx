@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Gavel, Play, Pause, Plus, CheckCircle2, Search, X, RotateCcw, Clock, PlayCircle, XOctagon, Activity, ChevronRight, TrendingUp } from 'lucide-react';
+import { Users, Gavel, Play, Pause, Plus, CheckCircle2, Search, X, RotateCcw, Clock, PlayCircle, XOctagon, Activity, ChevronRight, TrendingUp, ListOrdered } from 'lucide-react';
 import PlayerDirectory from '../../components/PlayerDirectory';
 import { io, Socket } from 'socket.io-client';
 
@@ -165,6 +165,22 @@ export default function AdminAuctionDashboard() {
 
   const isActive = auctionState && auctionState.status !== 'IDLE' && auctionState.activePlayer;
 
+  const handleDraftPlayer = async (player: any) => {
+    if (!token) return;
+    const toastId = toast.loading('Drafting player...');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auction/draft`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ playerId: player.id })
+    });
+    if (res.ok) {
+      toast.success(`Drafted ${player.name} successfully!`, { id: toastId });
+    } else {
+      const err = await res.json();
+      toast.error(err.error || 'Failed to draft player', { id: toastId });
+    }
+  };
+
   return (
     <div className="flex-1 p-6 md:p-10 text-chalk font-body relative z-0 flex flex-col">
       <div className={`absolute top-0 left-0 w-full h-96 transition-colors duration-1000 -z-10 ${isActive ? 'bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-900/10 via-ink to-ink' : 'bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gold/5 via-ink to-ink'}`} />
@@ -172,34 +188,42 @@ export default function AdminAuctionDashboard() {
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col pt-4">
         <div className="flex justify-end mb-4">
           <Link href="/admin">
-            <button className="px-6 py-2.5 bg-white/10 text-white rounded-xl hover:bg-white/20 font-bold transition text-sm">
+            <button className="px-6 py-2.5 bg-ink border border-white/10 text-chalkMuted hover:text-white rounded-xl hover:bg-white/5 hover:border-white/20 font-bold transition-all text-xs tracking-widest uppercase">
               Back to Admin
             </button>
           </Link>
         </div>
         {/* Header */}
-        <div className="bg-panel rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-center mb-8 gap-6 border border-white/10 shadow-2xl">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gold/20 to-gold/5 flex items-center justify-center border border-white/20">
-              <Activity className="text-white" size={28} />
+        <div className="bg-panel rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-center mb-8 gap-6 border border-white/5 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-[80px] pointer-events-none" />
+          
+          <div className="flex items-center gap-5 z-10">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-900/40 flex items-center justify-center border border-emerald-500/30 shadow-[0_0_20px_rgba(16,185,129,0.2)]">
+              {config?.auctionMode === 'ROUND_ROBIN' ? <ListOrdered className="text-emerald-400" size={32} /> : <Gavel className="text-emerald-400" size={32} />}
             </div>
             <div>
               <h1 className="font-display text-3xl md:text-4xl text-white tracking-wide flex items-center gap-3">
-                Auctioneer Console
+                {config?.auctionMode === 'ROUND_ROBIN' ? 'Draft Console' : 'Auctioneer Console'}
               </h1>
-              <p className="text-danger mt-1 tracking-wider uppercase text-xs font-semibold flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-danger animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]" /> Live Broadcast Control
-              </p>
+              <div className="mt-1.5 flex items-center gap-2">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-danger opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-danger"></span>
+                </span>
+                <p className="text-danger tracking-widest uppercase text-xs font-bold drop-shadow-md">
+                  Live Broadcast Control
+                </p>
+              </div>
             </div>
           </div>
           
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3 z-10">
             <motion.button 
               whileHover={{ scale: isActive ? 1.02 : 1 }}
               whileTap={{ scale: isActive ? 0.98 : 1 }}
               onClick={sellPlayer} 
-              disabled={!isActive}
-              className={`px-8 py-3.5 rounded-xl font-bold transition-all uppercase tracking-widest flex items-center gap-2 text-sm ${isActive ? 'bg-white text-black text-ink shadow-[0_4px_20px_rgba(244,196,83,0.3)] hover:bg-zinc-200 hover:text-black cursor-pointer' : 'bg-white/5 text-chalkMuted cursor-not-allowed border border-white/5'}`}
+              disabled={!isActive || config?.auctionMode === 'ROUND_ROBIN'}
+              className={`px-8 py-3.5 rounded-xl font-bold transition-all uppercase tracking-widest flex items-center gap-2 text-sm ${(isActive && config?.auctionMode !== 'ROUND_ROBIN') ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] border border-emerald-400/50 cursor-pointer' : 'bg-ink text-chalkMuted border border-white/5 cursor-not-allowed opacity-50'}`}
             >
               <Gavel size={18} /> Final Sale
             </motion.button>
@@ -207,8 +231,8 @@ export default function AdminAuctionDashboard() {
               whileHover={{ scale: isActive ? 1.02 : 1 }}
               whileTap={{ scale: isActive ? 0.98 : 1 }}
               onClick={markUnsold} 
-              disabled={!isActive}
-              className={`px-6 py-3.5 rounded-xl font-bold transition-all uppercase tracking-widest flex items-center gap-2 text-sm ${isActive ? 'bg-panel border border-zinc-700 text-zinc-400 hover:bg-white/5 shadow-[0_4px_20px_rgba(228,72,59,0.15)] cursor-pointer' : 'bg-white/5 text-chalkMuted border border-white/5 cursor-not-allowed'}`}
+              disabled={!isActive || config?.auctionMode === 'ROUND_ROBIN'}
+              className={`px-6 py-3.5 rounded-xl font-bold transition-all uppercase tracking-widest flex items-center gap-2 text-sm ${(isActive && config?.auctionMode !== 'ROUND_ROBIN') ? 'bg-ink border border-danger/50 text-danger hover:bg-danger/10 hover:border-danger shadow-[0_0_15px_rgba(239,68,68,0.2)] cursor-pointer' : 'bg-ink text-chalkMuted border border-white/5 cursor-not-allowed opacity-50'}`}
             >
               <XOctagon size={18} /> Mark Unsold
             </motion.button>
@@ -216,21 +240,21 @@ export default function AdminAuctionDashboard() {
               whileHover={{ scale: isActive ? 1.02 : 1 }}
               whileTap={{ scale: isActive ? 0.98 : 1 }}
               onClick={cancelAuction} 
-              disabled={!isActive}
-              className={`px-6 py-3.5 rounded-xl font-bold transition-all uppercase tracking-widest flex items-center gap-2 text-sm ${isActive ? 'bg-panel border border-white/10 text-white hover:bg-white/5 cursor-pointer' : 'bg-white/5 text-chalkMuted border border-white/5 cursor-not-allowed'}`}
+              disabled={!isActive || config?.auctionMode === 'ROUND_ROBIN'}
+              className={`px-6 py-3.5 rounded-xl font-bold transition-all uppercase tracking-widest flex items-center gap-2 text-sm ${(isActive && config?.auctionMode !== 'ROUND_ROBIN') ? 'bg-ink border border-white/10 text-chalk hover:bg-white/5 hover:text-white cursor-pointer' : 'bg-ink text-chalkMuted border border-white/5 cursor-not-allowed opacity-50'}`}
             >
               <X size={18} /> Cancel
             </motion.button>
           </div>
         </div>
 
-        {isActive ? (
+        {isActive && config?.auctionMode !== 'ROUND_ROBIN' ? (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             {/* Active Player Broadcast Display */}
-            <div className="lg:col-span-8 bg-panel p-8 md:p-12 rounded-3xl border border-white/10 flex flex-col items-center relative overflow-hidden shadow-2xl">
-              <div className="absolute top-0 right-0 p-6 flex gap-3">
-                <div className="bg-ink/80 backdrop-blur-md px-4 py-1.5 rounded-full font-display text-xs tracking-widest uppercase border border-white/10 text-chalk flex items-center gap-2">
-                  <span className={`w-2 h-2 rounded-full ${auctionState.status === 'ACTIVE' ? 'bg-white' : 'bg-white text-black'}`} />
+            <div className="lg:col-span-8 bg-panel p-8 md:p-12 rounded-3xl border border-white/5 flex flex-col items-center relative overflow-hidden shadow-2xl">
+              <div className="absolute top-0 right-0 p-6 flex gap-3 z-10">
+                <div className="bg-ink/80 backdrop-blur-md px-4 py-1.5 rounded-full font-display text-xs tracking-widest uppercase border border-white/10 text-chalk flex items-center gap-2 shadow-lg">
+                  <span className={`w-2.5 h-2.5 rounded-full ${auctionState.status === 'ACTIVE' ? 'bg-emerald-500 animate-pulse' : 'bg-white text-black'}`} />
                   {auctionState.status}
                 </div>
               </div>
@@ -379,14 +403,27 @@ export default function AdminAuctionDashboard() {
             </div>
             
             <div className="flex-1">
+              {config?.auctionMode === 'ROUND_ROBIN' && config?.draftOrder?.length > 0 && (
+                <div className="bg-white/5 border border-white/10 text-white p-4 rounded-2xl mb-4 flex items-center justify-between shadow-lg">
+                  <div className="flex items-center gap-3">
+                    <ListOrdered className="text-emerald-400" size={24} />
+                    <div>
+                      <div className="text-[10px] uppercase tracking-widest font-bold text-chalkMuted">Current Turn</div>
+                      <div className="font-display text-lg text-emerald-400">
+                        {teams.find(t => t.id === config.draftOrder[config.currentDraftTurn])?.name || 'Unknown Team'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
               <PlayerDirectory 
                 players={players} 
-                onAction={(p) => {
+                onAction={config?.auctionMode === 'ROUND_ROBIN' ? handleDraftPlayer : (p) => {
                   setSelectedForPodium(p);
                   if (config?.defaultTimer) setTimerDuration(config.defaultTimer);
                 }}
-                actionLabel="Send to Podium"
-                actionIcon={<ChevronRight size={16} />}
+                actionLabel={config?.auctionMode === 'ROUND_ROBIN' ? "Draft Player" : "Send to Podium"}
+                actionIcon={config?.auctionMode === 'ROUND_ROBIN' ? <ListOrdered size={16} /> : <ChevronRight size={16} />}
                 showStatusFilter={false}
               />
             </div>
@@ -460,4 +497,5 @@ export default function AdminAuctionDashboard() {
     </div>
   );
 }
+
 

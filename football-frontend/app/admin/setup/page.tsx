@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { Settings, Shield, Users, CheckCircle, ArrowLeft, BadgeCheck, Activity, DollarSign, Plus, UserPlus, Database, Trash2, Edit2, X, Image as ImageIcon } from 'lucide-react';
+import { Settings, Shield, Users, CheckCircle, ArrowLeft, BadgeCheck, Activity, DollarSign, Plus, UserPlus, Database, Trash2, Edit2, X, Image as ImageIcon, ListOrdered } from 'lucide-react';
 import { io } from 'socket.io-client';
 import PlayerDirectory from '../../../components/PlayerDirectory';
 import Dropdown from '../../../components/Dropdown';
@@ -162,6 +162,33 @@ export default function SuperAdminSetup() {
     }
   };
 
+  const updateAuctionMode = async (mode: string) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/mode`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ auctionMode: mode })
+    });
+    if (res.ok) {
+      toast.success(`Auction Mode changed to ${mode}`);
+      setConfig({ ...config, auctionMode: mode });
+    } else {
+      toast.error('Failed to update auction mode');
+    }
+  };
+
+  const updateDraftOrder = async (order: any[]) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/draft-order`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ order })
+    });
+    if (res.ok) {
+      toast.success('Draft Order updated');
+    } else {
+      toast.error('Failed to update draft order');
+    }
+  };
+
   const updateTimerConfig = async (e: React.FormEvent) => {
     e.preventDefault();
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/rules/timer`, {
@@ -260,9 +287,28 @@ export default function SuperAdminSetup() {
       setApproveDialog(null);
       fetchData(token!);
     } else {
-      const err = await res.json();
-      toast.error(err.error || 'Failed to approve manager');
+      toast.error('Failed to approve manager');
     }
+  };
+
+  const executeRejectManager = async (managerId: string) => {
+    setConfirmDialog({
+      isOpen: true,
+      message: 'Are you sure you want to reject and delete this manager application?',
+      onConfirm: async () => {
+        setConfirmDialog(null);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/teams/reject-manager/${managerId}`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.ok) {
+          toast.success('Manager application rejected.');
+          fetchData(token!);
+        } else {
+          toast.error('Failed to reject manager');
+        }
+      }
+    });
   };
 
   const openEditManager = (team: any) => {
@@ -824,6 +870,51 @@ export default function SuperAdminSetup() {
                   </div>
                 </section>
 
+                {/* 1.5 AUCTION MODE */}
+                <section className="glass-panel p-8">
+                  <div className="flex items-center justify-between mb-8">
+                    <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-zinc-400 flex items-center gap-3">
+                      <Activity className="text-white" size={16} /> Auction Strategy
+                    </h2>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
+                    <button
+                      onClick={() => updateAuctionMode('OPEN')}
+                      className={`p-6 rounded-2xl flex flex-col items-center gap-4 text-center border-2 transition-all ${
+                        config?.auctionMode !== 'ROUND_ROBIN' 
+                          ? 'bg-ink border-white/50 text-white shadow-[0_0_20px_rgba(255,255,255,0.1)]' 
+                          : 'bg-black/50 border-white/5 text-zinc-500 hover:border-white/20 hover:text-zinc-300'
+                      }`}
+                    >
+                      <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                        <Users size={20} />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-1">Open Bidding</h3>
+                        <p className="text-xs opacity-70">Standard competitive bidding for all teams simultaneously.</p>
+                      </div>
+                    </button>
+                    
+                    <button
+                      onClick={() => updateAuctionMode('ROUND_ROBIN')}
+                      className={`p-6 rounded-2xl flex flex-col items-center gap-4 text-center border-2 transition-all ${
+                        config?.auctionMode === 'ROUND_ROBIN' 
+                          ? 'bg-ink border-emerald-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.2)]' 
+                          : 'bg-black/50 border-white/5 text-zinc-500 hover:border-white/20 hover:text-zinc-300'
+                      }`}
+                    >
+                      <div className="w-12 h-12 bg-emerald-500/10 text-emerald-500 rounded-full flex items-center justify-center">
+                        <ListOrdered size={20} />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg mb-1">Round Robin Draft</h3>
+                        <p className="text-xs opacity-70">Teams take turns picking players sequentially.</p>
+                      </div>
+                    </button>
+                  </div>
+                </section>
+
                 {/* 2. CORE CONSTRAINTS (TIMER, BUDGET, ROSTER) */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   
@@ -1000,9 +1091,14 @@ export default function SuperAdminSetup() {
                               <div>Phone: {m.phone || 'N/A'}</div>
                             </div>
                           </div>
-                          <button onClick={() => openApproveModal(m)} className="px-4 py-2 bg-white text-black hover:bg-zinc-200 hover:text-black text-ink rounded-lg font-bold uppercase tracking-widest text-xs transition">
-                            Approve
-                          </button>
+                          <div className="flex items-center gap-2">
+                            <button onClick={() => executeRejectManager(m.id)} className="px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg font-bold uppercase tracking-widest text-xs transition border border-red-500/20">
+                              Reject
+                            </button>
+                            <button onClick={() => openApproveModal(m)} className="px-4 py-2 bg-white text-black hover:bg-zinc-200 hover:text-black text-ink rounded-lg font-bold uppercase tracking-widest text-xs transition">
+                              Approve
+                            </button>
+                          </div>
                         </div>
                         <div className="bg-white/5 p-3 rounded-xl mt-2">
                           <span className="text-xs text-chalkMuted uppercase tracking-widest mb-1 block">Desired Franchise</span>

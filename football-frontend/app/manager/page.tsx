@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { io, Socket } from 'socket.io-client';
-import { User, Coins, AlertCircle, Clock, CheckCircle2, Crown, EyeOff, Shield, ShieldAlert, Search, ListOrdered, ChevronRight, Activity, HandMetal, TrendingUp, Image as ImageIcon, X } from 'lucide-react';
+import { User, Coins, AlertCircle, Clock, CheckCircle2, Crown, EyeOff, Shield, ShieldAlert, Search, ListOrdered, ChevronRight, Activity, HandMetal, TrendingUp, Image as ImageIcon, X, Gavel } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import PlayerDirectory from '../../components/PlayerDirectory';
@@ -50,15 +50,21 @@ export default function ManagerDashboard() {
       .then(data => setWishlistIds(Array.isArray(data) ? data : []))
       .catch(console.error);
       
-    // Refresh team data on player_sold event to update roster and budget
-    const refreshInterval = setInterval(() => {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/me`, { headers: { Authorization: `Bearer ${t}` }})
-      .then(res => res.json())
-      .then(data => { if(data.team) setTeam(data.team); })
-      .catch(console.error);
-    }, 5000);
-    return () => clearInterval(refreshInterval);
-  }, [router]);
+      // Refresh team data on player_sold event to update roster and budget
+      const refreshInterval = setInterval(() => {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/me`, { headers: { Authorization: `Bearer ${t}` }})
+        .then(res => res.json())
+        .then(data => { if(data.team) setTeam(data.team); })
+        .catch(console.error);
+      }, 5000);
+      return () => clearInterval(refreshInterval);
+    }, [router]);
+  
+    useEffect(() => {
+      if (config?.auctionMode === 'ROUND_ROBIN' && activeTab === 'auction') {
+        setActiveTab('database');
+      }
+    }, [config?.auctionMode, activeTab]);
 
   const initSocket = (t: string) => {
     const s = io(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}`, { auth: { token: t } });
@@ -94,6 +100,24 @@ export default function ManagerDashboard() {
   const handleFold = () => {
     setHasFolded(true);
     socket?.emit('manager_pass');
+  };
+
+  const handleDraftPlayer = async (player: any) => {
+    const t = localStorage.getItem('token');
+    const toastId = toast.loading('Drafting player...');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auction/draft`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${t}` },
+      body: JSON.stringify({ playerId: player.id })
+    });
+    if (res.ok) {
+      toast.success(`Drafted ${player.name} successfully!`, { id: toastId });
+      // Remove from allPlayers or update status
+      setAllPlayers(prev => prev.map(p => p.id === player.id ? { ...p, status: 'SOLD' } : p));
+    } else {
+      const err = await res.json();
+      toast.error(err.error || 'Failed to draft player', { id: toastId });
+    }
   };
 
   const toggleWishlist = (playerId: string) => {
@@ -194,11 +218,13 @@ export default function ManagerDashboard() {
         {/* Navigation Tabs */}
         <div className="max-w-7xl mx-auto px-6 pb-4">
           <div className="flex gap-2 relative">
-            {(['auction', 'database', 'wishlist'] as const).map((tab) => (
+            {(['auction', 'database', 'wishlist'] as const)
+              .filter(tab => !(tab === 'auction' && config?.auctionMode === 'ROUND_ROBIN'))
+              .map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`relative px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-colors flex items-center gap-2 ${activeTab === tab ? 'text-white' : 'text-chalkMuted hover:text-chalk hover:bg-white/5'}`}
+                className={`relative px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-colors flex items-center gap-2 ${activeTab === tab ? 'text-white' : 'text-chalkMuted hover:text-chalk hover:bg-panelLight'}`}
               >
                 {activeTab === tab && (
                   <motion.div
@@ -208,10 +234,10 @@ export default function ManagerDashboard() {
                   />
                 )}
                 <span className="relative z-10 flex items-center gap-2">
-                  {tab === 'auction' && <Activity size={16} />}
+                  {tab === 'auction' && <Gavel size={16} />}
                   {tab === 'database' && <Search size={16} />}
                   {tab === 'wishlist' && <ListOrdered size={16} />}
-                  {tab === 'auction' ? 'Live Auction' : tab === 'database' ? 'Database' : 'Wishlist'}
+                  {tab === 'auction' ? 'Live Auction' : tab === 'database' ? 'Players' : 'Wishlist'}
                 </span>
               </button>
             ))}
@@ -266,14 +292,14 @@ export default function ManagerDashboard() {
             <div className="lg:col-span-8 space-y-6">
               <div className="bg-panel p-8 md:p-12 rounded-3xl border border-white/10 relative overflow-hidden flex flex-col items-center justify-center min-h-[500px] shadow-2xl">
                 {mode === 'BLIND' && (
-                  <div className="absolute top-6 left-6 bg-white/5 text-zinc-400 border border-white/10 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg backdrop-blur-md">
+                  <div className="absolute top-6 left-6 bg-panelLight text-chalkMuted border border-white/10 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest flex items-center gap-2 shadow-lg backdrop-blur-md">
                     <EyeOff size={16} /> Blind Mode
                   </div>
                 )}
                 
                 {!auctionState || status === 'IDLE' || !activePlayer ? (
                   <div className="text-center">
-                    <div className="w-20 h-20 mx-auto bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/10">
+                    <div className="w-20 h-20 mx-auto bg-panelLight rounded-full flex items-center justify-center mb-6 border border-white/10">
                       <Crown size={32} className="text-chalkMuted" />
                     </div>
                     <h2 className="text-3xl tracking-widest font-display text-white uppercase mb-2">Standby</h2>
@@ -333,7 +359,7 @@ export default function ManagerDashboard() {
                             <div className="text-[10px] uppercase tracking-widest text-chalkMuted font-bold mb-2 flex items-center gap-1.5">
                               <Clock size={12} /> Timer
                             </div>
-                            <div className={`text-6xl font-display tabular-nums leading-none ${timer <= 5 ? 'text-zinc-400' : 'text-white'}`}>
+                            <div className={`text-6xl font-display tabular-nums leading-none ${timer <= 5 ? 'text-chalkMuted' : 'text-white'}`}>
                               {timer}
                             </div>
                           </div>
@@ -353,9 +379,9 @@ export default function ManagerDashboard() {
                             isLeading 
                               ? 'bg-white/10 text-white border border-white/20 '
                               : !canAfford 
-                                ? 'bg-white/5 text-chalkMuted border border-white/5 opacity-50 cursor-not-allowed'
+                                ? 'bg-panelLight text-chalkMuted border border-white/5 opacity-50 cursor-not-allowed'
                                 : hasFolded
-                                  ? 'bg-white/5 text-zinc-400 border border-white/10 opacity-50 cursor-not-allowed'
+                                  ? 'bg-panelLight text-chalkMuted border border-white/10 opacity-50 cursor-not-allowed'
                                   : 'bg-white text-black text-ink hover:bg-zinc-200 hover:text-black shadow-[0_8px_30px_rgba(244,196,83,0.3)]'
                           }`}
                         >
@@ -374,7 +400,7 @@ export default function ManagerDashboard() {
                             'Folded'
                           ) : (
                             <>
-                              <HandMetal size={32} /> Bid TK {nextBidAmount.toLocaleString()}
+                              Bid TK {nextBidAmount.toLocaleString()}
                             </>
                           )}
                         </motion.button>
@@ -384,7 +410,7 @@ export default function ManagerDashboard() {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={handleFold}
-                            className="px-8 py-6 rounded-2xl font-display text-xl tracking-widest uppercase transition-all flex flex-col items-center justify-center gap-1 bg-white/5 text-chalkMuted hover:bg-white/5 hover:text-zinc-400 border border-white/10 hover:border-white/10"
+                            className="px-8 py-6 rounded-2xl font-display text-xl tracking-widest uppercase transition-all flex flex-col items-center justify-center gap-1 bg-panelLight text-chalkMuted hover:bg-panelLight hover:text-chalkMuted border border-white/10 hover:border-white/10"
                           >
                             <AlertCircle size={24} />
                             Fold
@@ -453,7 +479,7 @@ export default function ManagerDashboard() {
                     </div>
                   )) : (
                     <div className="h-full flex flex-col items-center justify-center text-chalkMuted opacity-50 space-y-3">
-                      <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center">
+                      <div className="w-16 h-16 rounded-full bg-panelLight flex items-center justify-center">
                         <User size={24} />
                       </div>
                       <div className="text-[10px] uppercase tracking-widest font-bold">Roster is empty</div>
@@ -465,6 +491,12 @@ export default function ManagerDashboard() {
           </div>
         ) : activeTab === 'database' ? (
           <div className="h-[calc(100vh-220px)]">
+            {config?.auctionMode === 'ROUND_ROBIN' && config?.draftOrder?.[config?.currentDraftTurn] === team?.id && (
+               <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-4 rounded-2xl mb-4 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+                 <ListOrdered size={24} />
+                 <span className="font-bold uppercase tracking-widest text-sm">It's Your Turn to Draft!</span>
+               </div>
+            )}
             <PlayerDirectory 
               players={allPlayers} 
               showStatusFilter={true}
@@ -472,6 +504,10 @@ export default function ManagerDashboard() {
               wishlistIds={wishlistIds}
               onToggleWishlist={toggleWishlist}
               showWishlistFilter={false}
+              onAction={config?.auctionMode === 'ROUND_ROBIN' ? handleDraftPlayer : undefined}
+              actionLabel="DRAFT"
+              actionIcon={<ListOrdered size={16} />}
+              actionCondition={(p) => p.status === 'UNSOLD' && config?.auctionMode === 'ROUND_ROBIN' && config?.draftOrder?.[config?.currentDraftTurn] === team?.id}
             />
           </div>
         ) : (
@@ -490,4 +526,6 @@ export default function ManagerDashboard() {
     </div>
   );
 }
+
+
 

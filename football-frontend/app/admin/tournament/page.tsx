@@ -2,8 +2,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Shield, Target, Plus, Check, Trash2, Activity, X, Calendar } from 'lucide-react';
+import { Shield, Target, Plus, Check, Trash2, Activity, X, Calendar, ClipboardList } from 'lucide-react';
 import { toast } from 'react-hot-toast';
+import { motion, AnimatePresence } from 'framer-motion';
 import Dropdown from '../../../components/Dropdown';
 import { AppleCalendarPicker } from '../../../components/ui/apple-calendar-picker';
 
@@ -35,15 +36,21 @@ function PlayerStatsModal({ match, teamA, teamB, onClose, token, refresh }: any)
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState(teamA.id);
 
-  const handleStatChange = (playerId: string, field: string, value: number) => {
+  const handleStatChange = (playerId: string, field: string, value: string | number) => {
+    let parsed = value === '' ? 0 : (parseInt(value as string, 10) || 0);
     setStats(prev => {
       const existing = prev.find(s => s.playerId === playerId);
       if (existing) {
-        return prev.map(s => s.playerId === playerId ? { ...s, [field]: value } : s);
+        return prev.map(s => s.playerId === playerId ? { ...s, [field]: parsed } : s);
       }
-      return [...prev, { playerId, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheet: false, [field]: value }];
+      return [...prev, { playerId, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheet: false, [field]: parsed }];
     });
   };
+
+  const getStat = (playerId: string, field: string) => {
+    const s = stats.find(s => s.playerId === playerId);
+    return s ? s[field] : 0;
+  }
 
   const saveStats = async () => {
     setLoading(true);
@@ -53,7 +60,7 @@ function PlayerStatsModal({ match, teamA, teamB, onClose, token, refresh }: any)
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ stats })
       });
-      toast.success('Player stats saved');
+      toast.success('Player stats saved successfully');
       refresh();
       onClose();
     } catch (e) {
@@ -63,81 +70,107 @@ function PlayerStatsModal({ match, teamA, teamB, onClose, token, refresh }: any)
   };
 
   const renderTeamStats = (team: any) => (
-    <div className="space-y-3 mt-4 max-h-[50vh] overflow-y-auto custom-scrollbar pr-2">
-      {team.players.map((p: any) => {
-        const pStat = stats.find(s => s.playerId === p.id) || { goals: 0, assists: 0, yellowCards: 0, redCards: 0 };
-        return (
-          <div key={p.id} className="bg-ink border border-white/10 p-3 rounded-lg flex items-center justify-between gap-4">
-            <div className="text-white font-bold w-1/3 truncate">{p.name} <span className="text-chalkMuted text-xs font-normal">({p.position})</span></div>
-            <div className="flex gap-4 w-2/3 justify-end">
-              <div className="flex flex-col items-center">
-                <span className="text-[10px] uppercase text-chalkMuted mb-1">Goals</span>
-                <input type="number" min="0" value={pStat.goals} onChange={e => handleStatChange(p.id, 'goals', parseInt(e.target.value) || 0)} className="w-12 bg-white/5 border border-white/20 rounded p-1 text-center text-white" />
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="text-[10px] uppercase text-chalkMuted mb-1">Assists</span>
-                <input type="number" min="0" value={pStat.assists} onChange={e => handleStatChange(p.id, 'assists', parseInt(e.target.value) || 0)} className="w-12 bg-white/5 border border-white/20 rounded p-1 text-center text-white" />
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="text-[10px] uppercase text-chalkMuted mb-1">Yellow</span>
-                <input type="number" min="0" value={pStat.yellowCards} onChange={e => handleStatChange(p.id, 'yellowCards', parseInt(e.target.value) || 0)} className="w-12 bg-white/5 border border-yellow-500/50 rounded p-1 text-center text-white" />
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="text-[10px] uppercase text-chalkMuted mb-1">Red</span>
-                <input type="number" min="0" value={pStat.redCards} onChange={e => handleStatChange(p.id, 'redCards', parseInt(e.target.value) || 0)} className="w-12 bg-white/5 border border-red-500/50 rounded p-1 text-center text-zinc-500" />
-              </div>
+    <motion.div 
+      key={team.id}
+      initial={{ opacity: 0, y: 10 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.3 }}
+      className="space-y-3 mt-6 max-h-[50vh] overflow-y-auto custom-scrollbar pr-4"
+    >
+      {team.players.map((p: any) => (
+        <div key={p.id} className="bg-zinc-900/60 border border-zinc-800/80 hover:border-zinc-700/80 p-4 rounded-xl flex flex-col md:flex-row items-center justify-between gap-4 transition-all duration-300 relative overflow-hidden group">
+          <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+          
+          <div className="flex flex-col w-full md:w-1/3 z-10">
+            <span className="text-white font-display font-bold text-lg truncate">{p.name}</span>
+            <span className="text-zinc-500 text-xs uppercase tracking-widest font-semibold">{p.position}</span>
+          </div>
+          
+          <div className="flex gap-2 w-full md:w-2/3 justify-between md:justify-end z-10">
+            <div className="flex flex-col items-center bg-black/40 px-3 py-2 rounded-lg border border-white/5">
+              <span className="text-[9px] uppercase tracking-widest text-zinc-400 font-bold mb-1.5">Goals</span>
+              <input type="number" min="0" value={getStat(p.id, 'goals') === 0 ? '' : getStat(p.id, 'goals')} placeholder="0" onChange={e => handleStatChange(p.id, 'goals', e.target.value)} className="w-10 bg-transparent text-center text-white font-bold text-lg outline-none placeholder:text-zinc-600" />
+            </div>
+            <div className="flex flex-col items-center bg-black/40 px-3 py-2 rounded-lg border border-white/5">
+              <span className="text-[9px] uppercase tracking-widest text-zinc-400 font-bold mb-1.5">Assists</span>
+              <input type="number" min="0" value={getStat(p.id, 'assists') === 0 ? '' : getStat(p.id, 'assists')} placeholder="0" onChange={e => handleStatChange(p.id, 'assists', e.target.value)} className="w-10 bg-transparent text-center text-white font-bold text-lg outline-none placeholder:text-zinc-600" />
+            </div>
+            <div className="flex flex-col items-center bg-yellow-500/10 px-3 py-2 rounded-lg border border-yellow-500/20">
+              <span className="text-[9px] uppercase tracking-widest text-yellow-500/70 font-bold mb-1.5">Yellow</span>
+              <input type="number" min="0" value={getStat(p.id, 'yellowCards') === 0 ? '' : getStat(p.id, 'yellowCards')} placeholder="0" onChange={e => handleStatChange(p.id, 'yellowCards', e.target.value)} className="w-10 bg-transparent text-center text-yellow-400 font-bold text-lg outline-none placeholder:text-yellow-600/30" />
+            </div>
+            <div className="flex flex-col items-center bg-red-500/10 px-3 py-2 rounded-lg border border-red-500/20">
+              <span className="text-[9px] uppercase tracking-widest text-red-500/70 font-bold mb-1.5">Red</span>
+              <input type="number" min="0" value={getStat(p.id, 'redCards') === 0 ? '' : getStat(p.id, 'redCards')} placeholder="0" onChange={e => handleStatChange(p.id, 'redCards', e.target.value)} className="w-10 bg-transparent text-center text-red-400 font-bold text-lg outline-none placeholder:text-red-600/30" />
             </div>
           </div>
-        );
-      })}
-      {team.players.length === 0 && <div className="text-chalkMuted text-center py-4">No players in this team</div>}
-    </div>
+        </div>
+      ))}
+      {team.players.length === 0 && (
+        <div className="text-zinc-500 text-center py-10 uppercase tracking-widest font-semibold text-sm">No players registered in this team</div>
+      )}
+    </motion.div>
   );
 
   return (
-    <div className="fixed inset-0 bg-ink/90 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
-      <div className="bg-panelLight w-full max-w-3xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-        <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
-          <h2 className="font-display tracking-widest text-xl text-white flex items-center gap-2">
-            <Activity size={24} /> MATCH STATS (LEG {match.legNumber})
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center p-4">
+      <motion.div 
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.95, opacity: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="glass-panel w-full max-w-4xl rounded-3xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] flex flex-col max-h-[90vh] overflow-hidden bg-ink/90"
+      >
+        <div className="p-8 border-b border-white/10 flex justify-between items-center bg-black/20">
+          <h2 className="font-display font-bold text-2xl text-white flex items-center gap-3">
+            <div className="p-2 bg-white/10 rounded-lg text-zinc-300">
+              <ClipboardList size={24} />
+            </div>
+            PLAYER STATS
+            <span className="ml-3 text-xs bg-zinc-800 text-zinc-300 px-3 py-1 rounded-full border border-zinc-700 tracking-widest uppercase">Leg {match.legNumber}</span>
           </h2>
-          <button onClick={onClose} className="text-chalkMuted hover:text-white transition"><X size={24} /></button>
+          <button onClick={onClose} className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-400 hover:text-white transition"><X size={20} /></button>
         </div>
         
-        <div className="p-6 flex-1 overflow-hidden flex flex-col">
-          <div className="flex gap-4 border-b border-white/10 pb-4">
+        <div className="p-8 flex-1 overflow-hidden flex flex-col">
+          <div className="flex gap-4 border-b border-zinc-800/80 pb-6">
             <button 
               onClick={() => setActiveTab(teamA.id)} 
-              className={`flex-1 py-3 font-bold rounded-xl transition ${activeTab === teamA.id ? 'bg-white/10 text-white border border-white/20' : 'bg-white/5 text-chalkMuted hover:bg-white/10'}`}
+              className={`flex-1 py-4 font-display font-bold text-lg rounded-xl transition-all duration-300 flex items-center justify-center gap-3 ${activeTab === teamA.id ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.15)]' : 'bg-black/40 text-zinc-500 hover:bg-white/5 hover:text-white border border-white/5'}`}
             >
+              {teamA.logoUrl && <img src={teamA.logoUrl} className="w-6 h-6 rounded-full object-cover" />}
               {teamA.name}
             </button>
             <button 
               onClick={() => setActiveTab(teamB.id)} 
-              className={`flex-1 py-3 font-bold rounded-xl transition ${activeTab === teamB.id ? 'bg-white/10 text-white border border-white/20' : 'bg-white/5 text-chalkMuted hover:bg-white/10'}`}
+              className={`flex-1 py-4 font-display font-bold text-lg rounded-xl transition-all duration-300 flex items-center justify-center gap-3 ${activeTab === teamB.id ? 'bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.15)]' : 'bg-black/40 text-zinc-500 hover:bg-white/5 hover:text-white border border-white/5'}`}
             >
+              {teamB.logoUrl && <img src={teamB.logoUrl} className="w-6 h-6 rounded-full object-cover" />}
               {teamB.name}
             </button>
           </div>
           
-          {activeTab === teamA.id ? renderTeamStats(teamA) : renderTeamStats(teamB)}
+          <div className="flex-1 overflow-hidden">
+            {activeTab === teamA.id ? renderTeamStats(teamA) : renderTeamStats(teamB)}
+          </div>
         </div>
         
-        <div className="p-6 border-t border-white/10 bg-black/20 flex justify-end gap-4">
-          <button onClick={onClose} className="px-6 py-3 rounded-lg text-chalkMuted hover:text-white font-bold transition">Cancel</button>
-          <button onClick={saveStats} disabled={loading} className="px-6 py-3 bg-white text-black text-ink hover:bg-white text-black rounded-lg font-bold transition flex items-center gap-2">
-            {loading ? 'Saving...' : 'Save Stats'}
+        <div className="p-6 border-t border-white/10 bg-black/40 flex justify-end gap-4 relative z-20">
+          <button onClick={onClose} className="px-8 py-3 rounded-xl text-zinc-400 hover:bg-white/5 hover:text-white font-bold transition uppercase tracking-widest text-sm">Cancel</button>
+          <button onClick={saveStats} disabled={loading} className="px-8 py-3 bg-white text-black hover:bg-zinc-200 rounded-xl font-bold transition flex items-center gap-2 uppercase tracking-widest text-sm shadow-[0_0_15px_rgba(255,255,255,0.2)] disabled:opacity-50">
+            {loading ? <span className="animate-pulse">Saving...</span> : <><Check size={18} /> Save Updates</>}
           </button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
 
 
 function MatchRow({ m, tA, tB, updateMatchScore, onOpenStats }: { m: any, tA: any, tB: any, updateMatchScore: any, onOpenStats: any }) {
-  const [scoreA, setScoreA] = useState(m.scoreA ?? 0);
-  const [scoreB, setScoreB] = useState(m.scoreB ?? 0);
+  const [scoreA, setScoreA] = useState<string | number>(m.scoreA ?? 0);
+  const [scoreB, setScoreB] = useState<string | number>(m.scoreB ?? 0);
   const [status, setStatus] = useState(m.status);
   const [date, setDate] = useState<Date | null>(m.scheduledAt ? new Date(m.scheduledAt) : null);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
@@ -170,10 +203,28 @@ function MatchRow({ m, tA, tB, updateMatchScore, onOpenStats }: { m: any, tA: an
       </div>
 
       <div className="flex items-center gap-4 w-full xl:w-auto justify-between xl:justify-end">
-        <div className="flex items-center gap-2 bg-black/20 px-3 py-1 rounded-lg border border-white/5">
-          <input type="number" value={scoreA} onChange={e => setScoreA(parseInt(e.target.value) || 0)} className="w-8 bg-transparent text-white text-center text-lg font-bold outline-none" />
+        <div className={`flex items-center gap-2 px-3 py-1 rounded-lg border transition-all ${status !== 'IN_PROGRESS' ? 'bg-black/40 border-transparent opacity-50' : 'bg-black/20 border-white/10'}`}>
+          <input 
+            type="number" 
+            value={scoreA === '' ? 0 : scoreA} 
+            disabled={status !== 'IN_PROGRESS'}
+            onChange={e => {
+              const val = e.target.value;
+              setScoreA(val === '' ? 0 : (parseInt(val, 10) || 0));
+            }} 
+            className="w-8 bg-transparent text-white text-center text-lg font-bold outline-none disabled:text-zinc-500" 
+          />
           <span className="text-chalkMuted text-sm font-bold">-</span>
-          <input type="number" value={scoreB} onChange={e => setScoreB(parseInt(e.target.value) || 0)} className="w-8 bg-transparent text-white text-center text-lg font-bold outline-none" />
+          <input 
+            type="number" 
+            value={scoreB === '' ? 0 : scoreB} 
+            disabled={status !== 'IN_PROGRESS'}
+            onChange={e => {
+              const val = e.target.value;
+              setScoreB(val === '' ? 0 : (parseInt(val, 10) || 0));
+            }} 
+            className="w-8 bg-transparent text-white text-center text-lg font-bold outline-none disabled:text-zinc-500" 
+          />
         </div>
         
         <div className="w-36 relative z-30 shrink-0">
@@ -193,12 +244,12 @@ function MatchRow({ m, tA, tB, updateMatchScore, onOpenStats }: { m: any, tA: an
           <button 
             onClick={() => onOpenStats(m, tA, tB)}
             className="bg-white/5 text-zinc-400 hover:bg-white/10 hover:text-white p-2 rounded-lg flex items-center justify-center transition"
-            title="Player Stats"
+            title="Player Stats & Scorers"
           >
-            <Activity size={18} />
+            <ClipboardList size={18} />
           </button>
           <button 
-            onClick={() => updateMatchScore(m.id, scoreA, scoreB, status, date?.toISOString())}
+            onClick={() => updateMatchScore(m.id, scoreA === '' ? 0 : scoreA, scoreB === '' ? 0 : scoreB, status, date?.toISOString())}
             className="bg-white text-black hover:bg-zinc-200 px-4 py-2 rounded-lg flex items-center justify-center transition font-bold text-xs gap-1.5"
             title="Save Match Info"
           >

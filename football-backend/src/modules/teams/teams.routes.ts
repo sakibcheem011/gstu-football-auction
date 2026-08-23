@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { 
   createTeam, getTeams, deleteTeam,
-  getPendingManagers, approveManager, updateManager,
+  getPendingManagers, approveManager, rejectManager, updateManager,
   getWishlist, toggleWishlist, uploadTeamLogo
 } from './teams.controller';
 import multer from 'multer';
@@ -16,6 +16,7 @@ const router = Router();
 router.get('/', getTeams);
 router.get('/pending-managers', requireAuth, requireRole([Role.SUPER_ADMIN]), getPendingManagers);
 router.post('/approve-manager', requireAuth, requireRole([Role.SUPER_ADMIN]), requirePhase([Phase.SETUP]), approveManager);
+router.delete('/reject-manager/:id', requireAuth, requireRole([Role.SUPER_ADMIN]), requirePhase([Phase.SETUP]), rejectManager);
 router.post('/', requireAuth, requireRole([Role.SUPER_ADMIN]), requirePhase([Phase.SETUP]), createTeam);
 router.put('/:id/manager', requireAuth, requireRole([Role.SUPER_ADMIN]), updateManager);
 router.delete('/:id', requireAuth, requireRole([Role.SUPER_ADMIN]), deleteTeam);

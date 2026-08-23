@@ -96,18 +96,18 @@ export default function SuperAdminDashboard() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="font-display text-3xl text-white font-bold tracking-tight mb-1">Dashboard</h1>
-            <p className="text-zinc-500 text-sm font-semibold tracking-wider uppercase">Overview & Analytics</p>
+            <p className="text-chalkMuted text-sm font-semibold tracking-wider uppercase">Overview & Analytics</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
           {/* Box 1: System Phase */}
-          <div className="glass-panel p-8 col-span-1 md:col-span-2 md:row-span-2 relative overflow-hidden group border border-zinc-800/80 bg-zinc-900/40">
+          <div className="glass-panel p-8 col-span-1 md:col-span-2 md:row-span-2 relative overflow-hidden group border border-chalk/10 bg-panel">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4 pointer-events-none transition-transform duration-700 group-hover:scale-110" />
             
             <div className="relative z-10 flex flex-col h-full justify-between">
               <div className="flex justify-between items-start mb-12">
-                <div className="text-sm uppercase tracking-widest text-zinc-500 font-bold mb-2 flex items-center gap-2">
+                <div className="text-sm uppercase tracking-widest text-chalkMuted font-bold mb-2 flex items-center gap-2">
                    Current Phase
                 </div>
               </div>
@@ -121,11 +121,11 @@ export default function SuperAdminDashboard() {
           </div>
 
           {/* Box 2: Total Market Spend */}
-          <div className="glass-panel p-8 col-span-1 md:col-span-2 relative overflow-hidden group hover:border-zinc-700 transition-all duration-300 bg-zinc-900/40">
+          <div className="glass-panel p-8 col-span-1 md:col-span-2 relative overflow-hidden group hover:border-chalk/20 transition-all duration-300 bg-panel">
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/0 via-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
             <div className="flex items-center justify-between relative z-10">
               <div>
-                <div className="text-sm uppercase tracking-widest text-zinc-500 font-bold mb-2 flex items-center gap-2">
+                <div className="text-sm uppercase tracking-widest text-chalkMuted font-bold mb-2 flex items-center gap-2">
                   Total Market Spend
                 </div>
                 <div className="text-3xl font-display text-white font-bold tabular-nums tracking-tight">TK {totalSpent.toLocaleString()}</div>
@@ -134,17 +134,17 @@ export default function SuperAdminDashboard() {
           </div>
 
           {/* Box 3: Players in Queue */}
-          <div className="glass-panel p-6 col-span-1 flex flex-col justify-center group hover:border-zinc-700 transition-all duration-300 relative overflow-hidden bg-zinc-900/40">
+          <div className="glass-panel p-6 col-span-1 flex flex-col justify-center group hover:border-chalk/20 transition-all duration-300 relative overflow-hidden bg-panel">
             <div>
-              <div className="text-xs uppercase tracking-widest text-zinc-500 font-bold mb-1">Players Queue</div>
+              <div className="text-xs uppercase tracking-widest text-chalkMuted font-bold mb-1">Players Queue</div>
               <div className="text-3xl font-display text-white font-bold tabular-nums">{totalPlayers}</div>
             </div>
           </div>
 
           {/* Box 4: Active Franchises */}
-          <div className="glass-panel p-6 col-span-1 flex flex-col justify-center group hover:border-zinc-700 transition-all duration-300 relative overflow-hidden bg-zinc-900/40">
+          <div className="glass-panel p-6 col-span-1 flex flex-col justify-center group hover:border-chalk/20 transition-all duration-300 relative overflow-hidden bg-panel">
             <div>
-              <div className="text-xs uppercase tracking-widest text-zinc-500 font-bold mb-1">Franchises</div>
+              <div className="text-xs uppercase tracking-widest text-chalkMuted font-bold mb-1">Franchises</div>
               <div className="text-3xl font-display text-white font-bold tabular-nums">{teams.length}</div>
             </div>
           </div>
@@ -152,7 +152,7 @@ export default function SuperAdminDashboard() {
 
 
         <div className="glass-panel p-8 flex-1 mb-10">
-          <h2 className="text-xl font-display font-bold text-white mb-6 border-b border-zinc-800 pb-4">Franchise Economy</h2>
+          <h2 className="text-xl font-display font-bold text-white mb-6 border-b border-chalk/10 pb-4">Franchise Economy</h2>
           
           {safeTeams.length === 0 ? (
             <div className="text-center py-10">
@@ -176,19 +176,19 @@ export default function SuperAdminDashboard() {
                       {team.logoUrl ? (
                         <img src={team.logoUrl} alt={team.name} className="w-full h-full object-cover" />
                       ) : (
-                        <Shield className="text-zinc-500 w-4 h-4" />
+                        <Shield className="text-chalkMuted w-4 h-4" />
                       )}
                     </div>
                     <h3 className="text-lg font-bold text-zinc-200">{team.name}</h3>
                   </div>
                   <div className="flex justify-between items-end">
                     <div>
-                      <div className="text-xs text-zinc-500 uppercase tracking-widest font-semibold mb-1">Treasury</div>
+                      <div className="text-xs text-chalkMuted uppercase tracking-widest font-semibold mb-1">Treasury</div>
                       <div className="text-xl font-display tabular-nums tracking-wider text-white">TK {team.remainingBudget.toLocaleString()}</div>
                     </div>
                     <div className="text-right">
-                      <div className="text-xs text-zinc-500 uppercase tracking-widest font-semibold mb-1">Squad</div>
-                      <div className="text-lg font-bold tabular-nums text-zinc-400">{squadSize} / 20</div>
+                      <div className="text-xs text-chalkMuted uppercase tracking-widest font-semibold mb-1">Squad</div>
+                      <div className="text-lg font-bold tabular-nums text-chalkMuted">{squadSize} / 20</div>
                     </div>
                   </div>
                 </div>
@@ -204,3 +204,4 @@ export default function SuperAdminDashboard() {
     </div>
   )
 }
+

@@ -18,8 +18,8 @@ export function TournamentDashboard() {
   return (
     <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} className="py-12 space-y-6 max-w-6xl mx-auto w-full">
       <div className="mb-10 text-center">
-        <h1 className="font-display text-3xl md:text-4xl font-bold tracking-tight mb-2 text-white">Tournament Dashboard</h1>
-        <p className="text-zinc-400 uppercase tracking-wider text-xs font-semibold">Live Matches & Standings</p>
+        <h1 className="font-display text-3xl md:text-4xl font-bold tracking-tight mb-2 text-chalk">Tournament Dashboard</h1>
+        <p className="text-chalkMuted uppercase tracking-wider text-xs font-semibold">Live Matches & Standings</p>
       </div>
 
       {/* Featured Match Card */}
@@ -116,52 +116,80 @@ export function TournamentDashboard() {
         </div>
       </div>
 
-      {/* Full Fixtures List */}
-      <div className="glass-panel p-8 h-fit">
-        <h2 className="font-display font-bold text-xl text-white mb-6 border-b border-zinc-800 pb-4">All Fixtures</h2>
-        <div className="space-y-4">
-          <Accordion type="single">
-            {fixtures.sort((a, b) => {
-              const dateA = a.matches[0]?.scheduledAt ? new Date(a.matches[0].scheduledAt).getTime() : 0;
-              const dateB = b.matches[0]?.scheduledAt ? new Date(b.matches[0].scheduledAt).getTime() : 0;
-              return dateA - dateB;
-            }).map(fix => {
-              const tA = teams.find(t => t.id === fix.teamAId)?.name;
-              const tB = teams.find(t => t.id === fix.teamBId)?.name;
-              return (
-                <AccordionItem 
-                  key={fix.id} 
-                  id={fix.id} 
-                  title={`Matchday: ${fix.venue} ${fix.isTwoLegged ? '(Two-Legged)' : '(Single Tie)'}`}
-                  icon={Calendar}
-                >
-                  <div className="space-y-2 mt-2">
-                    {fix.matches.sort((a:any, b:any) => a.legNumber - b.legNumber).map((m: any) => (
-                      <div key={m.id} className="flex items-center justify-between p-3 rounded-lg bg-black/40 border border-zinc-800 hover:bg-black/60 transition-colors">
-                        <div className="flex flex-col w-1/4">
-                          <div className="font-semibold text-zinc-300 text-sm">{m.scheduledAt ? new Date(m.scheduledAt).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : 'TBD'}</div>
-                          <div className="text-xs text-zinc-500">{m.scheduledAt ? new Date(m.scheduledAt).toLocaleString('en-US', { hour: 'numeric', minute: '2-digit' }) : ''}</div>
-                        </div>
-                        <div className="font-semibold w-1/4 text-right text-zinc-200 text-sm lg:text-base">{tA}</div>
-                        <div className="flex flex-col items-center px-4 w-1/4">
-                          <div className="bg-zinc-800 px-4 py-1.5 rounded-lg font-display tracking-wider text-lg text-white shadow-inner border border-zinc-700">
-                            {m.status === 'SCHEDULED' ? 'v' : `${m.scoreA ?? 0} - ${m.scoreB ?? 0}`}
-                          </div>
-                          <div className={`text-[10px] uppercase mt-1 tracking-widest font-bold ${m.status === 'COMPLETED' ? 'text-success' : m.status === 'IN_PROGRESS' ? 'text-danger animate-pulse' : 'text-zinc-400'}`}>
-                            {m.status === 'IN_PROGRESS' ? 'Live' : m.status.replace('_', ' ')}
-                          </div>
-                        </div>
-                        <div className="font-semibold w-1/4 text-left text-zinc-200 text-sm lg:text-base">{tB}</div>
-                      </div>
-                    ))}
-                  </div>
-                </AccordionItem>
-              );
-            })}
-          </Accordion>
-          {fixtures.length === 0 && <div className="text-center text-zinc-500 py-4 text-sm uppercase tracking-widest font-semibold opacity-50">No Fixtures Scheduled</div>}
+      {/* Split Fixtures Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Recent Results */}
+        <div className="glass-panel p-8 h-fit">
+          <h2 className="font-display font-bold text-xl text-white mb-6 border-b border-zinc-800 pb-4">Recent Results</h2>
+          <div className="space-y-4">
+            {(() => {
+              const allMatches = fixtures.flatMap(f => f.matches.map((m: any) => ({ match: m, fixture: f })));
+              const completedMatches = allMatches.filter(m => m.match.status === 'COMPLETED').sort((a, b) => {
+                const dA = a.match.scheduledAt ? new Date(a.match.scheduledAt).getTime() : 0;
+                const dB = b.match.scheduledAt ? new Date(b.match.scheduledAt).getTime() : 0;
+                return dB - dA; // Newest first
+              });
+
+              if (completedMatches.length === 0) {
+                return <div className="text-center text-zinc-500 py-8 text-sm uppercase tracking-widest font-semibold opacity-50">No Results Yet</div>;
+              }
+              return completedMatches.map(mInfo => <MatchCard key={mInfo.match.id} matchInfo={mInfo} teams={teams} />);
+            })()}
+          </div>
+        </div>
+
+        {/* Upcoming Fixtures */}
+        <div className="glass-panel p-8 h-fit">
+          <h2 className="font-display font-bold text-xl text-white mb-6 border-b border-zinc-800 pb-4">Upcoming Fixtures</h2>
+          <div className="space-y-4">
+            {(() => {
+              const allMatches = fixtures.flatMap(f => f.matches.map((m: any) => ({ match: m, fixture: f })));
+              const upcomingMatches = allMatches.filter(m => m.match.status !== 'COMPLETED').sort((a, b) => {
+                const dA = a.match.scheduledAt ? new Date(a.match.scheduledAt).getTime() : Infinity;
+                const dB = b.match.scheduledAt ? new Date(b.match.scheduledAt).getTime() : Infinity;
+                return dA - dB; // Soonest first
+              });
+
+              if (upcomingMatches.length === 0) {
+                return <div className="text-center text-zinc-500 py-8 text-sm uppercase tracking-widest font-semibold opacity-50">No Upcoming Matches</div>;
+              }
+              return upcomingMatches.map(mInfo => <MatchCard key={mInfo.match.id} matchInfo={mInfo} teams={teams} />);
+            })()}
+          </div>
         </div>
       </div>
     </motion.div>
+  );
+}
+
+function MatchCard({ matchInfo, teams }: { matchInfo: any, teams: any[] }) {
+  const { match, fixture } = matchInfo;
+  const tA = teams.find(t => t.id === fixture.teamAId)?.name;
+  const tB = teams.find(t => t.id === fixture.teamBId)?.name;
+  
+  return (
+    <div className="flex flex-col p-4 rounded-xl bg-zinc-900/40 border border-zinc-800/80 hover:border-zinc-700 transition-all duration-300 relative overflow-hidden group">
+      <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 pointer-events-none" />
+      <div className="text-xs text-zinc-500 mb-4 font-semibold uppercase tracking-widest border-b border-zinc-800/50 pb-2 flex items-center gap-2">
+        <Calendar size={12} />
+        {fixture.venue} {fixture.isTwoLegged ? `(Leg ${match.legNumber})` : ''}
+      </div>
+      <div className="flex items-center justify-between relative z-10">
+        <div className="flex flex-col w-1/4">
+          <div className="font-semibold text-zinc-300 text-sm">{match.scheduledAt ? new Date(match.scheduledAt).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : 'TBD'}</div>
+          <div className="text-xs text-zinc-500">{match.scheduledAt ? new Date(match.scheduledAt).toLocaleString('en-US', { hour: 'numeric', minute: '2-digit' }) : ''}</div>
+        </div>
+        <div className="font-semibold w-1/4 text-right text-zinc-200 text-sm lg:text-base">{tA}</div>
+        <div className="flex flex-col items-center px-4 w-1/4">
+          <div className="bg-zinc-800 px-4 py-1.5 rounded-lg font-display tracking-wider text-lg text-white shadow-inner border border-zinc-700 min-w-[70px] flex justify-center">
+            {match.status === 'SCHEDULED' ? 'v' : `${match.scoreA ?? 0} - ${match.scoreB ?? 0}`}
+          </div>
+          <div className={`text-[10px] uppercase mt-1 tracking-widest font-bold ${match.status === 'COMPLETED' ? 'text-success' : match.status === 'IN_PROGRESS' ? 'text-danger animate-pulse' : 'text-zinc-400'}`}>
+            {match.status === 'IN_PROGRESS' ? 'Live' : match.status.replace('_', ' ')}
+          </div>
+        </div>
+        <div className="font-semibold w-1/4 text-left text-zinc-200 text-sm lg:text-base">{tB}</div>
+      </div>
+    </div>
   );
 }

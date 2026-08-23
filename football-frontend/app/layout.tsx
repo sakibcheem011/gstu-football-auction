@@ -24,7 +24,6 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${jakarta.variable}`} suppressHydrationWarning>
       <body className="bg-primary text-primary font-body antialiased min-h-screen flex flex-col overflow-x-hidden transition-colors duration-300">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          <div className="ambient-bg" />
           <Toaster position="bottom-right" toastOptions={{
             style: {
               background: 'var(--color-bg-secondary)',
@@ -40,7 +39,6 @@ export default function RootLayout({
           <main className="flex-1 flex flex-col">
             {children}
           </main>
-          <GlobalThemeToggle />
         </ThemeProvider>
       </body>
     </html>

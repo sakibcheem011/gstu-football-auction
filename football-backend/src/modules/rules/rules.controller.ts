@@ -245,3 +245,50 @@ export const deleteSession = async (req: Request, res: Response): Promise<any> =
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+// ============================================
+// AUCTION MODE
+// ============================================
+export const updateAuctionMode = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { auctionMode } = req.body;
+    let dataToUpdate: any = { auctionMode };
+    
+    if (auctionMode === 'ROUND_ROBIN') {
+      const config = await prisma.systemConfig.findUnique({ where: { id: 'singleton' } });
+      if (!config?.draftOrder || config.draftOrder.length === 0) {
+        // Generate a random draft order from approved teams
+        const teams = await prisma.team.findMany();
+        dataToUpdate.draftOrder = teams.map(t => t.id).sort(() => Math.random() - 0.5);
+      }
+    }
+
+    const config = await prisma.systemConfig.update({
+      where: { id: 'singleton' },
+      data: dataToUpdate
+    });
+    ioInstance.emit('data_updated', { entity: 'config' });
+    return res.json(config);
+  } catch (error) {
+    console.error('UPDATE AUCTION MODE ERROR:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const updateDraftOrder = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { draftOrder, currentDraftTurn } = req.body;
+    const config = await prisma.systemConfig.update({
+      where: { id: 'singleton' },
+      data: { 
+        ...(draftOrder !== undefined && { draftOrder }),
+        ...(currentDraftTurn !== undefined && { currentDraftTurn })
+      }
+    });
+    ioInstance.emit('data_updated', { entity: 'config' });
+    return res.json(config);
+  } catch (error) {
+    console.error('UPDATE DRAFT ORDER ERROR:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};

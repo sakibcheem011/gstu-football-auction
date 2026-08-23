@@ -105,17 +105,17 @@ export default function PlayerDirectory({
     <div className="flex flex-col h-full space-y-6">
       
       {/* Search & Filter Bar */}
-      <div className="glass-panel relative z-40 p-6 rounded-[2rem] border-white/10 bg-white/[0.02] flex flex-col gap-4">
+      <div className="bg-panel relative z-40 p-6 rounded-[2rem] border border-white/5 shadow-2xl flex flex-col gap-4">
         
         <div className="flex flex-col md:flex-row gap-4 items-center">
-          <div className="relative flex-1 w-full">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-chalkMuted" size={20} />
+          <div className="relative flex-1 w-full group">
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-chalkMuted group-focus-within:text-emerald-400 transition-colors" size={20} />
             <input 
               type="text" 
               placeholder="Search by name, student ID, or jersey..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full h-12 bg-ink/80 border border-white/10 rounded-xl pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-gold/50"
+              className="w-full h-14 bg-ink border border-white/5 rounded-2xl pl-14 pr-4 text-white focus:outline-none focus:border-emerald-500/50 focus:bg-ink shadow-inner transition-all"
             />
           </div>
           
@@ -129,25 +129,35 @@ export default function PlayerDirectory({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 items-center">
-          <Dropdown options={categoryOptions} value={category} onChange={setCategory} placeholder="Any Tier" />
-          <Dropdown options={positionOptions} value={position} onChange={setPosition} placeholder="Any Position" />
-          <Dropdown options={sessionOptions} value={session} onChange={setSession} placeholder="Any Session" />
+        <div className="flex flex-wrap gap-4 items-center">
+          <div className="flex-1 min-w-[200px]">
+            <Dropdown options={categoryOptions} value={category} onChange={setCategory} placeholder="Any Tier" />
+          </div>
+          <div className="flex-1 min-w-[200px]">
+            <Dropdown options={positionOptions} value={position} onChange={setPosition} placeholder="Any Position" />
+          </div>
+          <div className="flex-1 min-w-[200px]">
+            <Dropdown options={sessionOptions} value={session} onChange={setSession} placeholder="Any Session" />
+          </div>
           {showStatusFilter && (
-             <Dropdown options={statusOptions} value={status} onChange={setStatus} placeholder="Any Status" />
+            <div className="flex-1 min-w-[200px]">
+              <Dropdown options={statusOptions} value={status} onChange={setStatus} placeholder="Any Status" />
+            </div>
           )}
           {showWishlistFilter && (
-            <button 
-              onClick={() => setShowWishlistedOnly(!showWishlistedOnly)}
-              className={`h-12 rounded-xl font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2 transition-all ${
-                showWishlistedOnly 
-                  ? 'bg-gold text-ink border border-gold' 
-                  : 'bg-white/5 text-chalk hover:bg-white/10 border border-white/10'
-              }`}
-            >
-              <Star size={16} className={showWishlistedOnly ? 'fill-ink' : ''} />
-              {showWishlistedOnly ? 'Wishlist Only' : 'All Players'}
-            </button>
+            <div className="w-full sm:w-auto">
+              <button 
+                onClick={() => setShowWishlistedOnly(!showWishlistedOnly)}
+                className={`w-full sm:w-auto h-14 px-6 rounded-2xl font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2 transition-all shadow-inner ${
+                  showWishlistedOnly 
+                    ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white border border-emerald-400/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]' 
+                    : 'bg-ink text-chalkMuted hover:text-white border border-white/5 hover:border-white/10'
+                }`}
+              >
+                <Star size={18} className={showWishlistedOnly ? 'fill-white' : ''} />
+                {showWishlistedOnly ? 'Wishlist Only' : 'All Players'}
+              </button>
+            </div>
           )}
         </div>
 
@@ -241,7 +251,7 @@ export default function PlayerDirectory({
                   {onAction && (!actionCondition || actionCondition(p)) && (
                     <button 
                       onClick={(e) => { e.stopPropagation(); onAction(p); }}
-                      className="w-full py-2.5 bg-gold hover:bg-yellow-400 text-[#000000] rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(244,196,83,0.15)]"
+                      className="w-full py-2.5 bg-white text-ink hover:bg-emerald-50 hover:text-emerald-900 rounded-xl font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-[0_4px_15px_rgba(255,255,255,0.1)] border border-transparent hover:border-emerald-500/30"
                     >
                       {actionLabel || 'Action'} {actionIcon || <ArrowRight size={14} />}
                     </button>

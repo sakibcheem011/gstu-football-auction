@@ -129,3 +129,56 @@ export const cancelAuction = async (req: Request, res: Response): Promise<any> =
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+export const draftPlayer = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { playerId } = req.body;
+    
+    // In Draft Mode, the user's turn is checked by the frontend, but we also enforce it here
+    const config = await prisma.systemConfig.findUnique({ where: { id: 'singleton' } });
+    if (!config || config.auctionMode !== 'ROUND_ROBIN' || config.draftOrder.length === 0) {
+      return res.status(400).json({ error: 'Draft mode is not active or draft order is missing' });
+    }
+
+    const teamId = config.draftOrder[config.currentDraftTurn];
+    
+    const player = await prisma.player.findUnique({
+      where: { id: playerId },
+      include: { category: true }
+    });
+    
+    if (!player) return res.status(404).json({ error: 'Player not found' });
+    if (player.status !== PlayerStatus.UNSOLD) return res.status(400).json({ error: 'Player already drafted' });
+
+    let price = player.category?.basePrice || 500;
+
+    // Transaction
+    await prisma.$transaction([
+      prisma.player.update({
+        where: { id: playerId },
+        data: { status: PlayerStatus.SOLD, teamId, soldPrice: price }
+      }),
+      prisma.team.update({
+        where: { id: teamId },
+        data: { remainingBudget: { decrement: price } }
+      }),
+      prisma.auctionLedgerEntry.create({
+        data: { playerId, teamId, amount: price }
+      }),
+      prisma.systemConfig.update({
+        where: { id: 'singleton' },
+        data: { currentDraftTurn: (config.currentDraftTurn + 1) % config.draftOrder.length }
+      })
+    ]);
+
+    // Update frontend
+    ioInstance.emit('player_sold', { playerId, teamId, price });
+    ioInstance.emit('data_updated', { entity: 'config' });
+
+    return res.json({ success: true, teamId });
+  } catch (error) {
+    console.error('draftPlayer error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
