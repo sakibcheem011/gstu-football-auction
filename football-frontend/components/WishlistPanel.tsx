@@ -66,7 +66,7 @@ export default function WishlistPanel({ wishlistIds, allPlayers, teamId, remaini
           <span className="text-xs font-bold text-chalkMuted uppercase tracking-widest">Drag to rank</span>
         </div>
         
-        <Reorder.Group axis="y" values={orderedIds} onReorder={handleReorder} className="space-y-3 pr-2 custom-scrollbar max-h-[600px] overflow-y-auto">
+        <Reorder.Group axis="y" values={orderedIds} onReorder={handleReorder} className="space-y-3 pr-2 w-full">
           <AnimatePresence>
             {wishlistPlayers.map((p, index) => {
               const isSoldToMe = p.status === 'SOLD' && p.teamId === teamId;
@@ -114,7 +114,7 @@ export default function WishlistPanel({ wishlistIds, allPlayers, teamId, remaini
                       {p.status === 'SOLD' ? 'Sold For' : 'Base Price'}
                     </div>
                     <div className={`font-mono font-bold text-lg ${p.status === 'SOLD' ? 'text-white' : 'text-cyan-400'}`}>
-                      TK {(p.soldPrice || p.category?.basePrice || 0).toLocaleString()}
+                      TK {(p.soldPrice || p.category?.basePrice || 0).toLocaleString('en-IN')}
                     </div>
                   </div>
                   
@@ -165,11 +165,11 @@ export default function WishlistPanel({ wishlistIds, allPlayers, teamId, remaini
           <div className="mt-6 pt-6 border-t border-white/10">
             <div className="flex justify-between items-center mb-2">
               <span className="text-xs text-chalkMuted uppercase tracking-widest font-bold">Total Base Value</span>
-              <span className="font-mono font-bold text-cyan-400">TK {totalBasePrice.toLocaleString()}</span>
+              <span className="font-mono font-bold text-cyan-400">TK {totalBasePrice.toLocaleString('en-IN')}</span>
             </div>
             <div className="flex justify-between items-center mb-4">
               <span className="text-xs text-chalkMuted uppercase tracking-widest font-bold">Remaining Purse</span>
-              <span className="font-mono font-bold text-gold">TK {remainingBudget.toLocaleString()}</span>
+              <span className="font-mono font-bold text-gold">TK {remainingBudget.toLocaleString('en-IN')}</span>
             </div>
             
             {budgetWarning && (

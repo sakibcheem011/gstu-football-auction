@@ -210,7 +210,7 @@ export default function ManagerDashboard() {
           <div className="flex items-center gap-6">
             <div className="bg-ink border border-white/10 rounded-2xl px-6 py-2 flex flex-col items-end">
               <div className="text-[10px] uppercase tracking-widest text-chalkMuted font-bold mb-1">Remaining Purse</div>
-              <div className="text-2xl font-display tabular-nums text-white">TK {team.remainingBudget.toLocaleString()}</div>
+              <div className="text-2xl font-display tabular-nums text-white">TK {team.remainingBudget.toLocaleString('en-IN')}</div>
             </div>
           </div>
         </div>
@@ -328,25 +328,25 @@ export default function ManagerDashboard() {
                           <User className="text-white/20" size={64} />
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent" />
-                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-widest text-white bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/20">
-                          {activePlayer.positions?.[0]?.position || 'PLY'}
+                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 text-[10px] font-bold uppercase tracking-widest text-white bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 whitespace-nowrap overflow-hidden text-ellipsis max-w-[90%] text-center">
+                          {activePlayer.positions?.sort((a: any, b: any) => (b.isPrimary ? 1 : 0) - (a.isPrimary ? 1 : 0)).map((pos: any) => `${pos.position}${pos.isPrimary ? '' : ' (S)'}`).join(', ') || 'PLY'}
                         </div>
                       </motion.div>
                       
-                      <div className="flex-1 flex flex-col justify-between py-2">
+                      <div className="flex-1 flex flex-col justify-between py-2 min-w-0">
                         <div>
                           <div className="text-xs uppercase tracking-widest text-white font-bold mb-2 flex items-center gap-2 justify-center md:justify-start">
                             <span className="w-2 h-2 rounded-full bg-danger animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]" /> Live Now
                           </div>
-                          <h2 className="text-4xl md:text-5xl font-display text-white tracking-wide mb-2">{activePlayer.name}</h2>
-                          <div className="text-sm text-chalkMuted uppercase tracking-wider font-semibold">Base Price: TK {basePrice.toLocaleString()}</div>
+                          <h2 className="text-4xl md:text-5xl font-display text-white tracking-wide mb-2 truncate">{activePlayer.name}</h2>
+                          <div className="text-sm text-chalkMuted uppercase tracking-wider font-semibold">Base Price: TK {basePrice.toLocaleString('en-IN')}</div>
                         </div>
                         
                         <div className="mt-8 flex flex-col sm:flex-row justify-between items-center sm:items-end border-t border-white/10 pt-6 gap-6">
                           <div className="text-center sm:text-left">
                             <div className="text-[10px] uppercase tracking-widest text-chalkMuted font-bold mb-2">Current Highest Bid</div>
                             <div className="text-4xl md:text-5xl font-display text-white tabular-nums">
-                              {mode === 'BLIND' && !isLeading ? '???' : `TK ${currentBid.toLocaleString()}`}
+                              {mode === 'BLIND' && !isLeading ? '???' : `TK ${currentBid.toLocaleString('en-IN')}`}
                             </div>
                             {isLeading && (
                               <motion.div initial={{opacity:0,y:5}} animate={{opacity:1,y:0}} className="text-white font-bold uppercase text-xs mt-3 tracking-widest flex items-center justify-center sm:justify-start gap-1.5 bg-white/10 px-3 py-1.5 rounded-full border border-white/20 w-fit sm:mx-0 mx-auto">
@@ -355,7 +355,7 @@ export default function ManagerDashboard() {
                             )}
                           </div>
                           
-                          <div className="text-center sm:text-right flex flex-col items-center sm:items-end">
+                          <div className="text-center sm:text-right flex flex-col items-center sm:items-end shrink-0">
                             <div className="text-[10px] uppercase tracking-widest text-chalkMuted font-bold mb-2 flex items-center gap-1.5">
                               <Clock size={12} /> Timer
                             </div>
@@ -400,7 +400,7 @@ export default function ManagerDashboard() {
                             'Folded'
                           ) : (
                             <>
-                              Bid TK {nextBidAmount.toLocaleString()}
+                              Bid TK {nextBidAmount.toLocaleString('en-IN')}
                             </>
                           )}
                         </motion.button>
@@ -410,17 +410,51 @@ export default function ManagerDashboard() {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={handleFold}
-                            className="px-8 py-6 rounded-2xl font-display text-xl tracking-widest uppercase transition-all flex flex-col items-center justify-center gap-1 bg-panelLight text-chalkMuted hover:bg-panelLight hover:text-chalkMuted border border-white/10 hover:border-white/10"
+                            className="px-8 py-6 rounded-2xl font-display text-xl tracking-widest uppercase transition-all flex flex-col items-center justify-center gap-1 bg-panelLight text-chalkMuted hover:bg-panelLight hover:text-chalkMuted border border-white/10 hover:border-white/10 shrink-0"
                           >
                             <AlertCircle size={24} />
                             Fold
                           </motion.button>
                         )}
                       </div>
+                      
                       {!isLeading && canAfford && !isBidding && !hasFolded && (
-                        <p className="text-center text-[10px] uppercase tracking-widest text-chalkMuted mt-4 font-bold">
-                          Next valid bid increment applied automatically
-                        </p>
+                        <div className="mt-4 flex flex-col md:flex-row gap-4 items-center">
+                          <div className="relative flex-1 w-full group">
+                            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-chalkMuted font-bold">TK</span>
+                            <input 
+                              type="text" 
+                              value={bidAmount}
+                              onChange={(e) => {
+                                const val = e.target.value.replace(/[^0-9]/g, '');
+                                if (val) {
+                                  setBidAmount(parseInt(val, 10).toLocaleString('en-IN'));
+                                } else {
+                                  setBidAmount('');
+                                }
+                              }}
+                              placeholder="Custom Amount..."
+                              className="w-full h-14 bg-ink border border-white/5 rounded-xl pl-12 pr-4 text-white focus:outline-none focus:border-emerald-500/50 focus:bg-ink shadow-inner transition-all font-display tracking-widest"
+                            />
+                          </div>
+                          <button 
+                            onClick={() => {
+                              const amount = parseInt(bidAmount.replace(/,/g, ''), 10);
+                              if (amount >= nextBidAmount && amount <= team.remainingBudget) {
+                                handleBid(amount);
+                                setBidAmount('');
+                              } else if (amount > team.remainingBudget) {
+                                toast.error(`Insufficient funds. Your remaining purse is TK ${team.remainingBudget.toLocaleString('en-IN')}`);
+                              } else {
+                                toast.error(`Custom bid must be at least TK ${nextBidAmount.toLocaleString('en-IN')}`);
+                              }
+                            }}
+                            disabled={!bidAmount || isBidding}
+                            className="h-14 w-full md:w-auto px-8 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold tracking-widest uppercase transition-all disabled:opacity-50 border border-white/10 shrink-0"
+                          >
+                            Custom Bid
+                          </button>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -447,7 +481,7 @@ export default function ManagerDashboard() {
                           className={`flex justify-between items-center text-sm p-3 rounded-xl border ${idx === 0 ? 'bg-white/10 border-white/20' : 'bg-ink border-white/5'}`}
                         >
                           <span className={`font-bold tracking-wide ${idx === 0 ? 'text-white' : 'text-white'}`}>{bid.teamName}</span>
-                          <span className={`font-display tracking-widest ${idx === 0 ? 'text-white' : 'text-chalkMuted'}`}>TK {bid.amount.toLocaleString()}</span>
+                          <span className={`font-display tracking-widest ${idx === 0 ? 'text-white' : 'text-chalkMuted'}`}>TK {bid.amount.toLocaleString('en-IN')}</span>
                         </motion.div>
                       ))}
                     </AnimatePresence>
@@ -474,7 +508,7 @@ export default function ManagerDashboard() {
                       </div>
                       <div className="text-right shrink-0">
                         <div className="text-[10px] text-chalkMuted uppercase tracking-widest mb-1 font-semibold">Bought For</div>
-                        <div className="text-white font-display tracking-wider text-sm tabular-nums">TK {p.soldPrice?.toLocaleString()}</div>
+                        <div className="text-white font-display tracking-wider text-sm tabular-nums">TK {p.soldPrice?.toLocaleString('en-IN')}</div>
                       </div>
                     </div>
                   )) : (
@@ -490,7 +524,7 @@ export default function ManagerDashboard() {
             </div>
           </div>
         ) : activeTab === 'database' ? (
-          <div className="h-[calc(100vh-220px)] flex flex-col overflow-hidden">
+          <div className="w-full">
             {config?.auctionMode === 'ROUND_ROBIN' && config?.draftOrder?.[config?.currentDraftTurn] === team?.id && (
                <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 p-4 rounded-2xl mb-4 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
                  <ListOrdered size={24} />
@@ -511,7 +545,7 @@ export default function ManagerDashboard() {
             />
           </div>
         ) : (
-          <div className="h-[calc(100vh-220px)]">
+          <div className="w-full">
             <WishlistPanel
               wishlistIds={wishlistIds}
               allPlayers={allPlayers}

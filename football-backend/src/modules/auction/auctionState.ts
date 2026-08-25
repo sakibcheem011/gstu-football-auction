@@ -18,6 +18,7 @@ export interface AuctionState {
   raiseTiers: any[];
   nextValidBid: number;
   blindBids: Record<string, { teamName: string, amount: number, timestamp: Date }>;
+  initialTimer: number;
 }
 
 class AuctionStateManager {
@@ -33,7 +34,8 @@ class AuctionStateManager {
     totalBudget: 1500000,
     raiseTiers: [],
     nextValidBid: 0,
-    blindBids: {}
+    blindBids: {},
+    initialTimer: 30
   };
 
   private timerInterval: NodeJS.Timeout | null = null;
@@ -61,6 +63,7 @@ class AuctionStateManager {
       highestBidderTeamId: null,
       bidHistory: [],
       timer: defaultTimer,
+      initialTimer: defaultTimer,
       basePrice,
       totalBudget,
       raiseTiers,
@@ -115,6 +118,7 @@ class AuctionStateManager {
 
   setTimer(seconds: number) {
     this.state.timer = seconds;
+    this.state.initialTimer = seconds;
   }
 
   extendTimer(seconds: number) {
@@ -199,9 +203,9 @@ class AuctionStateManager {
       this.state.bidHistory.pop();
     }
     
-    // Only reset to 15s if the timer is currently below 15s
-    if (this.state.timer < 15) {
-      this.state.timer = 15;
+    // Reset timer to the initially set timer for this player
+    if (this.state.timer < this.state.initialTimer) {
+      this.state.timer = this.state.initialTimer;
     }
     
     this.updateNextValidBid();

@@ -29,9 +29,11 @@ export default function RootLayout({
               background: 'var(--color-bg-secondary)',
               color: 'var(--color-text-primary)',
               border: '1px solid var(--color-border-subtle)',
-              borderRadius: '12px',
-              fontSize: '13px',
-              fontWeight: '600'
+              borderRadius: '16px',
+              fontSize: '16px',
+              fontWeight: '600',
+              padding: '16px 24px',
+              maxWidth: '400px'
             }
           }} />
           <GlobalLoader />

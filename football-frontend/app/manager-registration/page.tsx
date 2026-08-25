@@ -92,7 +92,7 @@ export default function ManagerRegistration() {
           <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
             
             <div className="space-y-2">
-              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Manager Full Name</label>
+              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Manager Full Name <span className="text-red-500">*</span></label>
               <input 
                 type="text" 
                 required
@@ -107,7 +107,7 @@ export default function ManagerRegistration() {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Email Address</label>
+              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Email Address <span className="text-red-500">*</span></label>
               <input 
                 type="email" 
                 required
@@ -119,7 +119,7 @@ export default function ManagerRegistration() {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Phone Number</label>
+              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Phone Number <span className="text-red-500">*</span></label>
               <input 
                 type="text" 
                 required
@@ -131,7 +131,7 @@ export default function ManagerRegistration() {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Desired Franchise Name</label>
+              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Desired Franchise Name <span className="text-red-500">*</span></label>
               <input 
                 type="text" 
                 required
@@ -145,7 +145,7 @@ export default function ManagerRegistration() {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Password</label>
+              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Password <span className="text-red-500">*</span></label>
               <div className="relative">
                 <input 
                   type={showPassword ? "text" : "password"} 

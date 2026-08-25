@@ -128,7 +128,7 @@ export default function SuperAdminDashboard() {
                 <div className="text-sm uppercase tracking-widest text-chalkMuted font-bold mb-2 flex items-center gap-2">
                   Total Market Spend
                 </div>
-                <div className="text-3xl font-display text-white font-bold tabular-nums tracking-tight">TK {totalSpent.toLocaleString()}</div>
+                <div className="text-3xl font-display text-white font-bold tabular-nums tracking-tight">TK {totalSpent.toLocaleString('en-IN')}</div>
               </div>
             </div>
           </div>
@@ -184,7 +184,7 @@ export default function SuperAdminDashboard() {
                   <div className="flex justify-between items-end">
                     <div>
                       <div className="text-xs text-chalkMuted uppercase tracking-widest font-semibold mb-1">Treasury</div>
-                      <div className="text-xl font-display tabular-nums tracking-wider text-white">TK {team.remainingBudget.toLocaleString()}</div>
+                      <div className="text-xl font-display tabular-nums tracking-wider text-white">TK {team.remainingBudget.toLocaleString('en-IN')}</div>
                     </div>
                     <div className="text-right">
                       <div className="text-xs text-chalkMuted uppercase tracking-widest font-semibold mb-1">Squad</div>

@@ -76,7 +76,7 @@ export default function FranchisesPage() {
                       <Wallet size={12} /> Budget
                     </div>
                     <div className="font-display font-bold text-chalk tabular-nums">
-                      TK {team.remainingBudget?.toLocaleString() || 0}
+                      TK {team.remainingBudget?.toLocaleString('en-IN') || 0}
                     </div>
                   </div>
                   <div>

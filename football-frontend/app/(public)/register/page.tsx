@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import { UploadCloud, CheckCircle2, Eye, EyeOff } from 'lucide-react';
 import Dropdown from '../../../components/Dropdown';
+import MultiSelectDropdown from '../../../components/MultiSelectDropdown';
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ export default function Register() {
     studentId: '',
     sessionId: '24-25',
     jerseyName: '',
+    jerseyNumber: '',
     password: '',
   });
 
@@ -19,6 +21,16 @@ export default function Register() {
   const [sessions, setSessions] = useState<any[]>([]);
   const [phase, setPhase] = useState<string>('SETUP');
   const [isInitializing, setIsInitializing] = useState(true);
+
+  const [primaryPos, setPrimaryPos] = useState('');
+  const [secondaryPos, setSecondaryPos] = useState<string[]>([]);
+  const [file, setFile] = useState<File | null>(null);
+
+  useEffect(() => {
+    if (primaryPos && secondaryPos.includes(primaryPos)) {
+      setSecondaryPos(prev => prev.filter(p => p !== primaryPos));
+    }
+  }, [primaryPos, secondaryPos]);
 
   useEffect(() => {
     const fetchInitData = async () => {
@@ -42,20 +54,23 @@ export default function Register() {
     fetchInitData();
   }, []);
   const POSITIONS = ['GK', 'CB', 'LB', 'RB', 'CDM', 'CM', 'CAM', 'RW', 'LW', 'ST'];
-  const [file, setFile] = useState<File | null>(null);
-  const [primaryPos, setPrimaryPos] = useState('');
-  const [secondaryPos, setSecondaryPos] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file) return toast.error('Profile image is required');
     setLoading(true);
 
-    if (!primaryPos) return toast.error('Primary playing position is required');
+    if (!primaryPos) {
+      setLoading(false);
+      return toast.error('Primary playing position is required');
+    }
     const posArray = [{ position: primaryPos, isPrimary: true }];
-    if (secondaryPos && secondaryPos !== primaryPos) {
-      posArray.push({ position: secondaryPos, isPrimary: false });
+    if (secondaryPos.length > 0) {
+      secondaryPos.forEach(pos => {
+        if (pos !== primaryPos) {
+          posArray.push({ position: pos, isPrimary: false });
+        }
+      });
     }
 
     const data = new FormData();
@@ -64,9 +79,12 @@ export default function Register() {
     data.append('studentId', formData.studentId);
     data.append('sessionId', formData.sessionId);
     data.append('jerseyName', formData.jerseyName);
+    data.append('jerseyNumber', formData.jerseyNumber);
     data.append('password', formData.password);
     data.append('positions', JSON.stringify(posArray));
-    data.append('image', file);
+    if (file) {
+      data.append('image', file);
+    }
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL }/players`, {
@@ -118,7 +136,7 @@ export default function Register() {
           <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Full Name</label>
+                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Full Name <span className="text-red-500">*</span></label>
                 <input required type="text" className="w-full bg-ink border border-chalk/10 rounded-xl px-4 py-3 text-chalk placeholder:text-chalkMuted/40 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all" 
                   value={formData.name}
                   onChange={e => {
@@ -128,21 +146,21 @@ export default function Register() {
                 />
               </div>
               <div>
-                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Email Address</label>
+                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Email Address <span className="text-red-500">*</span></label>
                 <input required type="email" className="w-full bg-ink border border-chalk/10 rounded-xl px-4 py-3 text-chalk placeholder:text-chalkMuted/40 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all" 
                   value={formData.email} 
                   onChange={e => setFormData({...formData, email: e.target.value.toLowerCase()})} 
                 />
               </div>
               <div>
-                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Student ID</label>
+                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Student ID <span className="text-red-500">*</span></label>
                 <input required type="text" className="w-full bg-ink border border-chalk/10 rounded-xl px-4 py-3 text-chalk placeholder:text-chalkMuted/40 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all" 
                   value={formData.studentId} 
                   onChange={e => setFormData({...formData, studentId: e.target.value.toUpperCase()})} 
                 />
               </div>
               <div className="relative z-50">
-                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Session</label>
+                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Session <span className="text-red-500">*</span></label>
                 <Dropdown
                   options={sessions.map(s => ({ label: s.name, value: s.name }))}
                   value={formData.sessionId}
@@ -151,14 +169,21 @@ export default function Register() {
                 />
               </div>
               <div>
-                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Jersey Name</label>
+                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Jersey Name <span className="text-red-500">*</span></label>
                 <input required type="text" className="w-full bg-ink border border-chalk/10 rounded-xl px-4 py-3 text-chalk placeholder:text-chalkMuted/40 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all" 
                   value={formData.jerseyName}
                   onChange={e => setFormData({...formData, jerseyName: e.target.value.toUpperCase()})} 
                 />
               </div>
               <div>
-                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Password</label>
+                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Jersey Number <span className="text-red-500">*</span></label>
+                <input required type="text" className="w-full bg-ink border border-chalk/10 rounded-xl px-4 py-3 text-chalk placeholder:text-chalkMuted/40 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all" 
+                  value={formData.jerseyNumber}
+                  onChange={e => setFormData({...formData, jerseyNumber: e.target.value})} 
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Password <span className="text-red-500">*</span></label>
                 <div className="relative">
                   <input required type={showPassword ? "text" : "password"} placeholder="Create a password" className="w-full bg-ink border border-chalk/10 rounded-xl pl-4 pr-12 py-3 text-chalk placeholder:text-chalkMuted/40 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all" 
                     value={formData.password} 
@@ -174,7 +199,7 @@ export default function Register() {
                 </div>
               </div>
               <div className="relative z-40">
-                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Primary Position</label>
+                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Primary Position <span className="text-red-500">*</span></label>
                 <Dropdown
                   options={POSITIONS.map(p => ({ label: p, value: p }))}
                   value={primaryPos}
@@ -183,21 +208,20 @@ export default function Register() {
                 />
               </div>
               <div className="relative z-40">
-                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Secondary Position</label>
-                <Dropdown
-                  options={POSITIONS.map(p => ({ label: p, value: p }))}
+                <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Secondary Position(s)</label>
+                <MultiSelectDropdown
+                  options={POSITIONS.filter(p => p !== primaryPos).map(p => ({ label: p, value: p }))}
                   value={secondaryPos}
                   onChange={setSecondaryPos}
-                  placeholder="-- Optional --"
+                  placeholder="-- Select Optional --"
                 />
               </div>
             </div>
 
             <div className="pt-2">
-              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Profile Photo (Max 5MB)</label>
+              <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Profile Photo (Optional, Max 5MB)</label>
               <div className="relative group">
                 <input 
-                  required 
                   type="file" 
                   accept="image/*" 
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 

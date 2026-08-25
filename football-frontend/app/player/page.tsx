@@ -119,7 +119,7 @@ export default function PlayerDashboard() {
                 <div className="bg-ink border border-white/5 rounded-2xl p-6 text-center hover:border-emerald-500/20 transition-colors shadow-inner">
                   <div className="text-[10px] uppercase tracking-widest text-chalkMuted mb-3 font-bold">Sold For</div>
                   <div className={`text-2xl font-display tracking-widest ${p.soldPrice ? 'text-emerald-400' : 'text-chalkMuted'}`}>
-                    {p.soldPrice ? `TK ${p.soldPrice.toLocaleString()}` : '---'}
+                    {p.soldPrice ? `TK ${p.soldPrice.toLocaleString('en-IN')}` : '---'}
                   </div>
                 </div>
               </div>

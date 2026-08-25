@@ -2,10 +2,86 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Settings, Trophy, MonitorPlay, LogOut, Loader2, ShieldCheck } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { LayoutDashboard, Settings, Trophy, MonitorPlay, LogOut, Loader2, ShieldCheck, Users, Shield, Database, Activity } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeToggle } from '../../components/ThemeToggle';
+
+import { Suspense } from 'react';
+
+function SidebarNavContent({ pathname, navItems }: { pathname: string, navItems: any[] }) {
+  const searchParams = useSearchParams();
+  const currentTab = searchParams.get('tab') || 'config';
+
+  const subItems = [
+    { id: 'config', label: 'CONFIGURATION', icon: Settings },
+    { id: 'teams', label: 'FRANCHISES', icon: Shield },
+    { id: 'players', label: 'PLAYERS', icon: Users },
+    { id: 'staff', label: 'PODIUM & ADMIN', icon: ShieldCheck },
+    { id: 'danger', label: 'DATA MANAGEMENT', icon: Database },
+  ];
+
+  return (
+    <>
+      {navItems.map((item) => {
+        const isActive = pathname === item.href;
+        const Icon = item.icon;
+        
+        return (
+          <div key={item.href} className="space-y-1">
+            <Link href={item.href}>
+              <div className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-base ${
+                isActive 
+                  ? 'bg-accent/10 text-accent border border-accent/20' 
+                  : 'text-chalkMuted hover:bg-panel hover:text-chalk border border-transparent'
+              }`}>
+                <Icon size={20} className={isActive ? 'text-accent' : 'text-chalkMuted'} />
+                {item.label}
+              </div>
+            </Link>
+            
+            <AnimatePresence>
+              {isActive && item.href === '/admin/setup' && (
+                <motion.div 
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  className="pl-4 pt-2 pb-2 flex flex-col gap-1 relative before:absolute before:left-6 before:top-0 before:bottom-2 before:w-px before:bg-chalk/10 overflow-hidden"
+                >
+                  {subItems.map(sub => {
+                    const SubIcon = sub.icon;
+                    const isSubActive = currentTab === sub.id;
+                    return (
+                      <Link key={sub.id} href={`/admin/setup?tab=${sub.id}`}>
+                        <div className={`flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all font-bold text-xs uppercase tracking-widest relative z-10 ${
+                          isSubActive 
+                            ? 'bg-white text-ink shadow-[0_4px_15px_rgba(255,255,255,0.1)]' 
+                            : 'text-chalkMuted hover:bg-white/5 hover:text-white'
+                        }`}>
+                          <SubIcon size={16} className={isSubActive ? 'text-ink' : 'text-chalkMuted'} />
+                          {sub.label}
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        );
+      })}
+    </>
+  );
+}
+
+function SidebarNav({ pathname, navItems }: { pathname: string, navItems: any[] }) {
+  return (
+    <Suspense fallback={<div className="p-4 text-xs text-chalkMuted">Loading menu...</div>}>
+      <SidebarNavContent pathname={pathname} navItems={navItems} />
+    </Suspense>
+  );
+}
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -69,23 +145,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            const Icon = item.icon;
-            
-            return (
-              <Link key={item.href} href={item.href}>
-                <div className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all font-semibold text-base ${
-                  isActive 
-                    ? 'bg-accent/10 text-accent border border-accent/20' 
-                    : 'text-chalkMuted hover:bg-panel hover:text-chalk border border-transparent'
-                }`}>
-                  <Icon size={20} className={isActive ? 'text-accent' : 'text-chalkMuted'} />
-                  {item.label}
-                </div>
-              </Link>
-            );
-          })}
+          <SidebarNav pathname={pathname} navItems={navItems} />
         </nav>
 
         <div className="p-4 border-t border-chalk/10">

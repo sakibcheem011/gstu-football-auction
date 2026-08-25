@@ -27,26 +27,8 @@ export const getSystemConfig = async (req: Request, res: Response): Promise<any>
 };
 
 export const recalculateRosterLimits = async () => {
-  try {
-    const totalApprovedPlayers = await prisma.player.count({
-      where: { status: { in: ['UNSOLD', 'SOLD'] } }
-    });
-    const totalTeams = await prisma.team.count();
-    
-    if (totalTeams > 0) {
-      const avg = totalApprovedPlayers / totalTeams;
-      const minRosterSize = Math.max(1, Math.floor(avg) - 1);
-      const maxRosterSize = Math.ceil(avg) + 2; // +2 for flexibility as requested
-
-      await prisma.systemConfig.update({
-        where: { id: 'singleton' },
-        data: { minRosterSize, maxRosterSize }
-      });
-      ioInstance.emit('data_updated', { entity: 'config' });
-    }
-  } catch (error) {
-    console.error('Failed to recalculate roster limits', error);
-  }
+  // Disabled as per user request: Roster limits are now manually configured in the Admin Setup
+  return;
 };
 
 export const updateTimerSettings = async (req: Request, res: Response): Promise<any> => {
@@ -63,6 +45,30 @@ export const updateTimerSettings = async (req: Request, res: Response): Promise<
     return res.json(config);
   } catch (error) {
     console.error('UPDATE TIMER ERROR:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const updateRosterLimits = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { minRosterSize, maxRosterSize } = req.body;
+    const config = await prisma.systemConfig.upsert({
+      where: { id: 'singleton' },
+      update: { 
+        minRosterSize: minRosterSize !== undefined ? parseInt(minRosterSize) : undefined, 
+        maxRosterSize: maxRosterSize !== undefined ? parseInt(maxRosterSize) : undefined
+      },
+      create: {
+        id: 'singleton',
+        totalBudget: 150000,
+        minRosterSize: minRosterSize !== undefined ? parseInt(minRosterSize) : 15,
+        maxRosterSize: maxRosterSize !== undefined ? parseInt(maxRosterSize) : 18
+      }
+    });
+    ioInstance.emit('data_updated', { entity: 'config' });
+    return res.json(config);
+  } catch (error) {
+    console.error('UPDATE ROSTER LIMITS ERROR:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
@@ -173,6 +179,20 @@ export const createCategory = async (req: Request, res: Response): Promise<any> 
   }
 };
 
+export const updateCategory = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { id } = req.params;
+    const { name, basePrice } = req.body;
+    const cat = await prisma.playerCategory.update({
+      where: { id },
+      data: { name, basePrice: parseInt(basePrice) }
+    });
+    return res.json(cat);
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 export const deleteCategory = async (req: Request, res: Response): Promise<any> => {
   try {
     await prisma.playerCategory.delete({ where: { id: (req.params.id as string) } });
@@ -198,6 +218,20 @@ export const createRaiseTier = async (req: Request, res: Response): Promise<any>
   try {
     const { minPct, maxPct, raisePct } = req.body;
     const tier = await prisma.biddingRaiseTier.create({
+      data: { minPct: parseFloat(minPct), maxPct: parseFloat(maxPct), raisePct: parseFloat(raisePct) }
+    });
+    return res.json(tier);
+  } catch (error) {
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const updateRaiseTier = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { id } = req.params;
+    const { minPct, maxPct, raisePct } = req.body;
+    const tier = await prisma.biddingRaiseTier.update({
+      where: { id },
       data: { minPct: parseFloat(minPct), maxPct: parseFloat(maxPct), raisePct: parseFloat(raisePct) }
     });
     return res.json(tier);

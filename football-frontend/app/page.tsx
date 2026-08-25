@@ -131,7 +131,7 @@ function SetupPhase({ teams, config, role }: { teams: any[], config: any, role?:
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10 mt-12 max-w-6xl mx-auto">
         <motion.div variants={{hidden: {opacity:0, y:20}, show: {opacity:1, y:0}}} className="glass-panel p-8 text-center">
           <MonitorPlay className="mx-auto text-chalkMuted mb-4" size={32} />
-          <div className="font-display text-3xl font-bold text-chalk mb-2">TK {(config?.totalBudget || 0).toLocaleString()}</div>
+          <div className="font-display text-3xl font-bold text-chalk mb-2">TK {(config?.totalBudget || 0).toLocaleString('en-IN')}</div>
           <div className="text-xs uppercase tracking-wider text-zinc-500 font-semibold">Franchise Budget</div>
         </motion.div>
         <motion.div variants={{hidden: {opacity:0, y:20}, show: {opacity:1, y:0}}} className="glass-panel p-8 text-center">
@@ -290,7 +290,7 @@ function AuctionPhase({ teams, auctionState, config }: { teams: any[], auctionSt
                                </div>
                                <span className="text-chalk truncate">{p.name}</span>
                              </div>
-                             <span className="text-chalk font-mono font-bold shrink-0">TK {p.soldPrice?.toLocaleString()}</span>
+                             <span className="text-chalk font-mono font-bold shrink-0">TK {p.soldPrice?.toLocaleString('en-IN')}</span>
                            </div>
                          ))}
                          {(!t.players || t.players.length === 0) && (
@@ -315,12 +315,12 @@ function AuctionPhase({ teams, auctionState, config }: { teams: any[], auctionSt
               <div className="flex-1 py-2 text-center md:text-left">
                 <div className="text-xs uppercase tracking-widest text-chalk font-bold mb-2">Player</div>
                 <h2 className="text-5xl font-display text-chalk mb-2">{activePlayer.name}</h2>
-                <div className="text-sm text-chalkMuted uppercase tracking-widest mb-10">Base Price: TK {(auctionState?.basePrice || 5000).toLocaleString()}</div>
+                <div className="text-sm text-chalkMuted uppercase tracking-widest mb-10">Base Price: TK {(auctionState?.basePrice || 5000).toLocaleString('en-IN')}</div>
                 
                 <div className="flex items-end justify-between bg-chalk/5 p-6 rounded-2xl border border-chalk/10">
                   <div>
                     <div className="text-xs uppercase tracking-widest text-chalkMuted font-bold mb-2">Current Bid</div>
-                    <div className="text-6xl font-display text-chalk tabular">TK {currentBid?.toLocaleString()}</div>
+                    <div className="text-6xl font-display text-chalk tabular">TK {currentBid?.toLocaleString('en-IN')}</div>
                     <div className="text-sm font-bold text-chalk uppercase tracking-widest mt-2">{leadingTeam ? `by ${leadingTeam.name}` : 'No Bids Yet'}</div>
                   </div>
                   <div className="text-right">
@@ -348,7 +348,7 @@ function AuctionPhase({ teams, auctionState, config }: { teams: any[], auctionSt
                   </div>
                   <div className="text-right">
                     <div className="text-xs uppercase tracking-widest text-chalk/60">Remaining</div>
-                    <div className="font-display text-chalk tabular text-xl">TK {t.remainingBudget?.toLocaleString()}</div>
+                    <div className="font-display text-chalk tabular text-xl">TK {t.remainingBudget?.toLocaleString('en-IN')}</div>
                   </div>
                 </div>
               );

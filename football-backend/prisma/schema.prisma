@@ -69,8 +69,9 @@ model Player {
   studentId         String           @unique
   sessionId         String
   jerseyName        String
-  imageUrl          String
-  imagePublicId     String
+  jerseyNumber      String?
+  imageUrl          String?
+  imagePublicId     String?
   status            PlayerStatus     @default(UNSOLD)
   teamId            String?
   soldPrice         Int?

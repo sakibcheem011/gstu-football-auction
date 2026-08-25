@@ -153,7 +153,7 @@ export default function LiveSpectatorView() {
                                  </div>
                                  <span className="text-chalk truncate font-medium">{p.name}</span>
                                </div>
-                               <span className="text-chalk font-mono font-bold shrink-0 bg-ink px-2 py-1 rounded-md">TK {p.soldPrice?.toLocaleString()}</span>
+                               <span className="text-chalk font-mono font-bold shrink-0 bg-ink px-2 py-1 rounded-md">TK {p.soldPrice?.toLocaleString('en-IN')}</span>
                              </div>
                            ))}
                            {(!t.players || t.players.length === 0) && (
@@ -182,13 +182,13 @@ export default function LiveSpectatorView() {
                       <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" /> Current Player
                     </div>
                     <h2 className="text-5xl md:text-6xl font-display text-chalk mb-3">{activePlayer.name}</h2>
-                    <div className="text-sm text-chalkMuted uppercase tracking-widest mb-10 font-bold">Base Price: <span className="text-chalk">TK {(auctionState?.basePrice || 5000).toLocaleString()}</span></div>
+                    <div className="text-sm text-chalkMuted uppercase tracking-widest mb-10 font-bold">Base Price: <span className="text-chalk">TK {(auctionState?.basePrice || 5000).toLocaleString('en-IN')}</span></div>
                   </div>
                   
                   <div className="flex items-end justify-between bg-ink p-6 rounded-3xl border border-chalk/10 shadow-inner">
                     <div>
                       <div className="text-xs uppercase tracking-widest text-chalkMuted font-bold mb-2">Current Highest Bid</div>
-                      <div className="text-6xl font-display text-emerald-400 tabular-nums font-bold drop-shadow-[0_0_10px_rgba(52,211,153,0.3)]">TK {currentBid?.toLocaleString()}</div>
+                      <div className="text-6xl font-display text-emerald-400 tabular-nums font-bold drop-shadow-[0_0_10px_rgba(52,211,153,0.3)]">TK {currentBid?.toLocaleString('en-IN')}</div>
                       <div className="text-sm font-bold text-chalk uppercase tracking-widest mt-2">{leadingTeam ? `by ${leadingTeam.name}` : 'No Bids Yet'}</div>
                     </div>
                     <div className="text-right flex flex-col items-end">
@@ -224,7 +224,7 @@ export default function LiveSpectatorView() {
                     </div>
                     <div className="text-right shrink-0 pl-2 border-l border-chalk/5">
                       <div className="text-[10px] uppercase tracking-widest text-chalkMuted mb-0.5">Remaining</div>
-                      <div className="font-display text-chalk tabular-nums text-lg font-bold">TK {t.remainingBudget?.toLocaleString()}</div>
+                      <div className="font-display text-chalk tabular-nums text-lg font-bold">TK {t.remainingBudget?.toLocaleString('en-IN')}</div>
                     </div>
                   </div>
                 );

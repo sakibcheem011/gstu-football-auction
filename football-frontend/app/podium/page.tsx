@@ -292,7 +292,7 @@ export default function AdminAuctionDashboard() {
                   <span className="text-xs uppercase tracking-widest text-chalkMuted mb-2 font-semibold">Current Bid</span>
                   <div className="flex items-end gap-2">
                     <span className="text-sm font-bold text-white mb-2">TK</span>
-                    <span className="text-5xl font-display text-white tracking-tight">{auctionState.currentBid?.toLocaleString() || 0}</span>
+                    <span className="text-5xl font-display text-white tracking-tight">{auctionState.currentBid?.toLocaleString('en-IN') || 0}</span>
                   </div>
                   <span className="text-sm uppercase tracking-wider text-white mt-3 font-bold flex items-center gap-1 bg-white/10 px-3 py-1 rounded-full">
                     {auctionState.bidHistory?.[0]?.teamName || 'NO BIDS YET'}
@@ -371,7 +371,7 @@ export default function AdminAuctionDashboard() {
                             {bid.teamName}
                           </span>
                           <span className={`font-display tracking-wider ${index === 0 ? 'text-white' : 'text-chalkMuted'}`}>
-                            TK {bid.amount.toLocaleString()}
+                            TK {bid.amount.toLocaleString('en-IN')}
                           </span>
                         </div>
                       </motion.div>
@@ -389,7 +389,7 @@ export default function AdminAuctionDashboard() {
             </div>
           </div>
         ) : (
-          <div className="bg-panel rounded-3xl border border-white/10 p-8 shadow-2xl flex-1 flex flex-col">
+          <div className="flex-1 w-full">
             <div className="flex items-center justify-between mb-8 pb-6 border-b border-white/5">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-lg bg-ink border border-white/10 flex items-center justify-center">
@@ -402,7 +402,7 @@ export default function AdminAuctionDashboard() {
               </div>
             </div>
             
-            <div className="flex-1 flex flex-col min-h-0">
+            <div className="w-full">
               {config?.auctionMode === 'ROUND_ROBIN' && config?.draftOrder?.length > 0 && (
                 <div className="bg-white/5 border border-white/10 text-white p-4 rounded-2xl mb-4 flex items-center justify-between shadow-lg">
                   <div className="flex items-center gap-3">

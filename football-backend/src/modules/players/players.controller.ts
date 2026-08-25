@@ -11,16 +11,17 @@ export const registerPlayer = async (req: Request, res: Response): Promise<any> 
       return res.status(403).json({ error: 'Player registration is currently closed.' });
     }
 
-    const { name, email, studentId, sessionId, jerseyName, positions } = req.body;
+    const { name, email, studentId, sessionId, jerseyName, jerseyNumber, positions } = req.body;
     
-    if (!req.file) {
-      return res.status(400).json({ error: 'Image is required' });
-    }
+    let imageUrl: string | null = null;
+    let imagePublicId: string | null = null;
 
-    // Upload to Cloudinary
-    const uploadResult = await uploadFromBuffer(req.file.buffer, 'gstu_liga_players');
-    const imageUrl = uploadResult.secure_url;
-    const imagePublicId = uploadResult.public_id;
+    if (req.file) {
+      // Upload to Cloudinary
+      const uploadResult = await uploadFromBuffer(req.file.buffer, 'gstu_liga_players');
+      imageUrl = uploadResult.secure_url;
+      imagePublicId = uploadResult.public_id;
+    }
 
     let parsedPositions = [];
     try {
@@ -58,6 +59,7 @@ export const registerPlayer = async (req: Request, res: Response): Promise<any> 
           studentId: studentId.toLowerCase(),
           sessionId,
           jerseyName,
+          jerseyNumber: jerseyNumber || null,
           imageUrl,
           imagePublicId,
           positions: {
@@ -124,7 +126,7 @@ export const getPlayers = async (req: Request, res: Response): Promise<any> => {
 export const updatePlayer = async (req: Request, res: Response): Promise<any> => {
   try {
     const id = req.params.id as string;
-    const { status, name, studentId, sessionId, jerseyName, positions, categoryId } = req.body;
+    const { status, name, studentId, sessionId, jerseyName, jerseyNumber, positions, categoryId } = req.body;
     
     let data: any = {};
     if (status !== undefined) data.status = status;
@@ -132,6 +134,7 @@ export const updatePlayer = async (req: Request, res: Response): Promise<any> =>
     if (studentId !== undefined) data.studentId = studentId.toLowerCase();
     if (sessionId !== undefined) data.sessionId = sessionId;
     if (jerseyName !== undefined) data.jerseyName = jerseyName;
+    if (jerseyNumber !== undefined) data.jerseyNumber = jerseyNumber || null;
     if (categoryId !== undefined) data.categoryId = categoryId || null;
 
     // Handle positions update if provided

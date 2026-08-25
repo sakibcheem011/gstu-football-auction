@@ -3,19 +3,30 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { Settings, Shield, Users, CheckCircle, ArrowLeft, BadgeCheck, Activity, DollarSign, Plus, UserPlus, Database, Trash2, Edit2, X, Image as ImageIcon, ListOrdered } from 'lucide-react';
+import { Settings, Shield, Users, CheckCircle, ArrowLeft, BadgeCheck, Activity, DollarSign, Plus, UserPlus, Database, Trash2, Edit2, X, Image as ImageIcon, ListOrdered, User } from 'lucide-react';
 import { io } from 'socket.io-client';
 import PlayerDirectory from '../../../components/PlayerDirectory';
 import Dropdown from '../../../components/Dropdown';
+import MultiSelectDropdown from '../../../components/MultiSelectDropdown';
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
-export default function SuperAdminSetup() {
+function SetupContent() {
+  const searchParams = useSearchParams();
+  const urlTab = searchParams.get('tab');
+
   const [token, setToken] = useState<string | null>(null);
   const [activeTab, setActiveTabState] = useState('config');
 
   useEffect(() => {
-    const saved = localStorage.getItem('adminActiveTab');
-    if (saved) setActiveTabState(saved);
-  }, []);
+    if (urlTab) {
+      setActiveTabState(urlTab);
+      localStorage.setItem('adminActiveTab', urlTab);
+    } else {
+      const saved = localStorage.getItem('adminActiveTab');
+      if (saved) setActiveTabState(saved);
+    }
+  }, [urlTab]);
 
   const setActiveTab = (tab: string) => {
     setActiveTabState(tab);
@@ -50,7 +61,9 @@ export default function SuperAdminSetup() {
   // Timer States
   const [defaultTimer, setDefaultTimer] = useState<number>(30);
   const [timerLocked, setTimerLocked] = useState<boolean>(false);
-  const [totalBudgetInput, setTotalBudgetInput] = useState<string>('150000');
+  const [totalBudgetInput, setTotalBudgetInput] = useState<string>('1,50,000');
+  const [minRosterSizeInput, setMinRosterSizeInput] = useState<string>('15');
+  const [maxRosterSizeInput, setMaxRosterSizeInput] = useState<string>('18');
 
   // Form States (Edit Manager)
   const [editingTeam, setEditingTeam] = useState<any>(null);
@@ -64,11 +77,14 @@ export default function SuperAdminSetup() {
   // Form States (Player Details / Edit)
   const [selectedPlayer, setSelectedPlayer] = useState<any>(null);
   const [isEditingPlayer, setIsEditingPlayer] = useState(false);
+  const [isCategorizingPlayer, setIsCategorizingPlayer] = useState(false);
   const [editPlayerName, setEditPlayerName] = useState('');
   const [editPlayerStudentId, setEditPlayerStudentId] = useState('');
   const [editPlayerSessionId, setEditPlayerSessionId] = useState('');
   const [editPlayerJerseyName, setEditPlayerJerseyName] = useState('');
-  const [editPlayerPositions, setEditPlayerPositions] = useState<any[]>([]);
+  const [editPlayerJerseyNumber, setEditPlayerJerseyNumber] = useState('');
+  const [editPrimaryPos, setEditPrimaryPos] = useState<string>('');
+  const [editSecondaryPos, setEditSecondaryPos] = useState<string[]>([]);
   const [editPlayerCategoryId, setEditPlayerCategoryId] = useState('');
 
   // Staff States
@@ -80,6 +96,16 @@ export default function SuperAdminSetup() {
 
   // Confirmation Modal State
   const [confirmDialog, setConfirmDialog] = useState<{ isOpen: boolean, message: string, onConfirm: () => void } | null>(null);
+
+  // Edit Tiers / Categories
+  const [editingTierId, setEditingTierId] = useState<string | null>(null);
+  const [editTierMin, setEditTierMin] = useState('');
+  const [editTierMax, setEditTierMax] = useState('');
+  const [editTierRaise, setEditTierRaise] = useState('');
+  
+  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
+  const [editCatName, setEditCatName] = useState('');
+  const [editCatPrice, setEditCatPrice] = useState('');
 
   // Logo Upload Modal State
   const [logoDialog, setLogoDialog] = useState<{ isOpen: boolean, team: any } | null>(null);
@@ -137,7 +163,9 @@ export default function SuperAdminSetup() {
       if (dataConfig) {
         setDefaultTimer(dataConfig.defaultTimer || 30);
         setTimerLocked(dataConfig.timerLocked || false);
-        setTotalBudgetInput(dataConfig.totalBudget ? String(dataConfig.totalBudget) : '150000');
+        setTotalBudgetInput(dataConfig.totalBudget ? Number(dataConfig.totalBudget).toLocaleString('en-IN') : '1,50,000');
+        setMinRosterSizeInput(dataConfig.minRosterSize ? String(dataConfig.minRosterSize) : '15');
+        setMaxRosterSizeInput(dataConfig.maxRosterSize ? String(dataConfig.maxRosterSize) : '18');
       }
       setTeams(Array.isArray(dataTeams) ? dataTeams : []);
       setPlayers(Array.isArray(dataPlayers) ? dataPlayers : []);
@@ -209,7 +237,7 @@ export default function SuperAdminSetup() {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL }/rules/budget`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ totalBudget: parseInt(totalBudgetInput) || 150000 })
+      body: JSON.stringify({ totalBudget: parseInt(totalBudgetInput.replace(/,/g, '')) || 150000 })
     });
     if (res.ok) {
       toast.success('League Total Budget updated');
@@ -219,8 +247,50 @@ export default function SuperAdminSetup() {
     }
   };
 
+  const updateRosterLimits = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL }/rules/roster-limits`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ minRosterSize: parseInt(minRosterSizeInput), maxRosterSize: parseInt(maxRosterSizeInput) })
+    });
+    if (res.ok) {
+      toast.success('Roster limits updated manually');
+      fetchData(token!);
+    } else {
+      toast.error('Failed to update roster limits');
+    }
+  };
 
+  const saveEditedTier = async (id: string) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL }/rules/tiers/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ minPct: parseFloat(editTierMin), maxPct: parseFloat(editTierMax), raisePct: parseFloat(editTierRaise) })
+    });
+    if (res.ok) {
+      toast.success('Tier Updated');
+      setEditingTierId(null);
+      fetchData(token!);
+    } else {
+      toast.error('Failed to update tier');
+    }
+  };
 
+  const saveEditedCategory = async (id: string) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL }/rules/categories/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ name: editCatName, basePrice: parseInt(editCatPrice.replace(/,/g, '')) })
+    });
+    if (res.ok) {
+      toast.success('Category Updated');
+      setEditingCategoryId(null);
+      fetchData(token!);
+    } else {
+      toast.error('Failed to update category');
+    }
+  };
   const createCategory = async (e: React.FormEvent) => {
     e.preventDefault();
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL }/rules/categories`, {
@@ -436,32 +506,35 @@ export default function SuperAdminSetup() {
   const openPlayerDetails = (player: any) => {
     setSelectedPlayer(player);
     setIsEditingPlayer(false);
+    setIsCategorizingPlayer(false);
     setEditPlayerName(player.name);
     setEditPlayerStudentId(player.studentId);
     setEditPlayerSessionId(player.sessionId || '');
     setEditPlayerJerseyName(player.jerseyName || '');
-    setEditPlayerPositions(player.positions || []);
+    
+    const primary = player.positions?.find((p: any) => p.isPrimary)?.position || '';
+    const secondary = player.positions?.filter((p: any) => !p.isPrimary).map((p: any) => p.position) || [];
+    setEditPrimaryPos(primary);
+    setEditSecondaryPos(secondary);
+    
     setEditPlayerCategoryId(player.categoryId || '');
   };
-
-  const togglePosition = (posStr: string) => {
-    setEditPlayerPositions(prev => {
-      if (prev.some(p => p.position === posStr)) {
-        const next = prev.filter(p => p.position !== posStr);
-        if (next.length > 0) next[0].isPrimary = true;
-        return next;
-      }
-      if (prev.length < 2) {
-        return [...prev, { position: posStr, isPrimary: prev.length === 0 }];
-      }
-      // If already 2, replace the secondary
-      return [prev[0], { position: posStr, isPrimary: false }];
-    });
-  };
+  useEffect(() => {
+    if (editPrimaryPos && editSecondaryPos.includes(editPrimaryPos)) {
+      setEditSecondaryPos(prev => prev.filter(p => p !== editPrimaryPos));
+    }
+  }, [editPrimaryPos, editSecondaryPos]);
 
   const updatePlayerDetails = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedPlayer) return;
+    
+    const posArray: any[] = [];
+    if (editPrimaryPos) posArray.push({ position: editPrimaryPos, isPrimary: true });
+    editSecondaryPos.forEach(p => {
+      if (p !== editPrimaryPos) posArray.push({ position: p, isPrimary: false });
+    });
+
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || `${process.env.NEXT_PUBLIC_API_URL }`}/players/${selectedPlayer.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -470,14 +543,15 @@ export default function SuperAdminSetup() {
         studentId: editPlayerStudentId,
         sessionId: editPlayerSessionId,
         jerseyName: editPlayerJerseyName,
-        positions: editPlayerPositions,
+        positions: posArray,
         categoryId: editPlayerCategoryId || undefined
       })
     });
     if (res.ok) {
       toast.success('Player updated');
       setIsEditingPlayer(false);
-      setSelectedPlayer({ ...selectedPlayer, name: editPlayerName, studentId: editPlayerStudentId, sessionId: editPlayerSessionId, jerseyName: editPlayerJerseyName, positions: editPlayerPositions, categoryId: editPlayerCategoryId || null });
+      setIsCategorizingPlayer(false);
+      setSelectedPlayer({ ...selectedPlayer, name: editPlayerName, studentId: editPlayerStudentId, sessionId: editPlayerSessionId, jerseyName: editPlayerJerseyName, positions: posArray, categoryId: editPlayerCategoryId || null });
       fetchData(token!);
     } else {
       toast.error('Failed to update player');
@@ -586,9 +660,14 @@ export default function SuperAdminSetup() {
                     <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Team Name</label>
                     <input type="text" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={editTeamName} onChange={e => setEditTeamName(e.target.value)} />
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Purse Budget (TK )</label>
-                    <input type="number" required className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={editTeamPurse} onChange={e => setEditTeamPurse(e.target.value)} />
+                  <div className="space-y-2 opacity-60">
+                    <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Purse Budget (Fixed)</label>
+                    <input 
+                      type="text" 
+                      readOnly 
+                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white outline-none cursor-not-allowed" 
+                      value={editTeamPurse ? Number(editTeamPurse).toLocaleString('en-IN') : ''} 
+                    />
                   </div>
                 </div>
                 
@@ -674,44 +753,105 @@ export default function SuperAdminSetup() {
               </button>
               
               <div className="h-48 w-full relative overflow-hidden bg-white/5 shrink-0">
-                <img src={selectedPlayer.imageUrl} alt={selectedPlayer.name} className="w-full h-full object-cover opacity-60 blur-sm" />
+                {selectedPlayer.imageUrl ? (
+                  <img src={selectedPlayer.imageUrl} alt={selectedPlayer.name} className="w-full h-full object-cover opacity-60 blur-sm" />
+                ) : (
+                  <div className="w-full h-full bg-black/40" />
+                )}
                 <div className="absolute inset-0 flex items-end p-6 bg-gradient-to-t from-ink via-ink/80 to-transparent">
                   <div className="flex items-center gap-6">
-                    <img src={selectedPlayer.imageUrl} alt={selectedPlayer.name} className="w-24 h-24 rounded-2xl object-cover border-2 border-white/20 shadow-xl" />
-                    <div>
-                      <h2 className="text-2xl font-display text-white">{selectedPlayer.name}</h2>
-                      <div className="text-chalkMuted font-mono text-sm">{selectedPlayer.studentId}  {selectedPlayer.sessionId}</div>
+                    {selectedPlayer.imageUrl ? (
+                      <img src={selectedPlayer.imageUrl} alt={selectedPlayer.name} className="w-24 h-24 rounded-2xl object-cover border-2 border-white/20 shadow-xl bg-black/50 shrink-0" />
+                    ) : (
+                      <div className="w-24 h-24 rounded-2xl border-2 border-white/20 shadow-xl bg-black/50 flex items-center justify-center shrink-0">
+                        <User size={32} className="text-white/20" />
+                      </div>
+                    )}
+                    <div className="min-w-0">
+                      <h2 className="text-2xl font-display text-white truncate">{selectedPlayer.name}</h2>
+                      <div className="text-chalkMuted font-mono text-sm truncate">{selectedPlayer.studentId}  {selectedPlayer.sessionId}</div>
                     </div>
                   </div>
                 </div>
               </div>
               
               <div className="p-6 overflow-y-auto">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex gap-2">
+                <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between mb-6 gap-4">
+                  <div className="flex flex-wrap gap-2">
                     {selectedPlayer.positions?.map((pos: any, idx: number) => (
                       <span key={pos.id || pos.position || idx} className="bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest text-chalk">
                         {pos.position}
                       </span>
                     ))}
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    {!isEditingPlayer && !isCategorizingPlayer && (
+                      <button 
+                        onClick={() => setIsCategorizingPlayer(true)}
+                        className="px-4 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/20 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center gap-1 shrink-0"
+                      >
+                        Categorize
+                      </button>
+                    )}
                     <button 
-                      onClick={() => setIsEditingPlayer(!isEditingPlayer)} 
-                      className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors ${isEditingPlayer ? 'bg-white text-ink' : 'bg-white/5 hover:bg-white/10 text-chalk'}`}
+                      onClick={() => {
+                        if (isCategorizingPlayer) setIsCategorizingPlayer(false);
+                        else setIsEditingPlayer(!isEditingPlayer);
+                      }} 
+                      className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors shrink-0 ${isEditingPlayer || isCategorizingPlayer ? 'bg-white text-ink' : 'bg-white/5 hover:bg-white/10 text-chalk'}`}
                     >
-                      {isEditingPlayer ? 'Cancel Edit' : 'Edit Profile'}
+                      {isEditingPlayer ? 'Cancel Edit' : isCategorizingPlayer ? 'Cancel' : 'Edit Profile'}
                     </button>
                     <button 
                       onClick={() => deletePlayer(selectedPlayer.id)}
-                      className="px-4 py-2 bg-white/5 hover:bg-white/5 text-zinc-400 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center gap-1"
+                      className="px-4 py-2 bg-white/5 hover:bg-white/5 text-zinc-400 rounded-xl text-xs font-bold uppercase tracking-widest transition-colors flex items-center gap-1 shrink-0"
                     >
                       <Trash2 size={14} /> Delete
                     </button>
                   </div>
                 </div>
 
-                {isEditingPlayer ? (
+                {isCategorizingPlayer ? (
+                  <form onSubmit={updatePlayerDetails} className="space-y-4 mt-6">
+                    <div className="space-y-2 relative z-50">
+                      <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Player Category (Required for Auction)</label>
+                      <Dropdown
+                        options={categories.map(c => ({
+                          label: `${c.name} (Base: TK ${c.basePrice.toLocaleString('en-IN')})`,
+                          value: c.id
+                        }))}
+                        value={editPlayerCategoryId}
+                        onChange={setEditPlayerCategoryId}
+                        placeholder="-- Select Category --"
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-40">
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Primary Position</label>
+                        <Dropdown
+                          options={['GK', 'CB', 'LB', 'RB', 'CDM', 'CM', 'CAM', 'LW', 'RW', 'ST'].map(p => ({ label: p, value: p }))}
+                          value={editPrimaryPos}
+                          onChange={setEditPrimaryPos}
+                          placeholder="-- Select Primary --"
+                        />
+                      </div>
+                      <div className="space-y-2 relative z-30">
+                        <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Secondary Position(s)</label>
+                        <MultiSelectDropdown
+                          options={['GK', 'CB', 'LB', 'RB', 'CDM', 'CM', 'CAM', 'LW', 'RW', 'ST'].filter(p => p !== editPrimaryPos).map(p => ({ label: p, value: p }))}
+                          value={editSecondaryPos}
+                          onChange={setEditSecondaryPos}
+                          placeholder="-- Select Optional --"
+                        />
+                      </div>
+                    </div>
+                    <div className="pt-6 pb-48">
+                      <button type="submit" className="w-full px-8 py-3.5 bg-white text-black hover:bg-zinc-200 hover:text-black text-ink rounded-xl font-bold uppercase tracking-widest transition-all">
+                        Save Changes
+                      </button>
+                    </div>
+                  </form>
+                ) : isEditingPlayer ? (
                   <form onSubmit={updatePlayerDetails} className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
@@ -730,44 +870,12 @@ export default function SuperAdminSetup() {
                         <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Jersey Name</label>
                         <input type="text" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={editPlayerJerseyName} onChange={e => setEditPlayerJerseyName(e.target.value)} />
                       </div>
-                    </div>
-                    <div className="space-y-2 relative z-50">
-                      <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Player Category (Required for Auction)</label>
-                      <Dropdown
-                        options={categories.map(c => ({
-                          label: `${c.name} (Base: TK ${c.basePrice.toLocaleString()})`,
-                          value: c.id
-                        }))}
-                        value={editPlayerCategoryId}
-                        onChange={setEditPlayerCategoryId}
-                        placeholder="-- Select Category --"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Playing Positions</label>
-                      <div className="flex flex-wrap gap-2">
-                        {['GK', 'CB', 'LB', 'RB', 'CDM', 'CM', 'CAM', 'LW', 'RW', 'ST'].map(pos => {
-                          const selectedPos = editPlayerPositions.find(p => p.position === pos);
-                          const isSelected = !!selectedPos;
-                          const isPrimary = selectedPos?.isPrimary;
-                          return (
-                            <button
-                              key={pos}
-                              type="button"
-                              onClick={() => togglePosition(pos)}
-                              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-widest transition-colors border flex items-center gap-1 ${isSelected ? (isPrimary ? 'bg-white text-black text-ink border-white' : 'bg-white/10 text-white border-white/20') : 'bg-white/5 text-chalkMuted border-white/10 hover:border-white/30 hover:text-white'}`}
-                            >
-                              {pos}
-                              {isSelected && (
-                                <span className="text-[9px] opacity-70">
-                                  ({isPrimary ? 'P' : 'S'})
-                                </span>
-                              )}
-                            </button>
-                          );
-                        })}
+                      <div className="space-y-2">
+                        <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Jersey Number</label>
+                        <input type="text" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" value={editPlayerJerseyNumber} onChange={e => setEditPlayerJerseyNumber(e.target.value)} placeholder="e.g. 10" />
                       </div>
                     </div>
+
                     <div className="pt-2">
                       <button type="submit" className="w-full px-8 py-3.5 bg-white text-black hover:bg-zinc-200 hover:text-black text-ink rounded-xl font-bold uppercase tracking-widest transition-all">
                         Save Changes
@@ -797,36 +905,33 @@ export default function SuperAdminSetup() {
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="max-w-[1600px] mx-auto w-full flex-1 flex flex-col lg:flex-row gap-8 pb-10">
+      <div className="max-w-[1600px] mx-auto w-full flex-1 flex flex-col min-w-0 pb-10 px-4">
         
-        {/* Sidebar Tabs */}
-        <div className="w-full lg:w-64 shrink-0">
-          <h1 className="font-display text-5xl text-white tracking-[0.2em] mb-8 lg:mb-12">CONFIG HUB</h1>
-          
-          <div className="flex flex-row lg:flex-col flex-wrap gap-2 pb-4 lg:pb-0 sticky top-24">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-4 px-5 py-4 rounded-xl font-bold tracking-widest text-xs uppercase transition-all duration-300 shrink-0 text-left group ${
-                    isActive 
-                      ? 'bg-white text-black text-ink shadow-[0_4px_20px_rgba(232,184,75,0.3)]' 
-                      : 'bg-panel text-chalkMuted hover:bg-white/10 hover:text-white border border-white/5'
-                  }`}
-                >
-                  <Icon size={18} className={isActive ? 'text-ink' : 'text-chalkMuted group-hover:text-white transition-colors'} />
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
+        {/* Mobile Tabs */}
+        <div className="md:hidden flex flex-wrap gap-2 mb-6">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-3 py-2 rounded-lg font-bold tracking-widest text-[10px] uppercase transition-all flex-1 justify-center min-w-[140px] ${
+                  isActive 
+                    ? 'bg-white text-ink' 
+                    : 'bg-panel text-chalkMuted border border-white/5'
+                }`}
+              >
+                <Icon size={14} />
+                {tab.label}
+              </button>
+            );
+          })}
         </div>
 
         {/* Main Content Area */}
         <div className="flex-1 min-w-0">
+          <h1 className="font-display text-4xl text-white tracking-[0.2em] mb-8">CONFIG HUB</h1>
           <AnimatePresence mode="wait">
             
             {activeTab === 'config' && (
@@ -954,15 +1059,21 @@ export default function SuperAdminSetup() {
                   <section className="glass-panel p-8 flex flex-col justify-between">
                     <div>
                       <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-zinc-400 mb-6 flex items-center gap-3">
-                        <DollarSign className="text-white" size={16} /> Global Budget
+                        <span className="text-white font-display text-lg">৳</span> Global Budget
                       </h2>
                       <form id="budgetForm" onSubmit={updateBudgetConfig} className="space-y-4">
                         <div className="space-y-2">
                           <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Standard Purse (TK)</label>
                           <input 
-                            type="number" required 
+                            type="text" required 
                             className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-white outline-none font-display text-2xl tracking-tight" 
-                            value={totalBudgetInput} onChange={e => setTotalBudgetInput(e.target.value)} 
+                            value={totalBudgetInput} 
+                            onChange={e => {
+                              const val = e.target.value.replace(/,/g, '');
+                              if (!isNaN(Number(val))) {
+                                setTotalBudgetInput(val ? Number(val).toLocaleString('en-IN') : '');
+                              }
+                            }} 
                           />
                         </div>
                         <p className="text-xs text-zinc-500 leading-relaxed">
@@ -981,21 +1092,28 @@ export default function SuperAdminSetup() {
                       <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-zinc-400 mb-6 flex items-center gap-3">
                         <Users className="text-white" size={16} /> Roster Limits
                       </h2>
-                      <div className="space-y-4">
-                        <div className="bg-ink/50 border border-white/10 rounded-xl p-4 flex justify-between items-center">
-                          <span className="text-xs uppercase tracking-widest text-zinc-500 font-bold">Min Size</span>
-                          <span className="text-2xl font-display font-bold text-white">{config?.minRosterSize || 15}</span>
+                      <form id="rosterForm" onSubmit={updateRosterLimits} className="space-y-4">
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Min Size</label>
+                          <input 
+                            type="number" required min="1"
+                            className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-white outline-none font-display text-2xl tracking-tight" 
+                            value={minRosterSizeInput} onChange={(e) => setMinRosterSizeInput(e.target.value)} 
+                          />
                         </div>
-                        <div className="bg-ink/50 border border-white/10 rounded-xl p-4 flex justify-between items-center relative overflow-hidden group">
-                           <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                          <div>
-                            <span className="text-xs uppercase tracking-widest text-zinc-500 font-bold block mb-1">Max Size</span>
-                            <span className="text-[8px] text-zinc-600 uppercase tracking-widest">Calculated</span>
-                          </div>
-                          <span className="text-2xl font-display font-bold text-white relative z-10">{config?.maxRosterSize || 18}</span>
+                        <div className="space-y-2">
+                          <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Max Size</label>
+                          <input 
+                            type="number" required min="1"
+                            className="w-full bg-ink/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-white outline-none font-display text-2xl tracking-tight" 
+                            value={maxRosterSizeInput} onChange={(e) => setMaxRosterSizeInput(e.target.value)} 
+                          />
                         </div>
-                      </div>
+                      </form>
                     </div>
+                    <button type="submit" form="rosterForm" className="w-full mt-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl font-bold text-sm uppercase tracking-widest transition-colors border border-white/10">
+                      Save Limits
+                    </button>
                   </section>
                 </div>
 
@@ -1017,12 +1135,31 @@ export default function SuperAdminSetup() {
                     </form>
                     <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
                       {tiers.map(t => (
-                        <div key={t.id} className="flex justify-between items-center bg-white/5 border border-white/5 p-4 rounded-xl group hover:border-white/10 transition-colors">
-                          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
-                            <span className="font-bold text-white text-sm">{t.minPct}% &rarr; {t.maxPct}%</span>
-                            <span className="text-xs text-zinc-400 uppercase tracking-widest bg-white/10 px-2 py-0.5 rounded-full">Raise {t.raisePct}%</span>
-                          </div>
-                          <button onClick={() => deleteTier(t.id)} className="text-zinc-600 hover:text-white transition-colors p-2"><Trash2 size={14}/></button>
+                        <div key={t.id} className="flex flex-col sm:flex-row justify-between sm:items-center bg-white/5 border border-white/5 p-4 rounded-xl group hover:border-white/10 transition-colors">
+                          {editingTierId === t.id ? (
+                            <div className="flex flex-wrap items-center gap-2 w-full">
+                              <input type="number" step="0.1" className="w-16 bg-ink/50 border border-white/10 rounded-lg px-2 py-1 text-sm text-white" value={editTierMin} onChange={e => setEditTierMin(e.target.value)} />
+                              <span className="text-white text-xs">&rarr;</span>
+                              <input type="number" step="0.1" className="w-16 bg-ink/50 border border-white/10 rounded-lg px-2 py-1 text-sm text-white" value={editTierMax} onChange={e => setEditTierMax(e.target.value)} />
+                              <span className="text-xs text-zinc-400">Raise</span>
+                              <input type="number" step="0.01" className="w-20 bg-ink/50 border border-white/10 rounded-lg px-2 py-1 text-sm text-white" value={editTierRaise} onChange={e => setEditTierRaise(e.target.value)} />
+                              <div className="ml-auto flex gap-2">
+                                <button onClick={() => saveEditedTier(t.id)} className="px-3 py-1 bg-white text-black hover:bg-zinc-200 rounded-lg font-bold text-xs transition">Save</button>
+                                <button onClick={() => setEditingTierId(null)} className="px-2 py-1 bg-white/10 text-white hover:bg-white/20 rounded-lg transition"><X size={14}/></button>
+                              </div>
+                            </div>
+                          ) : (
+                            <>
+                              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+                                <span className="font-bold text-white text-sm">{t.minPct}% &rarr; {t.maxPct}%</span>
+                                <span className="text-xs text-zinc-400 uppercase tracking-widest bg-white/10 px-2 py-0.5 rounded-full">Raise {t.raisePct}%</span>
+                              </div>
+                              <div className="flex items-center mt-2 sm:mt-0 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onClick={() => { setEditingTierId(t.id); setEditTierMin(String(t.minPct)); setEditTierMax(String(t.maxPct)); setEditTierRaise(String(t.raisePct)); }} className="text-zinc-500 hover:text-white transition-colors p-2"><Edit2 size={14}/></button>
+                                <button onClick={() => deleteTier(t.id)} className="text-zinc-500 hover:text-red-400 transition-colors p-2"><Trash2 size={14}/></button>
+                              </div>
+                            </>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -1040,12 +1177,34 @@ export default function SuperAdminSetup() {
                     </form>
                     <div className="space-y-2 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
                       {categories.map(c => (
-                        <div key={c.id} className="flex justify-between items-center bg-white/5 border border-white/5 p-4 rounded-xl group hover:border-white/10 transition-colors">
-                          <div className="flex items-center justify-between w-full pr-4">
-                            <span className="font-bold text-white text-sm">{c.name}</span>
-                            <span className="text-sm font-bold text-zinc-400">TK {c.basePrice.toLocaleString()}</span>
-                          </div>
-                          <button onClick={() => deleteCategory(c.id)} className="text-zinc-600 hover:text-white transition-colors p-2 shrink-0"><Trash2 size={14}/></button>
+                        <div key={c.id} className="flex flex-col sm:flex-row justify-between sm:items-center bg-white/5 border border-white/5 p-4 rounded-xl group hover:border-white/10 transition-colors">
+                          {editingCategoryId === c.id ? (
+                            <div className="flex flex-wrap items-center gap-2 w-full">
+                              <input type="text" className="flex-1 min-w-[100px] bg-ink/50 border border-white/10 rounded-lg px-2 py-1 text-sm text-white" value={editCatName} onChange={e => setEditCatName(e.target.value)} />
+                              <div className="flex items-center gap-1">
+                                <span className="text-white text-xs font-bold">TK</span>
+                                <input type="text" className="w-24 bg-ink/50 border border-white/10 rounded-lg px-2 py-1 text-sm text-white" value={editCatPrice} onChange={e => {
+                                  const val = e.target.value.replace(/,/g, '');
+                                  if (!isNaN(Number(val))) setEditCatPrice(val ? Number(val).toLocaleString('en-IN') : '');
+                                }} />
+                              </div>
+                              <div className="ml-auto flex gap-2">
+                                <button onClick={() => saveEditedCategory(c.id)} className="px-3 py-1 bg-white text-black hover:bg-zinc-200 rounded-lg font-bold text-xs transition">Save</button>
+                                <button onClick={() => setEditingCategoryId(null)} className="px-2 py-1 bg-white/10 text-white hover:bg-white/20 rounded-lg transition"><X size={14}/></button>
+                              </div>
+                            </div>
+                          ) : (
+                            <>
+                              <div className="flex items-center justify-between w-full sm:pr-4">
+                                <span className="font-bold text-white text-sm">{c.name}</span>
+                                <span className="text-sm font-bold text-zinc-400">TK {c.basePrice.toLocaleString('en-IN')}</span>
+                              </div>
+                              <div className="flex items-center mt-2 sm:mt-0 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+                                <button onClick={() => { setEditingCategoryId(c.id); setEditCatName(c.name); setEditCatPrice(c.basePrice.toLocaleString('en-IN')); }} className="text-zinc-500 hover:text-white transition-colors p-2"><Edit2 size={14}/></button>
+                                <button onClick={() => deleteCategory(c.id)} className="text-zinc-500 hover:text-red-400 transition-colors p-2"><Trash2 size={14}/></button>
+                              </div>
+                            </>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -1145,7 +1304,7 @@ export default function SuperAdminSetup() {
                         
                         <div className="flex flex-col items-start bg-white/5 p-3 rounded-xl">
                           <span className="text-xs text-chalkMuted uppercase tracking-widest mb-1">Purse</span>
-                          <span className="text-white text-sm font-bold">TK {t.remainingBudget.toLocaleString()}</span>
+                          <span className="text-white text-sm font-bold">TK {t.remainingBudget.toLocaleString('en-IN')}</span>
                         </div>
                       </div>
                     ))}
@@ -1156,16 +1315,16 @@ export default function SuperAdminSetup() {
             )}
 
             {activeTab === 'players' && (
-              <motion.div key="players" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
-                <div className="bg-panel rounded-3xl border border-white/10 shadow-xl p-8 h-[calc(100vh-120px)] flex flex-col overflow-hidden">
-                  <div className="border-b border-white/5 pb-4 mb-4 shrink-0">
-                    <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-chalk flex items-center gap-3">
-                      <CheckCircle className="text-white" size={18} /> Approval Queue & Database
-                    </h2>
-                  </div>
+              <motion.div key="players" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="w-full">
+                <div className="border-b border-white/5 pb-4 mb-4 mt-4 md:mt-0">
+                  <h2 className="text-sm uppercase tracking-[0.2em] font-bold text-chalk flex items-center gap-3">
+                    <CheckCircle className="text-emerald-400" size={18} /> Approval Queue & Database
+                  </h2>
+                </div>
+                <div className="w-full">
                   <PlayerDirectory 
                     players={players} 
-                    onAction={(p) => { openPlayerDetails(p); setIsEditingPlayer(true); }}
+                    onAction={(p) => { openPlayerDetails(p); setIsCategorizingPlayer(true); }}
                     actionLabel="Categorize Player"
                     actionCondition={(p) => !p.categoryId}
                     onSecondaryAction={(p) => openPlayerDetails(p)}
@@ -1342,14 +1501,13 @@ export default function SuperAdminSetup() {
                   />
                 </div>
                 
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Team Purse (TK)</label>
+                <div className="space-y-2 opacity-60">
+                  <label className="text-xs font-bold text-chalkMuted uppercase tracking-[0.2em] ml-1">Team Purse (Fixed from Global Budget)</label>
                   <input 
-                    type="number" 
-                    required 
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:ring-2 focus:ring-gold outline-none" 
-                    value={approvePurse} 
-                    onChange={e => setApprovePurse(e.target.value)} 
+                    type="text" 
+                    readOnly
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white outline-none cursor-not-allowed" 
+                    value={approvePurse ? Number(approvePurse).toLocaleString('en-IN') : ''} 
                   />
                 </div>
 
@@ -1374,5 +1532,13 @@ export default function SuperAdminSetup() {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+export default function SuperAdminSetup() {
+  return (
+    <Suspense fallback={<div className="p-8 text-chalk">Loading...</div>}>
+      <SetupContent />
+    </Suspense>
   );
 }

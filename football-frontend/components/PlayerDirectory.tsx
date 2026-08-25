@@ -67,7 +67,7 @@ export default function PlayerDirectory({
   ];
 
   const sortOptions = [
-    { label: 'Default Sorting', value: '' },
+    { label: 'Tier (High to Low)', value: '' },
     { label: 'Price (High to Low)', value: 'price_desc' },
     { label: 'Price (Low to High)', value: 'price_asc' },
     { label: 'Name (A to Z)', value: 'name_asc' },
@@ -96,13 +96,50 @@ export default function PlayerDirectory({
       result.sort((a, b) => (a.soldPrice || a.category?.basePrice || 0) - (b.soldPrice || b.category?.basePrice || 0));
     } else if (sortOrder === 'name_asc') {
       result.sort((a, b) => a.name.localeCompare(b.name));
+    } else {
+      // Default Sort: Tier (Base Price Descending), then by Name
+      result.sort((a, b) => {
+        const diff = (b.category?.basePrice || 0) - (a.category?.basePrice || 0);
+        if (diff !== 0) return diff;
+        return a.name.localeCompare(b.name);
+      });
     }
 
     return result;
   }, [players, search, session, category, position, status, sortOrder]);
 
+  const groupedPlayers = useMemo(() => {
+    // If user explicitly chooses to sort by Price or Name, DO NOT group by Tier
+    if (sortOrder !== '') {
+      return [{
+        category: 'Players',
+        players: filteredAndSortedPlayers
+      }];
+    }
+
+    const groups: Record<string, any[]> = {};
+    filteredAndSortedPlayers.forEach(p => {
+      const catName = p.category?.name || 'Uncategorized';
+      if (!groups[catName]) groups[catName] = [];
+      groups[catName].push(p);
+    });
+
+    const sortedKeys = Object.keys(groups).sort((a, b) => {
+      if (a === 'Uncategorized') return 1;
+      if (b === 'Uncategorized') return -1;
+      const priceA = groups[a][0]?.category?.basePrice || 0;
+      const priceB = groups[b][0]?.category?.basePrice || 0;
+      return priceB - priceA;
+    });
+
+    return sortedKeys.map(key => ({
+      category: key,
+      players: groups[key]
+    }));
+  }, [filteredAndSortedPlayers, sortOrder]);
+
   return (
-    <div className="flex flex-col h-full space-y-6">
+    <div className="flex flex-col space-y-6 min-w-0">
       
       {/* Search & Filter Bar */}
       <div className="bg-panel relative z-40 p-6 rounded-[2rem] border border-white/5 shadow-2xl flex flex-col gap-4">
@@ -129,18 +166,18 @@ export default function PlayerDirectory({
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-4 items-center">
-          <div className="flex-1 min-w-[200px]">
+        <div className="flex flex-wrap gap-3 md:gap-4 items-center">
+          <div className="flex-1 min-w-[130px] md:min-w-[200px]">
             <Dropdown options={categoryOptions} value={category} onChange={setCategory} placeholder="Any Tier" />
           </div>
-          <div className="flex-1 min-w-[200px]">
+          <div className="flex-1 min-w-[130px] md:min-w-[200px]">
             <Dropdown options={positionOptions} value={position} onChange={setPosition} placeholder="Any Position" />
           </div>
-          <div className="flex-1 min-w-[200px]">
+          <div className="flex-1 min-w-[130px] md:min-w-[200px]">
             <Dropdown options={sessionOptions} value={session} onChange={setSession} placeholder="Any Session" />
           </div>
           {showStatusFilter && (
-            <div className="flex-1 min-w-[200px]">
+            <div className="flex-1 min-w-[130px] md:min-w-[200px]">
               <Dropdown options={statusOptions} value={status} onChange={setStatus} placeholder="Any Status" />
             </div>
           )}
@@ -171,106 +208,128 @@ export default function PlayerDirectory({
       </div>
 
       {/* Player Grid */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
-        {filteredAndSortedPlayers.length > 0 ? (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ staggerChildren: 0.05 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
-          >
-            {filteredAndSortedPlayers.map(p => {
-              const isWishlisted = wishlistIds.includes(p.id);
-              return (
-              <motion.div 
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                key={p.id} 
-                className={`glass-panel p-5 rounded-2xl flex flex-col group transition-all duration-300 ${enablePlayerModal ? 'cursor-pointer hover:border-gold/40 hover:shadow-xl' : ''}`}
-                onClick={() => enablePlayerModal && setSelectedPlayer(p)}
-              >
-                <div className="flex items-start gap-4 mb-4 relative">
-                  {onToggleWishlist && (
-                    <button 
-                      onClick={(e) => { e.stopPropagation(); onToggleWishlist(p.id); }}
-                      className={`absolute top-0 right-0 p-2 rounded-xl transition-all z-10 ${
-                        isWishlisted ? 'bg-gold/20 text-gold hover:bg-gold/30' : 'bg-white/5 text-chalkMuted hover:text-white hover:bg-white/10'
-                      }`}
-                    >
-                      <Star size={15} className={isWishlisted ? 'fill-gold' : ''} />
-                    </button>
-                  )}
-
-                  <div className="w-14 h-14 rounded-xl overflow-hidden bg-black/40 border border-white/10 shrink-0 relative group-hover:border-gold/30 transition-colors">
-                    {p.imageUrl ? (
-                      <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover" />
-                    ) : (
-                      <User size={22} className="m-auto text-chalkMuted/40 mt-3.5" />
-                    )}
-                  </div>
-
-                  <div className="flex-1 min-w-0 pr-6">
-                    <h3 className="font-bold text-white text-base truncate group-hover:text-gold transition-colors">{p.name}</h3>
-                    <div className="text-xs text-chalkMuted truncate mt-0.5">{p.studentId} • Session {p.sessionId}</div>
-                    
-                    <div className="flex items-center gap-1.5 mt-2 flex-wrap">
-                      <span className="text-[10px] bg-white/5 border border-white/10 px-2 py-0.5 rounded-md font-semibold text-chalkMuted">{p.category?.name || 'Uncategorized'}</span>
-                      <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold tracking-wide ${
-                        p.status === 'SOLD' ? 'bg-gold/10 text-gold border border-gold/20' : 
-                        p.status === 'UNSOLD' ? 'bg-danger/10 text-danger border border-danger/20' : 
-                        p.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-white/5 text-chalkMuted'
-                      }`}>
-                        {p.status}
-                      </span>
+      <div className="w-full overflow-x-hidden min-w-0 pb-10">
+        {groupedPlayers.length > 0 ? (
+          <div className="space-y-12 pb-12">
+            {groupedPlayers.map((group) => (
+              <div key={group.category} className="space-y-4">
+                {sortOrder === '' && (
+                  <div className="flex items-center gap-4 py-2">
+                    <div className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 flex items-center gap-3">
+                      <span className="font-bold text-sm tracking-widest text-white uppercase">{group.category}</span>
+                      <span className="w-1.5 h-1.5 rounded-full bg-gold"></span>
+                      <span className="text-chalkMuted text-xs font-bold uppercase tracking-widest">{group.players.length} Players</span>
                     </div>
+                    <div className="h-px bg-gradient-to-r from-white/10 to-transparent flex-1"></div>
                   </div>
-                </div>
-
-                <div className="flex-1 border-t border-white/5 pt-3.5 flex flex-col gap-2.5 text-xs">
-                  <div className="flex justify-between items-center">
-                    <span className="text-chalkMuted flex items-center gap-1.5"><Goal size={13} /> Positions</span>
-                    <span className="font-semibold text-chalk truncate max-w-[120px]">
-                      {p.positions?.sort((a: any, b: any) => (b.isPrimary ? 1 : 0) - (a.isPrimary ? 1 : 0)).map((pos: any) => `${pos.position}${pos.isPrimary ? '' : ' (S)'}`).join(', ') || 'N/A'}
-                    </span>
-                  </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="text-chalkMuted flex items-center gap-1.5"><Tag size={13} /> {p.status === 'SOLD' ? 'Sold Price' : 'Base Price'}</span>
-                    <span className="font-bold text-emerald-400 text-sm">TK {(p.soldPrice || p.category?.basePrice || 0).toLocaleString()}</span>
-                  </div>
-
-                  {p.team && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-chalkMuted flex items-center gap-1.5"><UserCheck size={13} /> Franchise</span>
-                      <span className="font-semibold text-gold truncate max-w-[120px]">{p.team.name}</span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex flex-col gap-2 mt-4 pt-2 border-t border-white/5">
-                  {onAction && (!actionCondition || actionCondition(p)) && (
-                    <button 
-                      onClick={(e) => { e.stopPropagation(); onAction(p); }}
-                      className="w-full py-2.5 bg-white text-ink hover:bg-emerald-50 hover:text-emerald-900 rounded-xl font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-[0_4px_15px_rgba(255,255,255,0.1)] border border-transparent hover:border-emerald-500/30"
+                )}
+                
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ staggerChildren: 0.05 }}
+                  className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+                >
+                  {group.players.map(p => {
+                    const isWishlisted = wishlistIds.includes(p.id);
+                    return (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      key={p.id} 
+                      className={`glass-panel p-5 rounded-2xl flex flex-col group transition-all duration-300 ${enablePlayerModal ? 'cursor-pointer hover:border-gold/40 hover:shadow-xl' : ''}`}
+                      onClick={() => enablePlayerModal && setSelectedPlayer(p)}
                     >
-                      {actionLabel || 'Action'} {actionIcon || <ArrowRight size={14} />}
-                    </button>
-                  )}
-                  
-                  {onSecondaryAction && (!secondaryActionCondition || secondaryActionCondition(p)) && (
-                    <button 
-                      onClick={(e) => { e.stopPropagation(); onSecondaryAction(p); }}
-                      className="w-full py-2.5 bg-white/5 hover:bg-white/10 text-chalk border border-white/10 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
-                    >
-                      {secondaryActionLabel || 'View'} {secondaryActionIcon}
-                    </button>
-                  )}
-                </div>
+                      <div className="flex items-start gap-4 mb-4 relative">
+                        {onToggleWishlist && (
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); onToggleWishlist(p.id); }}
+                            className={`absolute top-0 right-0 p-2 rounded-xl transition-all z-10 ${
+                              isWishlisted ? 'bg-gold/20 text-gold hover:bg-gold/30' : 'bg-white/5 text-chalkMuted hover:text-white hover:bg-white/10'
+                            }`}
+                          >
+                            <Star size={15} className={isWishlisted ? 'fill-gold' : ''} />
+                          </button>
+                        )}
 
-              </motion.div>
-              );
-            })}
-          </motion.div>
+                        <div className="w-14 h-14 rounded-xl overflow-hidden bg-black/40 border border-white/10 shrink-0 relative group-hover:border-gold/30 transition-colors">
+                          {p.imageUrl ? (
+                            <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <User size={22} className="m-auto text-chalkMuted/40 mt-3.5" />
+                          )}
+                        </div>
+
+                        <div className="flex-1 min-w-0 pr-6">
+                          <h3 className="font-bold text-white text-base truncate group-hover:text-gold transition-colors">{p.name}</h3>
+                          <div className="text-xs text-chalkMuted truncate mt-0.5">{p.studentId} • Session {p.sessionId}</div>
+                          {p.jerseyNumber && (
+                            <div className="text-[11px] text-chalk truncate mt-1">
+                              <span className="opacity-60">Jersey No:</span> <span className="font-semibold">{p.jerseyNumber}</span>
+                            </div>
+                          )}
+                          
+                          <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                            <span className="text-[10px] bg-white/5 border border-white/10 px-2 py-0.5 rounded-md font-semibold text-chalkMuted">{p.category?.name || 'Uncategorized'}</span>
+                            <span className={`text-[10px] px-2 py-0.5 rounded-md font-semibold tracking-wide ${
+                              p.status === 'SOLD' ? 'bg-gold/10 text-gold border border-gold/20' : 
+                              p.status === 'UNSOLD' ? 'bg-danger/10 text-danger border border-danger/20' : 
+                              p.status === 'APPROVED' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-white/5 text-chalkMuted'
+                            }`}>
+                              {p.status}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex-1 border-t border-white/5 pt-3.5 flex flex-col gap-2.5 text-xs">
+                        <div className="flex justify-between items-center">
+                          <span className="text-chalkMuted flex items-center gap-1.5"><Goal size={13} /> Positions</span>
+                          <span className="font-semibold text-chalk truncate max-w-[120px]">
+                            {p.positions?.sort((a: any, b: any) => (b.isPrimary ? 1 : 0) - (a.isPrimary ? 1 : 0)).map((pos: any) => `${pos.position}${pos.isPrimary ? '' : ' (S)'}`).join(', ') || 'N/A'}
+                          </span>
+                        </div>
+                        
+                        <div className="flex justify-between items-center">
+                          <span className="text-chalkMuted flex items-center gap-1.5"><Tag size={13} /> {p.status === 'SOLD' ? 'Sold Price' : 'Base Price'}</span>
+                          <span className="font-bold text-emerald-400 text-sm">TK {(p.soldPrice || p.category?.basePrice || 0).toLocaleString('en-IN')}</span>
+                        </div>
+
+                        {p.team && (
+                          <div className="flex justify-between items-center">
+                            <span className="text-chalkMuted flex items-center gap-1.5"><UserCheck size={13} /> Franchise</span>
+                            <span className="font-semibold text-gold truncate max-w-[120px]">{p.team.name}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col gap-2 mt-4 pt-2 border-t border-white/5">
+                        {onAction && (!actionCondition || actionCondition(p)) && (
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); onAction(p); }}
+                            className="w-full py-2.5 bg-white text-ink hover:bg-emerald-50 hover:text-emerald-900 rounded-xl font-bold text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-[0_4px_15px_rgba(255,255,255,0.1)] border border-transparent hover:border-emerald-500/30"
+                          >
+                            {actionLabel || 'Action'} {actionIcon || <ArrowRight size={14} />}
+                          </button>
+                        )}
+                        
+                        {onSecondaryAction && (!secondaryActionCondition || secondaryActionCondition(p)) && (
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); onSecondaryAction(p); }}
+                            className="w-full py-2.5 bg-white/5 hover:bg-white/10 text-chalk border border-white/10 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
+                          >
+                            {secondaryActionLabel || 'View'} {secondaryActionIcon}
+                          </button>
+                        )}
+                      </div>
+
+                    </motion.div>
+                    );
+                  })}
+                </motion.div>
+              </div>
+            ))}
+          </div>
         ) : (
           <div className="h-64 flex flex-col items-center justify-center text-chalkMuted">
             <User size={48} className="mb-4 opacity-50" />
@@ -318,7 +377,14 @@ export default function PlayerDirectory({
                     {selectedPlayer.category?.name || 'Uncategorized'}
                   </div>
                   <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-2">{selectedPlayer.name}</h2>
-                  <p className="text-chalkMuted font-mono text-lg mb-6">{selectedPlayer.studentId} • Session {selectedPlayer.sessionId}</p>
+                  <div className="mb-6">
+                    <p className="text-chalkMuted font-mono text-lg">{selectedPlayer.studentId} • Session {selectedPlayer.sessionId}</p>
+                    {selectedPlayer.jerseyNumber && (
+                      <p className="text-emerald-400/90 font-bold tracking-wider uppercase text-sm mt-1">
+                        Jersey No: {selectedPlayer.jerseyNumber}
+                      </p>
+                    )}
+                  </div>
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
@@ -327,13 +393,13 @@ export default function PlayerDirectory({
                     </div>
                     <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
                       <div className="text-xs text-chalkMuted uppercase tracking-widest font-bold mb-1 flex items-center gap-2 justify-center md:justify-start"><Tag size={14}/> Base Price</div>
-                      <div className="text-cyan-400 font-mono font-bold">TK {(selectedPlayer.category?.basePrice || 0).toLocaleString()}</div>
+                      <div className="text-cyan-400 font-mono font-bold">TK {(selectedPlayer.category?.basePrice || 0).toLocaleString('en-IN')}</div>
                     </div>
                     {selectedPlayer.status === 'SOLD' && (
                       <>
                         <div className="bg-gold/10 p-4 rounded-2xl border border-gold/20">
                           <div className="text-xs text-gold/70 uppercase tracking-widest font-bold mb-1 flex items-center gap-2 justify-center md:justify-start"><Tag size={14}/> Sold Price</div>
-                          <div className="text-gold font-mono font-bold">TK {(selectedPlayer.soldPrice || 0).toLocaleString()}</div>
+                          <div className="text-gold font-mono font-bold">TK {(selectedPlayer.soldPrice || 0).toLocaleString('en-IN')}</div>
                         </div>
                         <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
                           <div className="text-xs text-chalkMuted uppercase tracking-widest font-bold mb-1 flex items-center gap-2 justify-center md:justify-start"><UserCheck size={14}/> Franchise</div>
