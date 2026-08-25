@@ -126,16 +126,31 @@ export const getPlayers = async (req: Request, res: Response): Promise<any> => {
 export const updatePlayer = async (req: Request, res: Response): Promise<any> => {
   try {
     const id = req.params.id as string;
+    const user = (req as any).user;
+    
+    if (user.role === 'PLAYER') {
+      const playerRecord = await prisma.player.findUnique({ where: { id } });
+      if (!playerRecord || playerRecord.email !== user.email) {
+        return res.status(403).json({ error: 'Forbidden' });
+      }
+    }
+
     const { status, name, studentId, sessionId, jerseyName, jerseyNumber, positions, categoryId } = req.body;
     
     let data: any = {};
-    if (status !== undefined) data.status = status;
+    if (status !== undefined && user.role !== 'PLAYER') data.status = status;
     if (name !== undefined) data.name = name;
     if (studentId !== undefined) data.studentId = studentId.toLowerCase();
     if (sessionId !== undefined) data.sessionId = sessionId;
     if (jerseyName !== undefined) data.jerseyName = jerseyName;
     if (jerseyNumber !== undefined) data.jerseyNumber = jerseyNumber || null;
-    if (categoryId !== undefined) data.categoryId = categoryId || null;
+    if (categoryId !== undefined && user.role !== 'PLAYER') data.categoryId = categoryId || null;
+
+    if (req.file) {
+      const uploadResult = await uploadFromBuffer(req.file.buffer, 'gstu_liga_players');
+      data.imageUrl = uploadResult.secure_url;
+      data.imagePublicId = uploadResult.public_id;
+    }
 
     // Handle positions update if provided
     if (positions && Array.isArray(positions)) {

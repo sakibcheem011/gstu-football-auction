@@ -2,12 +2,76 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { CheckCircle2, User, Trophy, Shield, Goal, Flag } from 'lucide-react';
+import { CheckCircle2, User, Trophy, Shield, Goal, Flag, Edit2 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 export default function PlayerDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  
+  const [isEditing, setIsEditing] = useState(false);
+  const [editName, setEditName] = useState('');
+  const [editJerseyName, setEditJerseyName] = useState('');
+  const [editStudentId, setEditStudentId] = useState('');
+  const [editSessionId, setEditSessionId] = useState('');
+  const [editFile, setEditFile] = useState<File | null>(null);
+
+  const openEdit = () => {
+    if (user?.playerRecord) {
+      setEditName(user.playerRecord.name || '');
+      setEditJerseyName(user.playerRecord.jerseyName || '');
+      setEditStudentId(user.playerRecord.studentId || '');
+      setEditSessionId(user.playerRecord.sessionId || '');
+      setEditFile(null);
+      setIsEditing(true);
+    }
+  };
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    
+    const formData = new FormData();
+    formData.append('name', editName);
+    formData.append('jerseyName', editJerseyName);
+    formData.append('studentId', editStudentId);
+    formData.append('sessionId', editSessionId);
+    if (editFile) {
+      formData.append('image', editFile);
+    }
+
+    const toastId = toast.loading('Updating profile...');
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/players/${user.playerRecord.id}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      body: formData
+    });
+    
+    toast.dismiss(toastId);
+    if (res.ok) {
+      const data = await res.json();
+      toast.success('Profile updated successfully!');
+      const updatedUser = { 
+        ...user, 
+        playerRecord: { 
+          ...user.playerRecord, 
+          name: editName, 
+          jerseyName: editJerseyName, 
+          studentId: editStudentId, 
+          sessionId: editSessionId,
+          imageUrl: data.imageUrl || user.playerRecord.imageUrl
+        } 
+      };
+      setUser(updatedUser);
+      setIsEditing(false);
+    } else {
+      toast.error('Failed to update profile');
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -56,39 +120,89 @@ export default function PlayerDashboard() {
               {/* Subtle top accent line */}
               <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-emerald-500/0 via-emerald-500/50 to-emerald-500/0" />
               
-              <div className="relative w-40 h-40 mb-8">
-                <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-xl animate-pulse" />
-                <div className="w-full h-full rounded-full overflow-hidden border-2 border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.15)] relative bg-ink flex items-center justify-center p-1">
-                  <div className="w-full h-full rounded-full overflow-hidden bg-panel">
-                    {p.imageUrl ? (
-                      <img src={p.imageUrl} className="w-full h-full object-cover" alt="Profile" />
-                    ) : (
-                      <User size={48} className="w-full h-full p-8 text-chalk/20" />
-                    )}
-                  </div>
-                </div>
-              </div>
-              
-              <h2 className="text-3xl font-display font-bold text-white uppercase tracking-wider mb-2">{p.name}</h2>
-              <p className="text-emerald-400 font-mono text-sm mb-6 uppercase tracking-widest">{p.studentId} • Session {p.sessionId}</p>
-              
-              <div className="w-full h-px bg-gradient-to-r from-white/0 via-white/10 to-white/0 my-4" />
-              
-              <div className="w-full space-y-4 my-2">
-                <div className="flex justify-between items-center px-4 bg-ink/50 p-3 rounded-xl border border-white/5">
-                  <span className="text-xs uppercase tracking-widest text-chalkMuted">Jersey Name</span>
-                  <span className="font-bold text-white uppercase">{p.jerseyName}</span>
-                </div>
+              <div className="absolute top-4 right-4 z-20">
+                <button onClick={isEditing ? () => setIsEditing(false) : openEdit} className="p-2 bg-white/5 hover:bg-white/10 rounded-xl text-chalkMuted hover:text-white transition-colors border border-white/5">
+                  {isEditing ? <span className="text-xs uppercase font-bold tracking-widest">Cancel</span> : <Edit2 size={16} />}
+                </button>
               </div>
 
-              {p.positions && p.positions.length > 0 && (
-                <div className="flex flex-wrap gap-2 justify-center mt-6 w-full px-4">
-                  {p.positions.map((pos: any) => (
-                    <span key={pos.id} className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase px-4 py-1.5 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.1)]">
-                      {pos.position}
-                    </span>
-                  ))}
-                </div>
+              {isEditing ? (
+                <form onSubmit={handleUpdate} className="w-full mt-4 space-y-4 text-left">
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-widest ml-1">Full Name</label>
+                    <input type="text" value={editName} onChange={e => setEditName(e.target.value)} required className="w-full bg-ink border border-white/5 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500/50" />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-widest ml-1">Student ID</label>
+                    <input type="text" value={editStudentId} onChange={e => setEditStudentId(e.target.value)} required className="w-full bg-ink border border-white/5 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500/50" />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-widest ml-1">Session</label>
+                    <input type="text" value={editSessionId} onChange={e => setEditSessionId(e.target.value)} required className="w-full bg-ink border border-white/5 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500/50" />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-widest ml-1">Jersey Name</label>
+                    <input type="text" value={editJerseyName} onChange={e => setEditJerseyName(e.target.value)} className="w-full bg-ink border border-white/5 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500/50" />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] font-bold text-chalkMuted uppercase tracking-widest ml-1">Profile Photo</label>
+                    <div className="relative group">
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
+                        onChange={e => setEditFile(e.target.files?.[0] || null)} 
+                      />
+                      <div className={`w-full border border-dashed rounded-xl p-3 flex flex-col items-center justify-center transition-all duration-300 ${editFile ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-white/10 bg-ink group-hover:border-emerald-500/30'}`}>
+                        {editFile ? (
+                          <span className="text-emerald-400 font-bold text-xs">{editFile.name}</span>
+                        ) : (
+                          <span className="text-chalkMuted font-semibold text-xs group-hover:text-emerald-400 transition-colors">Click or drag image to change</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <button type="submit" className="w-full py-3 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-400 font-bold uppercase tracking-widest rounded-xl border border-emerald-500/20 transition-colors mt-4">
+                    Save Changes
+                  </button>
+                </form>
+              ) : (
+                <>
+                  <div className="relative w-40 h-40 mb-8 mt-4">
+                    <div className="absolute inset-0 bg-emerald-500/20 rounded-full blur-xl animate-pulse" />
+                    <div className="w-full h-full rounded-full overflow-hidden border-2 border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.15)] relative bg-ink flex items-center justify-center p-1">
+                      <div className="w-full h-full rounded-full overflow-hidden bg-panel">
+                        {p.imageUrl ? (
+                          <img src={p.imageUrl} className="w-full h-full object-cover" alt="Profile" />
+                        ) : (
+                          <User size={48} className="w-full h-full p-8 text-chalk/20" />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <h2 className="text-3xl font-display font-bold text-white uppercase tracking-wider mb-2">{p.name}</h2>
+                  <p className="text-emerald-400 font-mono text-sm mb-6 uppercase tracking-widest">{p.studentId} • Session {p.sessionId}</p>
+                  
+                  <div className="w-full h-px bg-gradient-to-r from-white/0 via-white/10 to-white/0 my-4" />
+                  
+                  <div className="w-full space-y-4 my-2">
+                    <div className="flex justify-between items-center px-4 bg-ink/50 p-3 rounded-xl border border-white/5">
+                      <span className="text-xs uppercase tracking-widest text-chalkMuted">Jersey Name</span>
+                      <span className="font-bold text-white uppercase">{p.jerseyName}</span>
+                    </div>
+                  </div>
+
+                  {p.positions && p.positions.length > 0 && (
+                    <div className="flex flex-wrap gap-2 justify-center mt-6 w-full px-4">
+                      {p.positions.map((pos: any) => (
+                        <span key={pos.id} className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase px-4 py-1.5 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.1)]">
+                          {pos.position}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>

@@ -11,7 +11,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 router.post('/', requirePhase([Phase.REGISTRATION]), upload.single('image'), registerPlayer);
 router.get('/public', getPublicPlayers);
 router.get('/', requireAuth, requireRole([Role.SUPER_ADMIN]), getPlayers);
-router.put('/:id', requireAuth, requireRole([Role.SUPER_ADMIN]), updatePlayer);
+router.put('/:id', requireAuth, requireRole([Role.SUPER_ADMIN, Role.PLAYER]), upload.single('image'), updatePlayer);
 router.delete('/:id', requireAuth, requireRole([Role.SUPER_ADMIN]), deletePlayer);
 
 export default router;
