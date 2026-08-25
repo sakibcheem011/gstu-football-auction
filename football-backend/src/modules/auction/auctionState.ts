@@ -239,6 +239,7 @@ class AuctionStateManager {
       highestBidderTeamId: null,
       bidHistory: [],
       timer: 30,
+      initialTimer: 30,
       basePrice: 0,
       totalBudget: 1500000,
       raiseTiers: [],

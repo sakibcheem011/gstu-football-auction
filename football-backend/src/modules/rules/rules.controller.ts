@@ -184,7 +184,7 @@ export const updateCategory = async (req: Request, res: Response): Promise<any> 
     const { id } = req.params;
     const { name, basePrice } = req.body;
     const cat = await prisma.playerCategory.update({
-      where: { id },
+      where: { id: id as string },
       data: { name, basePrice: parseInt(basePrice) }
     });
     return res.json(cat);
@@ -231,7 +231,7 @@ export const updateRaiseTier = async (req: Request, res: Response): Promise<any>
     const { id } = req.params;
     const { minPct, maxPct, raisePct } = req.body;
     const tier = await prisma.biddingRaiseTier.update({
-      where: { id },
+      where: { id: id as string },
       data: { minPct: parseFloat(minPct), maxPct: parseFloat(maxPct), raisePct: parseFloat(raisePct) }
     });
     return res.json(tier);
