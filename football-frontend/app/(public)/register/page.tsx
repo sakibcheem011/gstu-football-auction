@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
-import { UploadCloud, CheckCircle2 } from 'lucide-react';
+import { UploadCloud, CheckCircle2, Eye, EyeOff } from 'lucide-react';
 import Dropdown from '../../../components/Dropdown';
 
 export default function Register() {
@@ -15,6 +15,7 @@ export default function Register() {
     password: '',
   });
 
+  const [showPassword, setShowPassword] = useState(false);
   const [sessions, setSessions] = useState<any[]>([]);
   const [phase, setPhase] = useState<string>('SETUP');
   const [isInitializing, setIsInitializing] = useState(true);
@@ -158,10 +159,19 @@ export default function Register() {
               </div>
               <div>
                 <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Password</label>
-                <input required type="password" placeholder="Create a password" className="w-full bg-ink border border-chalk/10 rounded-xl px-4 py-3 text-chalk placeholder:text-chalkMuted/40 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all" 
-                  value={formData.password} 
-                  onChange={e => setFormData({...formData, password: e.target.value})} 
-                />
+                <div className="relative">
+                  <input required type={showPassword ? "text" : "password"} placeholder="Create a password" className="w-full bg-ink border border-chalk/10 rounded-xl pl-4 pr-12 py-3 text-chalk placeholder:text-chalkMuted/40 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all" 
+                    value={formData.password} 
+                    onChange={e => setFormData({...formData, password: e.target.value})} 
+                  />
+                  <button 
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-chalkMuted hover:text-white transition-colors"
+                  >
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  </button>
+                </div>
               </div>
               <div className="relative z-40">
                 <label className="block text-[11px] font-bold text-chalkMuted mb-2 uppercase tracking-wider">Primary Position</label>
