@@ -130,7 +130,8 @@ export const updatePlayer = async (req: Request, res: Response): Promise<any> =>
     
     if (user.role === 'PLAYER') {
       const playerRecord = await prisma.player.findUnique({ where: { id } });
-      if (!playerRecord || playerRecord.email !== user.email) {
+      const dbUser = await prisma.user.findUnique({ where: { id: user.id } });
+      if (!playerRecord || !dbUser || playerRecord.email !== dbUser.email) {
         return res.status(403).json({ error: 'Forbidden' });
       }
     }
