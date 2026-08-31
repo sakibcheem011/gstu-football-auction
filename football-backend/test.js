@@ -1,0 +1,1 @@
+﻿const jwt = require('jsonwebtoken'); const token = jwt.sign({ id: 'dummy', role: 'SUPER_ADMIN' }, 'gstu-liga-super-secret-key-2026'); fetch('https://gstu-football-auction.onrender.com/jerseys', { headers: { Authorization: 'Bearer ' + token } }).then(r => r.json()).then(data => console.log(JSON.stringify(data[0].votes))).catch(console.error);

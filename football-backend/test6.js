@@ -1,0 +1,1 @@
+﻿const { PrismaClient } = require('@prisma/client'); const prisma = new PrismaClient(); async function main() { const isAdmin = true; const jerseys = await prisma.jerseyDesign.findMany({ include: { votes: { select: { playerId: true, ...(isAdmin && { player: { select: { name: true } } }) } } } }); console.log(JSON.stringify(jerseys[0].votes)); } main();

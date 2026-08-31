@@ -152,7 +152,7 @@ function SetupContent() {
         fetch(`${process.env.NEXT_PUBLIC_API_URL }/rules/tiers`),
         fetch(`${process.env.NEXT_PUBLIC_API_URL }/rules/sessions`),
         fetch(`${process.env.NEXT_PUBLIC_API_URL }/teams/pending-managers`, { headers: { Authorization: `Bearer ${t}` } }),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL }/jerseys`, { headers: { Authorization: `Bearer ${t}` } })
+        fetch(`${process.env.NEXT_PUBLIC_API_URL }/jerseys?timestamp=${Date.now()}`, { headers: { Authorization: `Bearer ${t}` } })
       ]);
       const dataConfig = await resConfig.json();
       const dataTeams = await resTeams.json();

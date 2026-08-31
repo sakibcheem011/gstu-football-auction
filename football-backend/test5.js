@@ -1,0 +1,1 @@
+﻿fetch('https://gstu-football-auction.onrender.com/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: 'admin3369@gstu.edu', password: 'superadmin123' }) }).then(r => r.json()).then(data => console.log(data)).catch(console.error);
