@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { Settings, Shield, Users, CheckCircle, ArrowLeft, BadgeCheck, Activity, DollarSign, Plus, UserPlus, Database, Trash2, Edit2, X, Image as ImageIcon, ListOrdered, User } from 'lucide-react';
+import { Settings, Shield, Users, CheckCircle, ArrowLeft, BadgeCheck, Activity, DollarSign, Plus, UserPlus, Database, Trash2, Edit2, X, Image as ImageIcon, ListOrdered, User, Shirt } from 'lucide-react';
 import { io } from 'socket.io-client';
 import PlayerDirectory from '../../../components/PlayerDirectory';
 import Dropdown from '../../../components/Dropdown';
@@ -137,9 +137,11 @@ function SetupContent() {
     };
   }, []);
 
+  const [jerseys, setJerseys] = useState<any[]>([]);
+
   const fetchData = async (t: string) => {
     try {
-      const [resConfig, resTeams, resPlayers, resStaff, resCat, resTier, resSess, resPending] = await Promise.all([
+      const [resConfig, resTeams, resPlayers, resStaff, resCat, resTier, resSess, resPending, resJerseys] = await Promise.all([
         fetch(`${process.env.NEXT_PUBLIC_API_URL }/rules/config`),
         fetch(`${process.env.NEXT_PUBLIC_API_URL }/teams`),
         fetch(`${process.env.NEXT_PUBLIC_API_URL }/players`, { headers: { Authorization: `Bearer ${t}` } }),
@@ -147,17 +149,20 @@ function SetupContent() {
         fetch(`${process.env.NEXT_PUBLIC_API_URL }/rules/categories`),
         fetch(`${process.env.NEXT_PUBLIC_API_URL }/rules/tiers`),
         fetch(`${process.env.NEXT_PUBLIC_API_URL }/rules/sessions`),
-        fetch(`${process.env.NEXT_PUBLIC_API_URL }/teams/pending-managers`, { headers: { Authorization: `Bearer ${t}` } })
+        fetch(`${process.env.NEXT_PUBLIC_API_URL }/teams/pending-managers`, { headers: { Authorization: `Bearer ${t}` } }),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL }/jerseys`, { headers: { Authorization: `Bearer ${t}` } })
       ]);
       const dataConfig = await resConfig.json();
       const dataTeams = await resTeams.json();
       const dataPlayers = await resPlayers.json();
       const dataStaff = await resStaff.json();
       const dataPending = await resPending.json();
+      const dataJerseys = await resJerseys.json();
       
       setCategories(await resCat.json());
       setTiers(await resTier.json());
       setSessions(await resSess.json());
+      setJerseys(dataJerseys || []);
       
       setConfig(dataConfig);
       if (dataConfig) {
@@ -628,6 +633,7 @@ function SetupContent() {
     { id: 'config', label: 'Configuration', icon: Settings },
     { id: 'teams', label: 'Franchises', icon: Shield },
     { id: 'players', label: 'Players', icon: Users },
+    { id: 'jerseys', label: 'Jerseys', icon: Shirt },
     { id: 'staff', label: 'Podium & Admin', icon: BadgeCheck },
     { id: 'danger', label: 'Data Management', icon: Trash2 }
   ];

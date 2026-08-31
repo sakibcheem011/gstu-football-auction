@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { LayoutDashboard, Settings, Trophy, MonitorPlay, LogOut, Loader2, ShieldCheck, Users, Shield, Database, Activity } from 'lucide-react';
+import { LayoutDashboard, Settings, Trophy, MonitorPlay, LogOut, Loader2, ShieldCheck, Users, Shield, Database, Activity, Shirt } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ThemeToggle } from '../../components/ThemeToggle';
 
@@ -17,6 +17,7 @@ function SidebarNavContent({ pathname, navItems }: { pathname: string, navItems:
     { id: 'config', label: 'CONFIGURATION', icon: Settings },
     { id: 'teams', label: 'FRANCHISES', icon: Shield },
     { id: 'players', label: 'PLAYERS', icon: Users },
+    { id: 'jerseys', label: 'JERSEYS', icon: Shirt },
     { id: 'staff', label: 'PODIUM & ADMIN', icon: ShieldCheck },
     { id: 'danger', label: 'DATA MANAGEMENT', icon: Database },
   ];
