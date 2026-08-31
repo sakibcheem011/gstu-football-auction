@@ -1426,55 +1426,84 @@ function SetupContent() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <div className="space-y-12">
                   {jerseys.length === 0 ? (
-                    <div className="col-span-full py-8 text-center text-chalkMuted italic text-sm">No jerseys uploaded yet.</div>
+                    <div className="py-8 text-center text-chalkMuted italic text-sm">No jerseys uploaded yet.</div>
                   ) : (
-                    jerseys.map((jersey: any) => (
-                      <div key={jersey.id} className="bg-panel border border-white/5 rounded-xl overflow-hidden shadow-lg group relative aspect-[3/4]">
-                        <img src={jersey.imageUrl} alt="Jersey" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                        
-                        <div className="absolute top-2 left-2 bg-ink/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-white font-bold text-xs flex items-center gap-1.5 z-20">
-                          <span className="text-[10px] text-chalkMuted uppercase tracking-widest">Votes</span>
-                          <span className="text-emerald-400">{jersey._count?.votes || 0}</span>
-                        </div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-transparent flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                          {jersey.player && (
-                            <>
-                              <div className="text-white font-bold text-xs truncate uppercase">{jersey.player.name}</div>
-                              <div className="text-emerald-400 text-[10px] font-mono mt-0.5">{jersey.player.studentId} • {jersey.player.sessionId}</div>
-                              {jersey.player.team && (
-                                <div className="text-cyan-400 text-[10px] font-bold uppercase mt-1 truncate">
-                                  {jersey.player.team.name}
-                                </div>
+                    (() => {
+                      const jerseysByPlayer = jerseys.reduce((acc: any, jersey: any) => {
+                        const playerId = jersey.playerId || 'unknown';
+                        if (!acc[playerId]) {
+                          acc[playerId] = {
+                            player: jersey.player,
+                            jerseys: [],
+                            totalVotes: 0
+                          };
+                        }
+                        acc[playerId].jerseys.push(jersey);
+                        acc[playerId].totalVotes += (jersey._count?.votes || 0);
+                        return acc;
+                      }, {});
+                      
+                      const sortedGroups = Object.values(jerseysByPlayer).sort((a: any, b: any) => b.totalVotes - a.totalVotes);
+                      
+                      return sortedGroups.map((group: any, idx: number) => (
+                        <div key={idx} className="bg-ink/50 border border-white/5 rounded-2xl p-6">
+                          <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 pb-4 border-b border-white/10 gap-4">
+                            <div>
+                              <h4 className="text-xl font-bold text-white uppercase tracking-wider">{group.player?.name || 'Unknown Player'}</h4>
+                              <p className="text-emerald-400 font-mono text-xs mt-1 uppercase tracking-widest">{group.player?.studentId} • {group.player?.sessionId}</p>
+                              {group.player?.team && (
+                                <p className="text-cyan-400 text-[10px] font-bold uppercase mt-2 border border-cyan-400/20 bg-cyan-400/10 inline-block px-2 py-1 rounded">
+                                  Team: {group.player.team.name}
+                                </p>
                               )}
-                            </>
-                          )}
-                          <button 
-                            onClick={() => {
-                              setConfirmDialog({
-                                isOpen: true,
-                                message: 'Are you sure you want to delete this jersey? This action cannot be undone.',
-                                onConfirm: async () => {
-                                  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys/${jersey.id}`, {
-                                    method: 'DELETE',
-                                    headers: { Authorization: `Bearer ${token}` }
-                                  });
-                                  if (res.ok) {
-                                    toast.success('Jersey deleted');
-                                    setJerseys(jerseys.filter((j: any) => j.id !== jersey.id));
-                                  }
-                                  setConfirmDialog(null);
-                                }
-                              });
-                            }}
-                            className="mt-2 w-full py-1.5 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white rounded text-xs font-bold uppercase transition-colors"
-                          >
-                            Delete
-                          </button>
+                            </div>
+                            <div className="bg-panel border border-white/10 px-4 py-2 rounded-xl text-center">
+                              <p className="text-[10px] text-chalkMuted uppercase tracking-widest mb-1">Total Votes</p>
+                              <p className="text-2xl font-display text-emerald-400 leading-none">{group.totalVotes}</p>
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                            {group.jerseys.sort((a: any, b: any) => (b._count?.votes || 0) - (a._count?.votes || 0)).map((jersey: any) => (
+                              <div key={jersey.id} className="bg-panel border border-white/5 rounded-xl overflow-hidden shadow-lg group relative aspect-[3/4]">
+                                <img src={jersey.imageUrl} alt="Jersey" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                                
+                                <div className="absolute top-2 left-2 bg-ink/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-white font-bold text-xs flex items-center gap-1.5 z-20">
+                                  <span className="text-[10px] text-chalkMuted uppercase tracking-widest">Votes</span>
+                                  <span className="text-emerald-400">{jersey._count?.votes || 0}</span>
+                                </div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-transparent flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                  <button 
+                                    onClick={() => {
+                                      setConfirmDialog({
+                                        isOpen: true,
+                                        message: 'Are you sure you want to delete this jersey? This action cannot be undone.',
+                                        onConfirm: async () => {
+                                          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys/${jersey.id}`, {
+                                            method: 'DELETE',
+                                            headers: { Authorization: `Bearer ${token}` }
+                                          });
+                                          if (res.ok) {
+                                            toast.success('Jersey deleted');
+                                            setJerseys(jerseys.filter((j: any) => j.id !== jersey.id));
+                                          }
+                                          setConfirmDialog(null);
+                                        }
+                                      });
+                                    }}
+                                    className="w-full py-2 bg-red-500/80 hover:bg-red-500 text-white rounded-lg text-xs font-bold uppercase tracking-widest transition-colors backdrop-blur-md"
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    ))
+                      ));
+                    })()
                   )}
                 </div>
               </motion.div>
