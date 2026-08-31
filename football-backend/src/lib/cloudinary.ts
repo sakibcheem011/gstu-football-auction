@@ -25,4 +25,13 @@ export const uploadFromBuffer = (buffer: Buffer, folder: string): Promise<any> =
   });
 };
 
+export const deleteFromCloudinary = (publicId: string): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.destroy(publicId, (error, result) => {
+      if (error) reject(error);
+      else resolve(result);
+    });
+  });
+};
+
 export default cloudinary;

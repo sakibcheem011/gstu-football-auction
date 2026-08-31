@@ -39,7 +39,8 @@ export default function Navbar() {
     { name: 'Home', href: '/' },
     { name: 'Tournament', href: '/tournament' },
     { name: 'Franchises', href: '/franchises' },
-    { name: 'Players', href: '/players' }
+    { name: 'Players', href: '/players' },
+    { name: 'Jerseys', href: '/showcase' }
   ];
 
   if (!token || (role !== 'SUPER_ADMIN' && role !== 'PODIUM_ADMIN' && role !== 'TEAM_MANAGER')) {

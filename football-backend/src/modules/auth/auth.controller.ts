@@ -121,7 +121,8 @@ export const getMe = async (req: AuthRequest, res: Response): Promise<any> => {
         where: { email: fullUser!.email },
         include: {
           positions: true,
-          team: true
+          team: true,
+          jerseyDesigns: true
         }
       });
       return res.json({ ...fullUser, playerRecord });

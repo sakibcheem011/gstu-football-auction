@@ -81,6 +81,16 @@ model Player {
   team              Team?            @relation(fields: [teamId], references: [id])
   positions         PlayerPosition[]
   wishlistedByTeams Team[]           @relation("TeamWishlist")
+  jerseyDesigns     JerseyDesign[]
+}
+
+model JerseyDesign {
+  id            String   @id @default(cuid())
+  playerId      String
+  imageUrl      String
+  imagePublicId String
+  createdAt     DateTime @default(now())
+  player        Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
 }
 
 model PlayerPosition {

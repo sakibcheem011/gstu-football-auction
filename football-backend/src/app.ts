@@ -10,6 +10,7 @@ import auctionRoutes from './modules/auction/auction.routes';
 import configRoutes from './modules/config/config.routes';
 import tournamentRoutes from './modules/tournament/tournament.routes';
 import systemRoutes from './modules/system/system.routes';
+import jerseyRoutes from './modules/jerseys/jerseys.routes';
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use('/auction', auctionRoutes);
 app.use('/config', configRoutes);
 app.use('/tournament', tournamentRoutes);
 app.use('/system', systemRoutes);
+app.use('/jerseys', jerseyRoutes);
 
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 

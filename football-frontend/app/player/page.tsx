@@ -263,6 +263,80 @@ export default function PlayerDashboard() {
               </div>
             </div>
 
+            <div className="bg-panel rounded-[2rem] p-8 border border-white/5 shadow-2xl relative overflow-hidden">
+              <h3 className="text-lg uppercase tracking-[0.2em] font-bold text-chalk mb-8 relative z-10 flex justify-between items-center">
+                My Jersey Designs
+              </h3>
+              
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6 relative z-10">
+                {p.jerseyDesigns?.map((jd: any) => (
+                  <div key={jd.id} className="relative group rounded-xl overflow-hidden border border-white/5 bg-ink aspect-[3/4]">
+                    <img src={jd.imageUrl} alt="Jersey Design" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <button onClick={async () => {
+                      if (!confirm('Delete this jersey design?')) return;
+                      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys/${jd.id}`, {
+                        method: 'DELETE',
+                        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                      });
+                      if (res.ok) {
+                        toast.success('Jersey deleted');
+                        setUser({
+                          ...user,
+                          playerRecord: {
+                            ...p,
+                            jerseyDesigns: p.jerseyDesigns.filter((j: any) => j.id !== jd.id)
+                          }
+                        });
+                      }
+                    }} className="absolute top-2 right-2 bg-red-500/80 hover:bg-red-500 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                      X
+                    </button>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="relative z-10">
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  id="jersey-upload"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    
+                    const formData = new FormData();
+                    formData.append('image', file);
+                    
+                    const tId = toast.loading('Uploading jersey design...');
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys`, {
+                      method: 'POST',
+                      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+                      body: formData
+                    });
+                    
+                    toast.dismiss(tId);
+                    if (res.ok) {
+                      const newJersey = await res.json();
+                      toast.success('Jersey uploaded!');
+                      setUser({
+                        ...user,
+                        playerRecord: {
+                          ...p,
+                          jerseyDesigns: [newJersey, ...(p.jerseyDesigns || [])]
+                        }
+                      });
+                    } else {
+                      toast.error('Upload failed');
+                    }
+                  }}
+                />
+                <label htmlFor="jersey-upload" className="w-full py-4 border-2 border-dashed border-emerald-500/30 rounded-xl flex flex-col items-center justify-center text-emerald-400/70 hover:text-emerald-400 hover:border-emerald-500/60 hover:bg-emerald-500/5 cursor-pointer transition-all">
+                  <span className="font-bold uppercase tracking-widest text-xs">+ Upload New Jersey Design</span>
+                </label>
+              </div>
+            </div>
+
           </div>
 
         </div>
