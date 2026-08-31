@@ -1415,6 +1415,55 @@ function SetupContent() {
               </motion.div>
             )}
 
+            {activeTab === 'jerseys' && (
+              <motion.div key="jerseys" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-6">
+                <div className="flex justify-between items-center bg-panel border border-white/5 p-6 rounded-2xl">
+                  <div>
+                    <h3 className="text-xl font-bold text-white uppercase tracking-widest flex items-center gap-3">
+                      <Shirt className="text-emerald-400" /> Jersey Showcase
+                    </h3>
+                    <p className="text-chalkMuted text-sm mt-1">Manage jerseys uploaded by players</p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                  {jerseys.length === 0 ? (
+                    <div className="col-span-full py-8 text-center text-chalkMuted italic text-sm">No jerseys uploaded yet.</div>
+                  ) : (
+                    jerseys.map((jersey: any) => (
+                      <div key={jersey.id} className="bg-panel border border-white/5 rounded-xl overflow-hidden shadow-lg group relative aspect-[3/4]">
+                        <img src={jersey.imageUrl} alt="Jersey" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                        
+                        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                          {jersey.player && (
+                            <>
+                              <div className="text-white font-bold text-xs truncate uppercase">{jersey.player.name}</div>
+                              <div className="text-emerald-400 text-[10px] font-mono mt-0.5">{jersey.player.studentId} • {jersey.player.sessionId}</div>
+                            </>
+                          )}
+                          <button 
+                            onClick={async () => {
+                              if (!confirm('Delete this jersey?')) return;
+                              const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys/${jersey.id}`, {
+                                method: 'DELETE',
+                                headers: { Authorization: `Bearer ${token}` }
+                              });
+                              if (res.ok) {
+                                toast.success('Jersey deleted');
+                                setJerseys(jerseys.filter((j: any) => j.id !== jersey.id));
+                              }
+                            }}
+                            className="mt-2 w-full py-1.5 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white rounded text-xs font-bold uppercase transition-colors"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </motion.div>
+            )}
             {activeTab === 'danger' && (
               <motion.div key="danger" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-8">
                 <section className="glass-panel p-8 rounded-[2rem] border-white/10 bg-white/5">
