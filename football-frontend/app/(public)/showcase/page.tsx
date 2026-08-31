@@ -133,9 +133,13 @@ export default function JerseyShowcase() {
                   <p className="text-white font-bold uppercase tracking-wide text-sm truncate">{jersey.player.name}</p>
                   <p className="text-emerald-400 text-xs font-mono uppercase tracking-widest mt-1">{jersey.player.studentId} • {jersey.player.sessionId}</p>
                   <p className="text-chalkMuted text-xs mt-1">Printed Name: {jersey.player.jerseyName}</p>
-                  {jersey.player.team && (
-                    <p className="text-cyan-400 text-xs font-bold uppercase mt-2 border border-cyan-400/20 bg-cyan-400/10 inline-block px-2 py-1 rounded">
-                      {jersey.player.team.name}
+                  {jersey.player.team ? (
+                    <p className="text-cyan-400 text-[10px] font-bold uppercase mt-2 border border-cyan-400/20 bg-cyan-400/10 inline-block px-2 py-1 rounded">
+                      Team: {jersey.player.team.name}
+                    </p>
+                  ) : (
+                    <p className="text-chalkMuted text-[10px] font-bold uppercase mt-2 border border-white/10 bg-white/5 inline-block px-2 py-1 rounded">
+                      Team: NULL
                     </p>
                   )}
                 </div>

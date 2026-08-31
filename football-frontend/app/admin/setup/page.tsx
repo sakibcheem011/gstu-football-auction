@@ -1453,9 +1453,13 @@ function SetupContent() {
                             <div>
                               <h4 className="text-xl font-bold text-white uppercase tracking-wider">{group.player?.name || 'Unknown Player'}</h4>
                               <p className="text-emerald-400 font-mono text-xs mt-1 uppercase tracking-widest">{group.player?.studentId} • {group.player?.sessionId}</p>
-                              {group.player?.team && (
+                              {group.player?.team ? (
                                 <p className="text-cyan-400 text-[10px] font-bold uppercase mt-2 border border-cyan-400/20 bg-cyan-400/10 inline-block px-2 py-1 rounded">
                                   Team: {group.player.team.name}
+                                </p>
+                              ) : (
+                                <p className="text-chalkMuted text-[10px] font-bold uppercase mt-2 border border-white/10 bg-white/5 inline-block px-2 py-1 rounded">
+                                  Team: NULL
                                 </p>
                               )}
                             </div>
