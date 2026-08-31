@@ -50,6 +50,8 @@ export default function Navbar() {
   if (token) {
     if (role === 'SUPER_ADMIN' || role === 'PODIUM_ADMIN') {
       navLinks.push({ name: 'Dashboard', href: '/admin' });
+    } else if (role === 'PLAYER') {
+      navLinks.push({ name: 'Dashboard', href: '/player' });
     }
   }
 
@@ -97,6 +99,11 @@ export default function Navbar() {
                 <Link href="/podium" className="hidden sm:flex px-5 py-2 bg-chalk/20 text-chalk rounded-lg text-sm font-semibold items-center gap-2 hover:bg-chalk/20 transition">
                   <span className="w-2 h-2 rounded-full bg-danger animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]" />
                   Auction Live
+                </Link>
+              )}
+              {role === 'PLAYER' && (
+                <Link href="/player" className="md:hidden text-chalkMuted hover:text-chalk transition p-2">
+                  <UserCircle size={18} />
                 </Link>
               )}
               <button 
