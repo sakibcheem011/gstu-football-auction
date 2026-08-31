@@ -121,15 +121,11 @@ export default function JerseyShowcase() {
               <div className="aspect-[3/4] w-full overflow-hidden bg-ink relative cursor-pointer" onClick={() => setSelectedImage(jersey.imageUrl)}>
                 <img src={jersey.imageUrl} alt="Jersey Design" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                 <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-col justify-end" onClick={(e) => e.stopPropagation()}>
-                  <div className="flex justify-between items-end opacity-90 group-hover:opacity-100 transition-opacity">
-                    <div>
-                      <div className="text-white/60 font-bold uppercase tracking-widest text-[10px] mb-0.5">Total Votes</div>
-                      <div className="text-white font-display text-2xl leading-none">{jersey._count?.votes || 0}</div>
-                    </div>
+                  <div className="opacity-90 group-hover:opacity-100 transition-opacity w-full">
                     {isPlayer && (
                       <button 
                         onClick={() => toggleVote(jersey.id)}
-                        className={`px-4 py-2 rounded-lg font-bold uppercase tracking-widest text-xs transition-all ${
+                        className={`w-full py-3 rounded-xl font-bold uppercase tracking-widest text-xs transition-all ${
                           jersey.votes?.some((v: any) => v.playerId === playerId) 
                             ? 'bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]' 
                             : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-md'
