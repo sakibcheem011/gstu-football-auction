@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2, User, Trophy, Shield, Goal, Flag, Edit2 } from 'lucide-react';
+import { CheckCircle2, User, Trophy, Shield, Goal, Flag, Edit2, Heart } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
 export default function PlayerDashboard() {
@@ -17,6 +17,8 @@ export default function PlayerDashboard() {
   const [editSessionId, setEditSessionId] = useState('');
   const [editFile, setEditFile] = useState<File | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  
+  const [activeTab, setActiveTab] = useState('dashboard');
 
   const openEdit = () => {
     if (user?.playerRecord) {
@@ -111,9 +113,26 @@ export default function PlayerDashboard() {
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-emerald-900/20 rounded-full blur-[100px] pointer-events-none" />
       
       <div className="max-w-6xl mx-auto w-full flex-1 flex flex-col relative z-10">
-        <h1 className="font-display text-4xl md:text-5xl text-white tracking-[0.2em] mb-8 drop-shadow-md">PLAYER DASHBOARD</h1>
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+          <h1 className="font-display text-4xl md:text-5xl text-white tracking-[0.2em] drop-shadow-md uppercase">PLAYER DASHBOARD</h1>
+          <div className="flex gap-2 bg-ink/50 border border-white/5 p-1.5 rounded-2xl">
+            <button 
+              onClick={() => setActiveTab('dashboard')} 
+              className={`px-6 py-2.5 rounded-xl font-bold uppercase tracking-widest text-xs transition-all ${activeTab === 'dashboard' ? 'bg-emerald-500 text-white shadow-lg' : 'text-chalkMuted hover:text-white'}`}
+            >
+              My Profile
+            </button>
+            <button 
+              onClick={() => setActiveTab('vote')} 
+              className={`px-6 py-2.5 rounded-xl font-bold uppercase tracking-widest text-xs transition-all ${activeTab === 'vote' ? 'bg-emerald-500 text-white shadow-lg' : 'text-chalkMuted hover:text-white'}`}
+            >
+              Vote Jerseys
+            </button>
+          </div>
+        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {activeTab === 'dashboard' ? (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
           {/* Profile Card */}
           <div className="lg:col-span-1">
@@ -377,8 +396,96 @@ export default function PlayerDashboard() {
 
           </div>
 
-        </div>
+          </div>
+        ) : (
+          <div className="bg-panel rounded-[2rem] p-8 border border-white/5 shadow-2xl relative overflow-hidden">
+            <h2 className="text-xl uppercase tracking-[0.2em] font-bold text-white mb-2">Vote for Best Jerseys</h2>
+            <p className="text-chalkMuted text-sm mb-8">You can vote for up to 5 jerseys. Explore and vote for your favorites!</p>
+            <JerseyVotingPanel playerId={p.id} />
+          </div>
+        )}
       </div>
+    </div>
+  );
+}
+
+function JerseyVotingPanel({ playerId }: { playerId: string }) {
+  const [jerseys, setJerseys] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys`)
+      .then(res => res.json())
+      .then(data => {
+        setJerseys(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
+
+  const toggleVote = async (jerseyId: string) => {
+    const token = localStorage.getItem('token');
+    const toastId = toast.loading('Voting...');
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys/${jerseyId}/vote`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await res.json();
+      toast.dismiss(toastId);
+      
+      if (res.ok) {
+        toast.success(data.message);
+        setJerseys(prev => prev.map(j => {
+          if (j.id === jerseyId) {
+            const hasVoted = j.votes?.some((v: any) => v.playerId === playerId);
+            if (hasVoted) {
+              return { ...j, _count: { ...j._count, votes: j._count.votes - 1 }, votes: j.votes.filter((v: any) => v.playerId !== playerId) };
+            } else {
+              return { ...j, _count: { ...j._count, votes: (j._count?.votes || 0) + 1 }, votes: [...(j.votes || []), { playerId }] };
+            }
+          }
+          return j;
+        }));
+      } else {
+        toast.error(data.error || 'Failed to vote');
+      }
+    } catch (err) {
+      toast.dismiss(toastId);
+      toast.error('Network error');
+    }
+  };
+
+  if (loading) return <div className="py-12 text-center text-emerald-400 animate-pulse">Loading jerseys...</div>;
+  if (jerseys.length === 0) return <div className="py-12 text-center text-chalkMuted">No jerseys have been submitted yet.</div>;
+
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      {jerseys.map((jersey, i) => (
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.05 }}
+          key={jersey.id} 
+          className="bg-ink border border-white/5 rounded-xl overflow-hidden shadow-xl group hover:border-emerald-500/30 transition-all flex flex-col relative"
+        >
+          <div className="absolute top-2 right-2 z-10">
+            <button 
+              onClick={() => toggleVote(jersey.id)}
+              className="bg-panel/80 backdrop-blur-md hover:bg-panel px-3 py-1.5 rounded-full border border-white/10 text-white font-bold text-xs flex items-center gap-1 transition-colors shadow-lg"
+            >
+              <Heart size={14} className={jersey.votes?.some((v: any) => v.playerId === playerId) ? "text-emerald-400 fill-emerald-400" : "text-chalkMuted"} />
+              {jersey._count?.votes || 0}
+            </button>
+          </div>
+          <div className="aspect-[3/4] w-full overflow-hidden bg-black/50 relative">
+            <img src={jersey.imageUrl} alt="Jersey Design" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+          </div>
+        </motion.div>
+      ))}
     </div>
   );
 }
