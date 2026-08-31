@@ -1442,16 +1442,22 @@ function SetupContent() {
                             </>
                           )}
                           <button 
-                            onClick={async () => {
-                              if (!confirm('Delete this jersey?')) return;
-                              const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys/${jersey.id}`, {
-                                method: 'DELETE',
-                                headers: { Authorization: `Bearer ${token}` }
+                            onClick={() => {
+                              setConfirmDialog({
+                                isOpen: true,
+                                message: 'Are you sure you want to delete this jersey? This action cannot be undone.',
+                                onConfirm: async () => {
+                                  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys/${jersey.id}`, {
+                                    method: 'DELETE',
+                                    headers: { Authorization: `Bearer ${token}` }
+                                  });
+                                  if (res.ok) {
+                                    toast.success('Jersey deleted');
+                                    setJerseys(jerseys.filter((j: any) => j.id !== jersey.id));
+                                  }
+                                  setConfirmDialog(null);
+                                }
                               });
-                              if (res.ok) {
-                                toast.success('Jersey deleted');
-                                setJerseys(jerseys.filter((j: any) => j.id !== jersey.id));
-                              }
                             }}
                             className="mt-2 w-full py-1.5 bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white rounded text-xs font-bold uppercase transition-colors"
                           >

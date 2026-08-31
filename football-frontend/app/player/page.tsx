@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2, User, Trophy, Shield, Goal, Flag, Edit2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
@@ -16,6 +16,7 @@ export default function PlayerDashboard() {
   const [editStudentId, setEditStudentId] = useState('');
   const [editSessionId, setEditSessionId] = useState('');
   const [editFile, setEditFile] = useState<File | null>(null);
+  const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
 
   const openEdit = () => {
     if (user?.playerRecord) {
@@ -272,28 +273,58 @@ export default function PlayerDashboard() {
                 {p.jerseyDesigns?.map((jd: any) => (
                   <div key={jd.id} className="relative group rounded-xl overflow-hidden border border-white/5 bg-ink aspect-[3/4]">
                     <img src={jd.imageUrl} alt="Jersey Design" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    <button onClick={async () => {
-                      if (!confirm('Delete this jersey design?')) return;
-                      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys/${jd.id}`, {
-                        method: 'DELETE',
-                        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-                      });
-                      if (res.ok) {
-                        toast.success('Jersey deleted');
-                        setUser({
-                          ...user,
-                          playerRecord: {
-                            ...p,
-                            jerseyDesigns: p.jerseyDesigns.filter((j: any) => j.id !== jd.id)
-                          }
-                        });
-                      }
-                    }} className="absolute top-2 right-2 bg-red-500/80 hover:bg-red-500 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button 
+                      onClick={() => setDeleteConfirm(jd.id)} 
+                      className="absolute top-2 right-2 bg-red-500/80 hover:bg-red-500 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
                       X
                     </button>
                   </div>
                 ))}
               </div>
+              
+              <AnimatePresence>
+                {deleteConfirm && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm px-4">
+                    <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="bg-panel border border-white/10 p-6 rounded-3xl max-w-sm w-full">
+                      <h3 className="text-xl font-bold text-white mb-3">Delete Jersey?</h3>
+                      <p className="text-chalk text-sm mb-6">
+                        Are you sure you want to delete this jersey design? This action cannot be undone.
+                      </p>
+                      <div className="flex justify-end gap-3">
+                        <button 
+                          onClick={() => setDeleteConfirm(null)}
+                          className="px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl font-bold text-xs uppercase tracking-widest transition"
+                        >
+                          Cancel
+                        </button>
+                        <button 
+                          onClick={async () => {
+                            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys/${deleteConfirm}`, {
+                              method: 'DELETE',
+                              headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                            });
+                            if (res.ok) {
+                              toast.success('Jersey deleted');
+                              setUser({
+                                ...user,
+                                playerRecord: {
+                                  ...p,
+                                  jerseyDesigns: p.jerseyDesigns.filter((j: any) => j.id !== deleteConfirm)
+                                }
+                              });
+                            }
+                            setDeleteConfirm(null);
+                          }}
+                          className="px-4 py-2 bg-red-500/20 hover:bg-red-500 hover:text-white text-red-400 border border-red-500/20 rounded-xl font-bold text-xs uppercase tracking-widest transition"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </motion.div>
+                  </div>
+                )}
+              </AnimatePresence>
               
               {(p.jerseyDesigns?.length || 0) >= 3 ? (
                 <div className="relative z-10 w-full py-4 border border-white/5 bg-ink/50 rounded-xl flex flex-col items-center justify-center text-chalkMuted">
