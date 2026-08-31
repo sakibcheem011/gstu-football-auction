@@ -79,7 +79,16 @@ export const getJerseys = async (req: Request, res: Response): Promise<any> => {
         },
         votes: {
           select: {
-            playerId: true
+            playerId: true,
+            ...(isAdmin && {
+              player: {
+                select: {
+                  name: true,
+                  studentId: true,
+                  sessionId: true
+                }
+              }
+            })
           }
         },
         _count: {

@@ -1504,36 +1504,56 @@ function SetupContent() {
                           
                           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                             {group.jerseys.sort((a: any, b: any) => (b._count?.votes || 0) - (a._count?.votes || 0)).map((jersey: any) => (
-                              <div key={jersey.id} className="bg-panel border border-white/5 rounded-xl overflow-hidden shadow-lg group relative aspect-[3/4] cursor-pointer" onClick={() => setSelectedImage(jersey.imageUrl)}>
-                                <img src={jersey.imageUrl} alt="Jersey" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                                
-                                <div className="absolute top-2 left-2 bg-ink/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-white font-bold text-xs flex items-center gap-1.5 z-20">
-                                  <span className="text-[10px] text-chalkMuted uppercase tracking-widest">Votes</span>
-                                  <span className="text-emerald-400">{jersey._count?.votes || 0}</span>
-                                </div>
-                                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-transparent flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity z-10" onClick={(e) => e.stopPropagation()}>
-                                  <button 
-                                    onClick={() => {
-                                      setConfirmDialog({
-                                        isOpen: true,
-                                        message: 'Are you sure you want to delete this jersey? This action cannot be undone.',
-                                        onConfirm: async () => {
-                                          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys/${jersey.id}`, {
-                                            method: 'DELETE',
-                                            headers: { Authorization: `Bearer ${token}` }
-                                          });
-                                          if (res.ok) {
-                                            toast.success('Jersey deleted');
-                                            setJerseys(jerseys.filter((j: any) => j.id !== jersey.id));
+                              <div key={jersey.id} className="bg-panel border border-white/5 rounded-xl overflow-hidden shadow-lg flex flex-col group cursor-pointer" onClick={() => setSelectedImage(jersey.imageUrl)}>
+                                <div className="relative aspect-[3/4] shrink-0">
+                                  <img src={jersey.imageUrl} alt="Jersey" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                                  
+                                  <div className="absolute top-2 left-2 bg-ink/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-white font-bold text-xs flex items-center gap-1.5 z-20">
+                                    <span className="text-[10px] text-chalkMuted uppercase tracking-widest">Votes</span>
+                                    <span className="text-emerald-400">{jersey._count?.votes || 0}</span>
+                                  </div>
+                                  <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-transparent flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity z-10" onClick={(e) => e.stopPropagation()}>
+                                    <button 
+                                      onClick={() => {
+                                        setConfirmDialog({
+                                          isOpen: true,
+                                          message: 'Are you sure you want to delete this jersey? This action cannot be undone.',
+                                          onConfirm: async () => {
+                                            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys/${jersey.id}`, {
+                                              method: 'DELETE',
+                                              headers: { Authorization: `Bearer ${token}` }
+                                            });
+                                            if (res.ok) {
+                                              toast.success('Jersey deleted');
+                                              setJerseys(jerseys.filter((j: any) => j.id !== jersey.id));
+                                            }
+                                            setConfirmDialog(null);
                                           }
-                                          setConfirmDialog(null);
-                                        }
-                                      });
-                                    }}
-                                    className="w-full py-2 bg-red-500/80 hover:bg-red-500 text-white rounded-lg text-xs font-bold uppercase tracking-widest transition-colors backdrop-blur-md"
-                                  >
-                                    Delete
-                                  </button>
+                                        });
+                                      }}
+                                      className="w-full py-2 bg-red-500/80 hover:bg-red-500 text-white rounded-lg text-xs font-bold uppercase tracking-widest transition-colors backdrop-blur-md"
+                                    >
+                                      Delete
+                                    </button>
+                                  </div>
+                                </div>
+                                
+                                <div className="p-3 flex-1 bg-ink/50 border-t border-white/5 flex flex-col" onClick={(e) => e.stopPropagation()}>
+                                  <div className="flex items-center justify-between mb-2">
+                                    <span className="text-[10px] text-chalkMuted uppercase tracking-widest font-bold">Voters List</span>
+                                  </div>
+                                  {jersey.votes && jersey.votes.length > 0 ? (
+                                    <div className="space-y-1.5 max-h-[120px] overflow-y-auto pr-1 custom-scrollbar">
+                                      {jersey.votes.map((vote: any) => (
+                                        <div key={vote.playerId} className="flex justify-between items-center text-xs border-b border-white/5 pb-1 last:border-0 last:pb-0">
+                                          <span className="text-chalk font-medium truncate pr-2" title={vote.player?.name}>{vote.player?.name || 'Unknown'}</span>
+                                          <span className="text-emerald-400/70 font-mono text-[9px] whitespace-nowrap">{vote.player?.studentId}</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  ) : (
+                                    <div className="text-[10px] text-chalkMuted italic py-2 text-center">No votes yet</div>
+                                  )}
                                 </div>
                               </div>
                             ))}
