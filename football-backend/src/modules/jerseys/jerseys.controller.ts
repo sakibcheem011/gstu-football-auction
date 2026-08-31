@@ -18,6 +18,11 @@ export const uploadJersey = async (req: Request, res: Response): Promise<any> =>
     const playerRecord = await prisma.player.findUnique({ where: { email: dbUser.email } });
     if (!playerRecord) return res.status(404).json({ error: 'Player record not found' });
 
+    const existingJerseysCount = await prisma.jerseyDesign.count({ where: { playerId: playerRecord.id } });
+    if (existingJerseysCount >= 3) {
+      return res.status(400).json({ error: 'You can only upload a maximum of 3 jersey designs.' });
+    }
+
     const uploadResult = await uploadFromBuffer(req.file.buffer, 'gstu_liga_jerseys');
     
     const jersey = await prisma.jerseyDesign.create({

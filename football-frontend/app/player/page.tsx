@@ -295,46 +295,53 @@ export default function PlayerDashboard() {
                 ))}
               </div>
               
-              <div className="relative z-10">
-                <input 
-                  type="file" 
-                  accept="image/*"
-                  id="jersey-upload"
-                  className="hidden"
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) return;
-                    
-                    const formData = new FormData();
-                    formData.append('image', file);
-                    
-                    const tId = toast.loading('Uploading jersey design...');
-                    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys`, {
-                      method: 'POST',
-                      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-                      body: formData
-                    });
-                    
-                    toast.dismiss(tId);
-                    if (res.ok) {
-                      const newJersey = await res.json();
-                      toast.success('Jersey uploaded!');
-                      setUser({
-                        ...user,
-                        playerRecord: {
-                          ...p,
-                          jerseyDesigns: [newJersey, ...(p.jerseyDesigns || [])]
-                        }
+              {(p.jerseyDesigns?.length || 0) >= 3 ? (
+                <div className="relative z-10 w-full py-4 border border-white/5 bg-ink/50 rounded-xl flex flex-col items-center justify-center text-chalkMuted">
+                  <span className="font-bold uppercase tracking-widest text-xs">Maximum 3 designs allowed</span>
+                </div>
+              ) : (
+                <div className="relative z-10">
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    id="jersey-upload"
+                    className="hidden"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      
+                      const formData = new FormData();
+                      formData.append('image', file);
+                      
+                      const tId = toast.loading('Uploading jersey design...');
+                      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys`, {
+                        method: 'POST',
+                        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+                        body: formData
                       });
-                    } else {
-                      toast.error('Upload failed');
-                    }
-                  }}
-                />
-                <label htmlFor="jersey-upload" className="w-full py-4 border-2 border-dashed border-emerald-500/30 rounded-xl flex flex-col items-center justify-center text-emerald-400/70 hover:text-emerald-400 hover:border-emerald-500/60 hover:bg-emerald-500/5 cursor-pointer transition-all">
-                  <span className="font-bold uppercase tracking-widest text-xs">+ Upload New Jersey Design</span>
-                </label>
-              </div>
+                      
+                      toast.dismiss(tId);
+                      if (res.ok) {
+                        const newJersey = await res.json();
+                        toast.success('Jersey uploaded!');
+                        setUser({
+                          ...user,
+                          playerRecord: {
+                            ...p,
+                            jerseyDesigns: [newJersey, ...(p.jerseyDesigns || [])]
+                          }
+                        });
+                      } else {
+                        const errData = await res.json().catch(() => ({}));
+                        toast.error(errData.error || 'Upload failed');
+                      }
+                    }}
+                  />
+                  <label htmlFor="jersey-upload" className="w-full py-4 border-2 border-dashed border-emerald-500/30 rounded-xl flex flex-col items-center justify-center text-emerald-400/70 hover:text-emerald-400 hover:border-emerald-500/60 hover:bg-emerald-500/5 cursor-pointer transition-all">
+                    <span className="font-bold uppercase tracking-widest text-xs">+ Upload New Jersey Design</span>
+                  </label>
+                </div>
+              )}
             </div>
 
           </div>
