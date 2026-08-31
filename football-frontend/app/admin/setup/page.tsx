@@ -18,6 +18,7 @@ function SetupContent() {
   const [token, setToken] = useState<string | null>(null);
   const [activeTab, setActiveTabState] = useState('config');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [votersModal, setVotersModal] = useState<{ isOpen: boolean; votes: any[] }>({ isOpen: false, votes: [] });
 
   useEffect(() => {
     if (urlTab) {
@@ -1504,15 +1505,24 @@ function SetupContent() {
                           
                           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                             {group.jerseys.sort((a: any, b: any) => (b._count?.votes || 0) - (a._count?.votes || 0)).map((jersey: any) => (
-                              <div key={jersey.id} className="bg-panel border border-white/5 rounded-xl overflow-hidden shadow-lg flex flex-col group cursor-pointer" onClick={() => setSelectedImage(jersey.imageUrl)}>
-                                <div className="relative aspect-[3/4] shrink-0">
-                                  <img src={jersey.imageUrl} alt="Jersey" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
-                                  
-                                  <div className="absolute top-2 left-2 bg-ink/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-white font-bold text-xs flex items-center gap-1.5 z-20">
-                                    <span className="text-[10px] text-chalkMuted uppercase tracking-widest">Votes</span>
-                                    <span className="text-emerald-400">{jersey._count?.votes || 0}</span>
-                                  </div>
-                                  <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-transparent flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity z-10" onClick={(e) => e.stopPropagation()}>
+                              <div key={jersey.id} className="bg-panel border border-white/5 rounded-xl overflow-hidden shadow-lg group relative aspect-[3/4] cursor-pointer" onClick={() => setSelectedImage(jersey.imageUrl)}>
+                                <img src={jersey.imageUrl} alt="Jersey" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                                
+                                <div className="absolute top-2 left-2 bg-ink/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-white font-bold text-xs flex items-center gap-1.5 z-20">
+                                  <span className="text-[10px] text-chalkMuted uppercase tracking-widest">Votes</span>
+                                  <span className="text-emerald-400">{jersey._count?.votes || 0}</span>
+                                </div>
+                                
+                                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-transparent flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity z-10" onClick={(e) => e.stopPropagation()}>
+                                  <div className="flex gap-2 w-full">
+                                    {jersey.votes && (
+                                      <button
+                                        onClick={() => setVotersModal({ isOpen: true, votes: jersey.votes })}
+                                        className="flex-1 py-2 bg-emerald-500/80 hover:bg-emerald-500 text-white rounded-lg text-xs font-bold uppercase tracking-widest transition-colors backdrop-blur-md flex items-center justify-center gap-1.5"
+                                      >
+                                        <Users className="w-3.5 h-3.5" /> List
+                                      </button>
+                                    )}
                                     <button 
                                       onClick={() => {
                                         setConfirmDialog({
@@ -1531,29 +1541,11 @@ function SetupContent() {
                                           }
                                         });
                                       }}
-                                      className="w-full py-2 bg-red-500/80 hover:bg-red-500 text-white rounded-lg text-xs font-bold uppercase tracking-widest transition-colors backdrop-blur-md"
+                                      className="flex-1 py-2 bg-red-500/80 hover:bg-red-500 text-white rounded-lg text-xs font-bold uppercase tracking-widest transition-colors backdrop-blur-md"
                                     >
                                       Delete
                                     </button>
                                   </div>
-                                </div>
-                                
-                                <div className="p-3 flex-1 bg-ink/50 border-t border-white/5 flex flex-col" onClick={(e) => e.stopPropagation()}>
-                                  <div className="flex items-center justify-between mb-2">
-                                    <span className="text-[10px] text-chalkMuted uppercase tracking-widest font-bold">Voters List</span>
-                                  </div>
-                                  {jersey.votes && jersey.votes.length > 0 ? (
-                                    <div className="space-y-1.5 max-h-[120px] overflow-y-auto pr-1 custom-scrollbar">
-                                      {jersey.votes.map((vote: any) => (
-                                        <div key={vote.playerId} className="flex justify-between items-center text-xs border-b border-white/5 pb-1 last:border-0 last:pb-0">
-                                          <span className="text-chalk font-medium truncate pr-2" title={vote.player?.name}>{vote.player?.name || 'Unknown'}</span>
-                                          <span className="text-emerald-400/70 font-mono text-[9px] whitespace-nowrap">{vote.player?.studentId}</span>
-                                        </div>
-                                      ))}
-                                    </div>
-                                  ) : (
-                                    <div className="text-[10px] text-chalkMuted italic py-2 text-center">No votes yet</div>
-                                  )}
                                 </div>
                               </div>
                             ))}
@@ -1712,6 +1704,60 @@ function SetupContent() {
               className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl cursor-default"
               onClick={(e) => e.stopPropagation()}
             />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {votersModal.isOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setVotersModal({ isOpen: false, votes: [] })}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-ink border border-white/10 rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden flex flex-col"
+            >
+              <div className="flex justify-between items-center p-4 border-b border-white/10 bg-white/5">
+                <h3 className="text-white font-bold uppercase tracking-widest flex items-center gap-2">
+                  <Users className="w-5 h-5 text-emerald-400" />
+                  Voters List
+                </h3>
+                <button
+                  onClick={() => setVotersModal({ isOpen: false, votes: [] })}
+                  className="p-1.5 bg-white/5 hover:bg-white/10 rounded-full text-chalk transition-colors"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+              <div className="p-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                {votersModal.votes.length > 0 ? (
+                  <div className="space-y-2">
+                    {votersModal.votes.map((vote: any) => (
+                      <div key={vote.playerId} className="flex justify-between items-center bg-white/5 border border-white/5 rounded-xl p-3">
+                        <div>
+                          <p className="text-white font-medium text-sm truncate">{vote.player?.name || 'Unknown'}</p>
+                          <p className="text-chalkMuted text-xs">{vote.player?.sessionId || 'Unknown Session'}</p>
+                        </div>
+                        <span className="text-emerald-400 font-mono text-xs font-bold uppercase bg-emerald-400/10 px-2 py-1 rounded">
+                          {vote.player?.studentId || 'ID'}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-chalkMuted text-sm italic">No votes have been cast for this jersey yet.</p>
+                  </div>
+                )}
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
