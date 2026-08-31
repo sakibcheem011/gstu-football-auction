@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import prisma from '../../lib/prisma';
 import { uploadFromBuffer, deleteFromCloudinary } from '../../lib/cloudinary';
+import jwt from 'jsonwebtoken';
 
 export const uploadJersey = async (req: Request, res: Response): Promise<any> => {
   try {
@@ -42,6 +43,25 @@ export const uploadJersey = async (req: Request, res: Response): Promise<any> =>
 
 export const getJerseys = async (req: Request, res: Response): Promise<any> => {
   try {
+    const config = await prisma.systemConfig.findUnique({ where: { id: 'singleton' } });
+    
+    // Check auth to see if user is SUPER_ADMIN
+    let isAdmin = false;
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.substring(7);
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret') as any;
+        if (decoded.role === 'SUPER_ADMIN') isAdmin = true;
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    if (!config?.jerseyVotingOpen && !isAdmin) {
+      return res.status(403).json({ error: 'Voting and showcase are currently closed by the Admin.' });
+    }
+
     const jerseys = await prisma.jerseyDesign.findMany({
       include: {
         player: {
@@ -113,6 +133,11 @@ export const toggleVote = async (req: Request, res: Response): Promise<any> => {
     const user = (req as any).user;
     if (user.role !== 'PLAYER') {
       return res.status(403).json({ error: 'Only players can vote' });
+    }
+
+    const config = await prisma.systemConfig.findUnique({ where: { id: 'singleton' } });
+    if (!config?.jerseyVotingOpen) {
+      return res.status(403).json({ error: 'Voting is currently closed by the Admin.' });
     }
 
     const dbUser = await prisma.user.findUnique({ where: { id: user.id as string } });

@@ -11,6 +11,7 @@ export default function JerseyShowcase() {
   const [playerId, setPlayerId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [votingClosed, setVotingClosed] = useState(false);
 
   useEffect(() => {
     const userStr = localStorage.getItem('user');
@@ -23,10 +24,24 @@ export default function JerseyShowcase() {
       }
     }
 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys`)
-      .then(res => res.json())
+    const token = localStorage.getItem('token');
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+      .then(async res => {
+        if (res.status === 403) {
+          const data = await res.json();
+          return { error: data.error, closed: true };
+        }
+        return res.json();
+      })
       .then(data => {
-        setJerseys(data);
+        if (data.closed) {
+          setJerseys([]);
+          setVotingClosed(true);
+        } else {
+          setJerseys(data);
+        }
         setLoading(false);
       })
       .catch(err => {
@@ -82,6 +97,12 @@ export default function JerseyShowcase() {
       {loading ? (
         <div className="flex justify-center items-center py-20">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
+        </div>
+      ) : votingClosed ? (
+        <div className="text-center py-20 border-2 border-dashed border-white/10 rounded-2xl bg-panel">
+          <Shirt className="text-chalkMuted mx-auto mb-4" size={48} opacity={0.5} />
+          <h3 className="text-xl font-bold text-white uppercase tracking-widest mb-2">Showcase Closed</h3>
+          <p className="text-chalkMuted">Jersey showcase and voting are currently closed by the Admin.</p>
         </div>
       ) : jerseys.length === 0 ? (
         <div className="text-center py-20 text-chalkMuted border-2 border-dashed border-white/10 rounded-2xl">

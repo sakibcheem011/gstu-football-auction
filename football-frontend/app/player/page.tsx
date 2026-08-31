@@ -413,12 +413,27 @@ function JerseyVotingPanel({ playerId }: { playerId: string }) {
   const [jerseys, setJerseys] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [votingClosed, setVotingClosed] = useState(false);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys`)
-      .then(res => res.json())
+    const token = localStorage.getItem('token');
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/jerseys`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {}
+    })
+      .then(async res => {
+        if (res.status === 403) {
+          const data = await res.json();
+          return { error: data.error, closed: true };
+        }
+        return res.json();
+      })
       .then(data => {
-        setJerseys(data);
+        if (data.closed) {
+          setJerseys([]);
+          setVotingClosed(true);
+        } else {
+          setJerseys(data);
+        }
         setLoading(false);
       })
       .catch(err => {
@@ -461,6 +476,12 @@ function JerseyVotingPanel({ playerId }: { playerId: string }) {
   };
 
   if (loading) return <div className="py-12 text-center text-emerald-400 animate-pulse">Loading jerseys...</div>;
+  if (votingClosed) return (
+    <div className="text-center py-12 border-2 border-dashed border-white/10 rounded-2xl bg-black/20">
+      <h3 className="text-xl font-bold text-white uppercase tracking-widest mb-2">Voting is Closed</h3>
+      <p className="text-chalkMuted">The Admin has currently closed the jersey showcase and voting.</p>
+    </div>
+  );
   if (jerseys.length === 0) return <div className="py-12 text-center text-chalkMuted">No jerseys have been submitted yet.</div>;
 
   return (

@@ -26,7 +26,7 @@ export const getConfig = async (req: Request, res: Response): Promise<any> => {
 
 export const updateConfig = async (req: Request, res: Response): Promise<any> => {
   try {
-    const { currentPhase, totalBudget, minRosterSize, playerBasePrice } = req.body;
+    const { currentPhase, totalBudget, minRosterSize, playerBasePrice, jerseyVotingOpen } = req.body;
     
     // Validate role (must be SUPER_ADMIN)
     if ((req as any).user?.role !== 'SUPER_ADMIN') {
@@ -39,14 +39,16 @@ export const updateConfig = async (req: Request, res: Response): Promise<any> =>
         ...(currentPhase && { currentPhase }),
         ...(totalBudget !== undefined && { totalBudget }),
         ...(minRosterSize !== undefined && { minRosterSize }),
-        ...(playerBasePrice !== undefined && { playerBasePrice })
+        ...(playerBasePrice !== undefined && { playerBasePrice }),
+        ...(jerseyVotingOpen !== undefined && { jerseyVotingOpen })
       },
       create: {
         id: 'singleton',
         currentPhase: currentPhase || Phase.SETUP,
         totalBudget: totalBudget !== undefined ? totalBudget : 1500000,
         minRosterSize: minRosterSize !== undefined ? minRosterSize : 15,
-        playerBasePrice: playerBasePrice !== undefined ? playerBasePrice : 5000
+        playerBasePrice: playerBasePrice !== undefined ? playerBasePrice : 5000,
+        jerseyVotingOpen: jerseyVotingOpen !== undefined ? jerseyVotingOpen : false
       }
     });
 

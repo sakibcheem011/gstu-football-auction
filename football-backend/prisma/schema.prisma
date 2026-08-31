@@ -29,6 +29,8 @@ model SystemConfig {
   timerLocked      Boolean      @default(false)
   draftOrder       String[]
   currentDraftTurn Int          @default(0)
+  playerBasePrice  Int          @default(5000)
+  jerseyVotingOpen Boolean      @default(false)
 }
 
 model Session {

@@ -1425,6 +1425,28 @@ function SetupContent() {
                     </h3>
                     <p className="text-chalkMuted text-sm mt-1">Manage jerseys uploaded by players</p>
                   </div>
+                  <button
+                    onClick={async () => {
+                      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/config`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                        body: JSON.stringify({ jerseyVotingOpen: !config?.jerseyVotingOpen })
+                      });
+                      if (res.ok) {
+                        const newConfig = await res.json();
+                        setConfig(newConfig);
+                        toast.success(`Jersey voting ${newConfig.jerseyVotingOpen ? 'opened' : 'closed'}`);
+                      }
+                    }}
+                    className={`px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-widest transition-colors flex items-center gap-2 border ${
+                      config?.jerseyVotingOpen 
+                        ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/50 hover:bg-emerald-500/30' 
+                        : 'bg-red-500/20 text-red-400 border-red-500/50 hover:bg-red-500/30'
+                    }`}
+                  >
+                    <div className={`w-2 h-2 rounded-full ${config?.jerseyVotingOpen ? 'bg-emerald-400 shadow-[0_0_8px_#34d399]' : 'bg-red-400 shadow-[0_0_8px_#f87171]'}`} />
+                    {config?.jerseyVotingOpen ? 'Voting Open' : 'Voting Closed'}
+                  </button>
                 </div>
 
                 <div className="space-y-12">
