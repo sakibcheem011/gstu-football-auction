@@ -49,11 +49,29 @@ export const getJerseys = async (req: Request, res: Response): Promise<any> => {
             name: true,
             studentId: true,
             sessionId: true,
-            jerseyName: true
+            jerseyName: true,
+            team: {
+              select: {
+                name: true
+              }
+            }
+          }
+        },
+        votes: {
+          select: {
+            playerId: true
+          }
+        },
+        _count: {
+          select: {
+            votes: true
           }
         }
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: [
+        { votes: { _count: 'desc' } },
+        { createdAt: 'desc' }
+      ]
     });
     return res.json(jerseys);
   } catch (error) {
@@ -86,6 +104,51 @@ export const deleteJersey = async (req: Request, res: Response): Promise<any> =>
     return res.json({ success: true });
   } catch (error) {
     console.error('Delete jersey error:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+export const toggleVote = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const user = (req as any).user;
+    if (user.role !== 'PLAYER') {
+      return res.status(403).json({ error: 'Only players can vote' });
+    }
+
+    const dbUser = await prisma.user.findUnique({ where: { id: user.id as string } });
+    if (!dbUser) return res.status(404).json({ error: 'User not found' });
+    const playerRecord = await prisma.player.findUnique({ where: { email: dbUser.email } });
+    if (!playerRecord) return res.status(404).json({ error: 'Player record not found' });
+
+    const { id: jerseyDesignId } = req.params;
+
+    const existingVote = await prisma.jerseyVote.findUnique({
+      where: {
+        playerId_jerseyDesignId: {
+          playerId: playerRecord.id,
+          jerseyDesignId: jerseyDesignId as string
+        }
+      }
+    });
+
+    if (existingVote) {
+      await prisma.jerseyVote.delete({ where: { id: existingVote.id } });
+      return res.json({ message: 'Vote removed' });
+    } else {
+      const currentVotes = await prisma.jerseyVote.count({ where: { playerId: playerRecord.id } });
+      if (currentVotes >= 5) {
+        return res.status(400).json({ error: 'You can only vote for up to 5 jerseys' });
+      }
+      await prisma.jerseyVote.create({
+        data: {
+          playerId: playerRecord.id,
+          jerseyDesignId: jerseyDesignId as string
+        }
+      });
+      return res.json({ message: 'Vote added' });
+    }
+  } catch (error: any) {
+    console.error('Toggle vote error:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 };

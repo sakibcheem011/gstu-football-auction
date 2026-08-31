@@ -82,15 +82,29 @@ model Player {
   positions         PlayerPosition[]
   wishlistedByTeams Team[]           @relation("TeamWishlist")
   jerseyDesigns     JerseyDesign[]
+  jerseyVotes       JerseyVote[]
 }
 
 model JerseyDesign {
-  id            String   @id @default(cuid())
+  id            String       @id @default(cuid())
   playerId      String
   imageUrl      String
   imagePublicId String
-  createdAt     DateTime @default(now())
-  player        Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  createdAt     DateTime     @default(now())
+  player        Player       @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  votes         JerseyVote[]
+}
+
+model JerseyVote {
+  id             String       @id @default(cuid())
+  playerId       String
+  jerseyDesignId String
+  createdAt      DateTime     @default(now())
+
+  player         Player       @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  jerseyDesign   JerseyDesign @relation(fields: [jerseyDesignId], references: [id], onDelete: Cascade)
+
+  @@unique([playerId, jerseyDesignId])
 }
 
 model PlayerPosition {

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { Settings, Shield, Users, CheckCircle, ArrowLeft, BadgeCheck, Activity, DollarSign, Plus, UserPlus, Database, Trash2, Edit2, X, Image as ImageIcon, ListOrdered, User, Shirt } from 'lucide-react';
+import { Settings, Shield, Users, CheckCircle, ArrowLeft, BadgeCheck, Activity, DollarSign, Plus, UserPlus, Database, Trash2, Edit2, X, Image as ImageIcon, ListOrdered, User, Shirt, Heart } from 'lucide-react';
 import { io } from 'socket.io-client';
 import PlayerDirectory from '../../../components/PlayerDirectory';
 import Dropdown from '../../../components/Dropdown';
@@ -1434,11 +1434,19 @@ function SetupContent() {
                       <div key={jersey.id} className="bg-panel border border-white/5 rounded-xl overflow-hidden shadow-lg group relative aspect-[3/4]">
                         <img src={jersey.imageUrl} alt="Jersey" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                         
-                        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="absolute top-2 left-2 bg-ink/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-white font-bold text-xs flex items-center gap-1 z-20">
+                          <Heart size={14} className="text-emerald-400 fill-emerald-400" /> {jersey._count?.votes || 0}
+                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-transparent flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                           {jersey.player && (
                             <>
                               <div className="text-white font-bold text-xs truncate uppercase">{jersey.player.name}</div>
                               <div className="text-emerald-400 text-[10px] font-mono mt-0.5">{jersey.player.studentId} • {jersey.player.sessionId}</div>
+                              {jersey.player.team && (
+                                <div className="text-cyan-400 text-[10px] font-bold uppercase mt-1 truncate">
+                                  {jersey.player.team.name}
+                                </div>
+                              )}
                             </>
                           )}
                           <button 
