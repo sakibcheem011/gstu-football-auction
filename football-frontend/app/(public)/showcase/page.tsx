@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Shirt, Heart } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Shirt, Heart, X } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
 export default function JerseyShowcase() {
@@ -10,6 +10,7 @@ export default function JerseyShowcase() {
   const [isPlayer, setIsPlayer] = useState(false);
   const [playerId, setPlayerId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     const userStr = localStorage.getItem('user');
@@ -96,9 +97,9 @@ export default function JerseyShowcase() {
               key={jersey.id} 
               className="bg-panel border border-white/5 rounded-2xl overflow-hidden shadow-xl group hover:border-emerald-500/30 transition-all flex flex-col relative"
             >
-              <div className="aspect-[3/4] w-full overflow-hidden bg-ink relative">
+              <div className="aspect-[3/4] w-full overflow-hidden bg-ink relative cursor-pointer" onClick={() => setSelectedImage(jersey.imageUrl)}>
                 <img src={jersey.imageUrl} alt="Jersey Design" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-col justify-end">
+                <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-col justify-end" onClick={(e) => e.stopPropagation()}>
                   <div className="flex justify-between items-end opacity-90 group-hover:opacity-100 transition-opacity">
                     <div>
                       <div className="text-white/60 font-bold uppercase tracking-widest text-[10px] mb-0.5">Total Votes</div>
@@ -139,6 +140,34 @@ export default function JerseyShowcase() {
           ))}
         </div>
       )}
+
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm cursor-pointer"
+          >
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
+            >
+              <X size={24} />
+            </button>
+            <motion.img
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              src={selectedImage}
+              alt="Fullscreen Jersey"
+              className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl cursor-default"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

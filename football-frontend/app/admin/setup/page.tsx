@@ -17,6 +17,7 @@ function SetupContent() {
 
   const [token, setToken] = useState<string | null>(null);
   const [activeTab, setActiveTabState] = useState('config');
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     if (urlTab) {
@@ -1471,14 +1472,14 @@ function SetupContent() {
                           
                           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                             {group.jerseys.sort((a: any, b: any) => (b._count?.votes || 0) - (a._count?.votes || 0)).map((jersey: any) => (
-                              <div key={jersey.id} className="bg-panel border border-white/5 rounded-xl overflow-hidden shadow-lg group relative aspect-[3/4]">
+                              <div key={jersey.id} className="bg-panel border border-white/5 rounded-xl overflow-hidden shadow-lg group relative aspect-[3/4] cursor-pointer" onClick={() => setSelectedImage(jersey.imageUrl)}>
                                 <img src={jersey.imageUrl} alt="Jersey" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                                 
                                 <div className="absolute top-2 left-2 bg-ink/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-white font-bold text-xs flex items-center gap-1.5 z-20">
                                   <span className="text-[10px] text-chalkMuted uppercase tracking-widest">Votes</span>
                                   <span className="text-emerald-400">{jersey._count?.votes || 0}</span>
                                 </div>
-                                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-transparent flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-transparent flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity z-10" onClick={(e) => e.stopPropagation()}>
                                   <button 
                                     onClick={() => {
                                       setConfirmDialog({
@@ -1632,6 +1633,34 @@ function SetupContent() {
               </form>
             </motion.div>
           </div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm cursor-pointer"
+          >
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-6 right-6 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
+            >
+              <X size={24} />
+            </button>
+            <motion.img
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              src={selectedImage}
+              alt="Fullscreen Jersey"
+              className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl cursor-default"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
