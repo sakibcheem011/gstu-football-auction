@@ -472,17 +472,27 @@ function JerseyVotingPanel({ playerId }: { playerId: string }) {
           key={jersey.id} 
           className="bg-ink border border-white/5 rounded-xl overflow-hidden shadow-xl group hover:border-emerald-500/30 transition-all flex flex-col relative"
         >
-          <div className="absolute top-2 right-2 z-10">
-            <button 
-              onClick={() => toggleVote(jersey.id)}
-              className="bg-panel/80 backdrop-blur-md hover:bg-panel px-3 py-1.5 rounded-full border border-white/10 text-white font-bold text-xs flex items-center gap-1 transition-colors shadow-lg"
-            >
-              <Heart size={14} className={jersey.votes?.some((v: any) => v.playerId === playerId) ? "text-emerald-400 fill-emerald-400" : "text-chalkMuted"} />
-              {jersey._count?.votes || 0}
-            </button>
-          </div>
           <div className="aspect-[3/4] w-full overflow-hidden bg-black/50 relative">
             <img src={jersey.imageUrl} alt="Jersey Design" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+            
+            <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-col justify-end">
+              <div className="flex justify-between items-end opacity-90 group-hover:opacity-100 transition-opacity">
+                <div>
+                  <div className="text-white/60 font-bold uppercase tracking-widest text-[10px] mb-0.5">Total Votes</div>
+                  <div className="text-white font-display text-2xl leading-none">{jersey._count?.votes || 0}</div>
+                </div>
+                <button 
+                  onClick={() => toggleVote(jersey.id)}
+                  className={`px-4 py-2 rounded-lg font-bold uppercase tracking-widest text-xs transition-all ${
+                    jersey.votes?.some((v: any) => v.playerId === playerId) 
+                      ? 'bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]' 
+                      : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-md'
+                  }`}
+                >
+                  {jersey.votes?.some((v: any) => v.playerId === playerId) ? '✓ Voted' : 'Vote'}
+                </button>
+              </div>
+            </div>
           </div>
         </motion.div>
       ))}

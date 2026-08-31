@@ -1434,8 +1434,9 @@ function SetupContent() {
                       <div key={jersey.id} className="bg-panel border border-white/5 rounded-xl overflow-hidden shadow-lg group relative aspect-[3/4]">
                         <img src={jersey.imageUrl} alt="Jersey" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                         
-                        <div className="absolute top-2 left-2 bg-ink/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-white font-bold text-xs flex items-center gap-1 z-20">
-                          <Heart size={14} className="text-emerald-400 fill-emerald-400" /> {jersey._count?.votes || 0}
+                        <div className="absolute top-2 left-2 bg-ink/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-white font-bold text-xs flex items-center gap-1.5 z-20">
+                          <span className="text-[10px] text-chalkMuted uppercase tracking-widest">Votes</span>
+                          <span className="text-emerald-400">{jersey._count?.votes || 0}</span>
                         </div>
                         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-transparent flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                           {jersey.player && (

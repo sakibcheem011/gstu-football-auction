@@ -98,22 +98,35 @@ export default function JerseyShowcase() {
             >
               <div className="absolute top-2 right-2 z-10 flex gap-2">
                 {isAdmin && (
-                  <div className="bg-ink/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-white font-bold text-xs flex items-center gap-1">
-                    <Heart size={14} className="text-emerald-400 fill-emerald-400" /> {jersey._count?.votes || 0}
+                  <div className="bg-ink/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10 text-white font-bold text-xs flex items-center gap-1.5">
+                    <span className="text-[10px] text-chalkMuted uppercase tracking-widest">Votes</span>
+                    <span className="text-emerald-400">{jersey._count?.votes || 0}</span>
                   </div>
-                )}
-                {isPlayer && (
-                  <button 
-                    onClick={() => toggleVote(jersey.id)}
-                    className="bg-ink/80 backdrop-blur-md hover:bg-ink px-3 py-1.5 rounded-full border border-white/10 text-white font-bold text-xs flex items-center gap-1 transition-colors"
-                  >
-                    <Heart size={14} className={jersey.votes?.some((v: any) => v.playerId === playerId) ? "text-emerald-400 fill-emerald-400" : "text-chalkMuted"} />
-                    {jersey._count?.votes || 0}
-                  </button>
                 )}
               </div>
               <div className="aspect-[3/4] w-full overflow-hidden bg-ink relative">
                 <img src={jersey.imageUrl} alt="Jersey Design" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                
+                {isPlayer && (
+                  <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/90 via-black/50 to-transparent flex flex-col justify-end">
+                    <div className="flex justify-between items-end opacity-90 group-hover:opacity-100 transition-opacity">
+                      <div>
+                        <div className="text-white/60 font-bold uppercase tracking-widest text-[10px] mb-0.5">Total Votes</div>
+                        <div className="text-white font-display text-2xl leading-none">{jersey._count?.votes || 0}</div>
+                      </div>
+                      <button 
+                        onClick={() => toggleVote(jersey.id)}
+                        className={`px-4 py-2 rounded-lg font-bold uppercase tracking-widest text-xs transition-all ${
+                          jersey.votes?.some((v: any) => v.playerId === playerId) 
+                            ? 'bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]' 
+                            : 'bg-white/10 text-white hover:bg-white/20 backdrop-blur-md'
+                        }`}
+                      >
+                        {jersey.votes?.some((v: any) => v.playerId === playerId) ? '✓ Voted' : 'Vote'}
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
               {isAdmin && jersey.player && (
                 <div className="p-4 bg-ink border-t border-white/5">
