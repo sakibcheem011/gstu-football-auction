@@ -104,22 +104,23 @@ export default function FranchisesPage() {
 
       <AnimatePresence>
         {selectedTeam && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedTeam(null)}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md"
-          >
+          <>
             <motion.div
-              initial={{ scale: 0.95, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              onClick={(e) => e.stopPropagation()}
-              className="bg-panel border border-white/10 rounded-3xl w-full max-w-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] relative"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedTeam(null)}
+              className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ x: '100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed inset-y-0 right-0 z-[101] w-full max-w-md bg-ink border-l border-white/5 shadow-2xl flex flex-col"
             >
               {/* Header */}
-              <div className="relative p-8 border-b border-white/5 overflow-hidden shrink-0">
+              <div className="relative p-8 border-b border-white/5 overflow-hidden shrink-0 bg-panel">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent pointer-events-none" />
                 <button
                   onClick={() => setSelectedTeam(null)}
@@ -128,17 +129,17 @@ export default function FranchisesPage() {
                   <X size={20} />
                 </button>
                 
-                <div className="flex items-center gap-5 relative z-10">
-                  <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-emerald-400 overflow-hidden shrink-0 shadow-lg">
+                <div className="flex flex-col gap-4 relative z-10 pt-4">
+                  <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-emerald-400 overflow-hidden shadow-lg mx-auto">
                     {selectedTeam.logoUrl ? (
                       <img src={selectedTeam.logoUrl} alt={selectedTeam.name} className="w-full h-full object-cover" />
                     ) : (
-                      <ShieldCheck size={32} />
+                      <ShieldCheck size={40} />
                     )}
                   </div>
-                  <div>
-                    <h3 className="text-white font-display text-2xl md:text-3xl font-bold tracking-wider mb-1">{selectedTeam.name}</h3>
-                    <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-emerald-400/80">
+                  <div className="text-center">
+                    <h3 className="text-white font-display text-2xl font-bold tracking-wider mb-2">{selectedTeam.name}</h3>
+                    <div className="flex items-center justify-center gap-3 text-[10px] font-bold uppercase tracking-widest text-emerald-400/80">
                       <span><Users size={12} className="inline mr-1" /> {selectedTeam.players?.length || 0} Players</span>
                       {selectedTeam.manager && (
                         <>
@@ -152,38 +153,50 @@ export default function FranchisesPage() {
               </div>
               
               {/* Roster List */}
-              <div className="p-4 sm:p-8 overflow-y-auto custom-scrollbar flex-1 bg-ink/30">
+              <div className="p-6 overflow-y-auto custom-scrollbar flex-1 bg-ink/50 relative">
+                <div className="absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-ink/50 to-transparent pointer-events-none" />
+                
                 {!selectedTeam.players || selectedTeam.players.length === 0 ? (
-                  <div className="text-center py-16">
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="text-center py-20"
+                  >
                     <Users size={48} className="mx-auto mb-4 opacity-20 text-chalkMuted" />
-                    <p className="text-chalkMuted text-base italic">No players in this roster yet.</p>
-                  </div>
+                    <p className="text-chalkMuted text-sm italic">No players in this roster yet.</p>
+                  </motion.div>
                 ) : (
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-3 pb-8">
                     {selectedTeam.players.map((player: any, index: number) => (
-                      <div key={player.id} className="bg-panel border border-white/5 hover:border-emerald-500/20 hover:bg-white/5 transition-colors rounded-2xl p-4 flex items-center gap-4 group">
-                        <div className="w-8 h-8 rounded-full bg-white/5 text-chalkMuted flex items-center justify-center font-bold text-xs shrink-0">
+                      <motion.div 
+                        key={player.id} 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                        className="bg-white/5 border border-white/5 hover:border-emerald-500/20 hover:bg-white/10 transition-colors rounded-2xl p-4 flex items-center gap-4 group cursor-default"
+                      >
+                        <div className="w-8 h-8 rounded-full bg-black/30 text-chalkMuted flex items-center justify-center font-bold text-xs shrink-0 group-hover:text-emerald-400 group-hover:bg-emerald-500/10 transition-colors">
                           {index + 1}
                         </div>
                         <img 
                           src={player.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(player.name)}&background=random`} 
                           alt={player.name}
-                          className="w-12 h-12 rounded-full object-cover bg-white/10 shrink-0 shadow-md" 
+                          className="w-12 h-12 rounded-full object-cover bg-white/10 shrink-0 shadow-md ring-2 ring-white/5 group-hover:ring-emerald-500/30 transition-all" 
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="text-white font-bold text-base truncate group-hover:text-emerald-400 transition-colors">{player.name}</p>
-                          <div className="flex items-center gap-2 mt-1">
-                            <span className="text-emerald-400/70 font-mono text-[10px] bg-emerald-400/10 px-2 py-0.5 rounded font-bold uppercase tracking-wider">{player.studentId}</span>
-                            <span className="text-chalkMuted font-mono text-[10px] uppercase tracking-wider bg-white/5 px-2 py-0.5 rounded">{player.sessionId}</span>
+                          <p className="text-white font-bold text-sm truncate group-hover:text-emerald-400 transition-colors">{player.name}</p>
+                          <div className="flex items-center gap-2 mt-1.5">
+                            <span className="text-emerald-400/80 font-mono text-[9px] bg-emerald-400/10 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">{player.studentId}</span>
+                            <span className="text-chalkMuted font-mono text-[9px] uppercase tracking-wider bg-black/30 px-1.5 py-0.5 rounded">{player.sessionId}</span>
                           </div>
                         </div>
-                      </div>
+                      </motion.div>
                     ))}
                   </div>
                 )}
               </div>
             </motion.div>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
     </div>
