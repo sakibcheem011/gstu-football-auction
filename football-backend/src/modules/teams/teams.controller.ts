@@ -49,7 +49,11 @@ export const getTeams = async (req: Request, res: Response): Promise<any> => {
   try {
     const teams = await prisma.team.findMany({
       include: {
-        players: true,
+        players: {
+          include: {
+            positions: true
+          }
+        },
         manager: {
           select: { id: true, name: true, email: true, phone: true }
         }
