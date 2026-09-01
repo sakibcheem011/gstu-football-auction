@@ -110,45 +110,8 @@ export const updatePhase = async (req: Request, res: Response): Promise<any> => 
       }
     });
 
-    // Check if we need to reset the auction
-    if (oldConfig && oldConfig.currentPhase === Phase.AUCTION && (phase === Phase.SETUP || phase === Phase.REGISTRATION)) {
-      // 1. Restore team budgets
-      const soldPlayers = await prisma.player.findMany({
-        where: { status: 'SOLD', teamId: { not: null }, soldPrice: { not: null } }
-      });
-      
-      for (const player of soldPlayers) {
-        if (player.teamId && player.soldPrice) {
-          await prisma.team.update({
-            where: { id: player.teamId },
-            data: { remainingBudget: { increment: player.soldPrice } }
-          });
-        }
-      }
-
-      // 2. Reset players
-      await prisma.player.updateMany({
-        data: {
-          status: 'UNSOLD',
-          teamId: null,
-          soldPrice: null
-        }
-      });
-
-      // 3. Clear ledger
-      await prisma.auctionLedgerEntry.deleteMany({});
-      
-      // 4. Clear memory state (import auctionState from '../auction/auctionState')
-      try {
-        const { auctionState } = require('../auction/auctionState');
-        if (auctionState) {
-          auctionState.clearAuction();
-          ioInstance.emit('auction_state_sync', auctionState.getState());
-        }
-      } catch (e) {
-        console.error('Failed to clear auction state memory', e);
-      }
-    }
+    // Auto-wipe on phase rollback has been intentionally removed
+    // to prevent accidental data loss when temporarily going back to registration phase.
     ioInstance.emit('data_updated', { entity: 'config' });
     return res.json(config);
   } catch (error) {
