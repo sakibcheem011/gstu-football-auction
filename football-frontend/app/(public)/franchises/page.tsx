@@ -104,99 +104,77 @@ export default function FranchisesPage() {
 
       <AnimatePresence>
         {selectedTeam && (
-          <>
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedTeam(null)}
-              className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm"
-            />
-            <motion.div
-              initial={{ x: '100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed inset-y-0 right-0 z-[101] w-full max-w-md bg-ink border-l border-white/5 shadow-2xl flex flex-col"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-panel rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh] border border-white/10"
             >
               {/* Header */}
-              <div className="relative p-8 border-b border-white/5 overflow-hidden shrink-0 bg-panel">
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent pointer-events-none" />
-                <button
-                  onClick={() => setSelectedTeam(null)}
-                  className="absolute top-6 right-6 p-2 bg-white/5 hover:bg-white/10 rounded-full text-chalk transition-colors z-10"
-                >
-                  <X size={20} />
-                </button>
-                
-                <div className="flex flex-col gap-4 relative z-10 pt-4">
-                  <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-emerald-400 overflow-hidden shadow-lg mx-auto">
+              <div className="p-6 border-b border-white/10 bg-black/20 flex items-center justify-between shrink-0">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center overflow-hidden">
                     {selectedTeam.logoUrl ? (
                       <img src={selectedTeam.logoUrl} alt={selectedTeam.name} className="w-full h-full object-cover" />
                     ) : (
-                      <ShieldCheck size={40} />
+                      <ShieldCheck size={24} className="text-emerald-400" />
                     )}
                   </div>
-                  <div className="text-center">
-                    <h3 className="text-white font-display text-2xl font-bold tracking-wider mb-2">{selectedTeam.name}</h3>
-                    <div className="flex items-center justify-center gap-3 text-[10px] font-bold uppercase tracking-widest text-emerald-400/80">
-                      <span><Users size={12} className="inline mr-1" /> {selectedTeam.players?.length || 0} Players</span>
-                      {selectedTeam.manager && (
-                        <>
-                          <span className="text-white/20">•</span>
-                          <span className="text-chalkMuted">Mgr: {selectedTeam.manager.name}</span>
-                        </>
-                      )}
-                    </div>
+                  <div>
+                    <h3 className="text-white font-display text-xl font-bold tracking-wide">{selectedTeam.name}</h3>
+                    <p className="text-chalkMuted text-xs mt-0.5">
+                      {selectedTeam.players?.length || 0} Players {selectedTeam.manager && `• Managed by ${selectedTeam.manager.name}`}
+                    </p>
                   </div>
                 </div>
+                <button
+                  onClick={() => setSelectedTeam(null)}
+                  className="p-2 bg-white/5 hover:bg-white/10 rounded-full text-chalk transition-colors"
+                >
+                  <X size={20} />
+                </button>
               </div>
               
               {/* Roster List */}
-              <div className="p-6 overflow-y-auto custom-scrollbar flex-1 bg-ink/50 relative">
-                <div className="absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-ink/50 to-transparent pointer-events-none" />
-                
+              <div className="p-2 sm:p-4 overflow-y-auto custom-scrollbar flex-1 bg-ink/40">
                 {!selectedTeam.players || selectedTeam.players.length === 0 ? (
-                  <motion.div 
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-center py-20"
-                  >
-                    <Users size={48} className="mx-auto mb-4 opacity-20 text-chalkMuted" />
-                    <p className="text-chalkMuted text-sm italic">No players in this roster yet.</p>
-                  </motion.div>
+                  <div className="text-center py-12">
+                    <Users size={32} className="mx-auto mb-3 opacity-20 text-chalkMuted" />
+                    <p className="text-chalkMuted text-sm">No players have been added yet.</p>
+                  </div>
                 ) : (
-                  <div className="flex flex-col gap-3 pb-8">
+                  <div className="space-y-2">
                     {selectedTeam.players.map((player: any, index: number) => (
-                      <motion.div 
+                      <div 
                         key={player.id} 
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                        className="bg-white/5 border border-white/5 hover:border-emerald-500/20 hover:bg-white/10 transition-colors rounded-2xl p-4 flex items-center gap-4 group cursor-default"
+                        className="flex items-center gap-4 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors border border-transparent hover:border-white/5"
                       >
-                        <div className="w-8 h-8 rounded-full bg-black/30 text-chalkMuted flex items-center justify-center font-bold text-xs shrink-0 group-hover:text-emerald-400 group-hover:bg-emerald-500/10 transition-colors">
+                        <div className="w-6 text-center text-xs text-chalkMuted font-bold shrink-0">
                           {index + 1}
                         </div>
                         <img 
                           src={player.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(player.name)}&background=random`} 
                           alt={player.name}
-                          className="w-12 h-12 rounded-full object-cover bg-white/10 shrink-0 shadow-md ring-2 ring-white/5 group-hover:ring-emerald-500/30 transition-all" 
+                          className="w-10 h-10 rounded-full object-cover bg-black/20 shrink-0" 
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="text-white font-bold text-sm truncate group-hover:text-emerald-400 transition-colors">{player.name}</p>
-                          <div className="flex items-center gap-2 mt-1.5">
-                            <span className="text-emerald-400/80 font-mono text-[9px] bg-emerald-400/10 px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">{player.studentId}</span>
-                            <span className="text-chalkMuted font-mono text-[9px] uppercase tracking-wider bg-black/30 px-1.5 py-0.5 rounded">{player.sessionId}</span>
+                          <p className="text-white font-medium text-sm truncate">{player.name}</p>
+                          <div className="flex gap-2 mt-0.5">
+                            <span className="text-emerald-400 font-mono text-[10px]">{player.studentId}</span>
+                            <span className="text-chalkMuted text-[10px]">•</span>
+                            <span className="text-chalkMuted font-mono text-[10px]">{player.sessionId}</span>
                           </div>
                         </div>
-                      </motion.div>
+                      </div>
                     ))}
                   </div>
                 )}
               </div>
             </motion.div>
-          </>
+          </div>
         )}
       </AnimatePresence>
     </div>
