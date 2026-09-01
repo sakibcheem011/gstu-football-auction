@@ -109,64 +109,74 @@ export default function FranchisesPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedTeam(null)}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md"
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-ink border border-white/10 rounded-2xl w-full max-w-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
+              className="bg-panel border border-white/10 rounded-3xl w-full max-w-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] relative"
             >
-              <div className="flex justify-between items-center p-6 border-b border-white/10 bg-white/5 shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-center text-emerald-400 overflow-hidden shrink-0">
-                    {selectedTeam.logoUrl ? (
-                      <img src={selectedTeam.logoUrl} alt={selectedTeam.name} className="w-full h-full object-cover" />
-                    ) : (
-                      <ShieldCheck size={20} />
-                    )}
-                  </div>
-                  <div>
-                    <h3 className="text-white font-display text-xl uppercase tracking-wider">{selectedTeam.name}</h3>
-                    <p className="text-chalkMuted text-[10px] uppercase tracking-widest font-bold">Roster ({selectedTeam.players?.length || 0} Players)</p>
-                  </div>
-                </div>
+              {/* Header */}
+              <div className="relative p-8 border-b border-white/5 overflow-hidden shrink-0">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent pointer-events-none" />
                 <button
                   onClick={() => setSelectedTeam(null)}
-                  className="p-2 bg-white/5 hover:bg-white/10 rounded-full text-chalk transition-colors"
+                  className="absolute top-6 right-6 p-2 bg-white/5 hover:bg-white/10 rounded-full text-chalk transition-colors z-10"
                 >
                   <X size={20} />
                 </button>
+                
+                <div className="flex items-center gap-5 relative z-10">
+                  <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-emerald-400 overflow-hidden shrink-0 shadow-lg">
+                    {selectedTeam.logoUrl ? (
+                      <img src={selectedTeam.logoUrl} alt={selectedTeam.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <ShieldCheck size={32} />
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="text-white font-display text-2xl md:text-3xl font-bold tracking-wider mb-1">{selectedTeam.name}</h3>
+                    <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-emerald-400/80">
+                      <span><Users size={12} className="inline mr-1" /> {selectedTeam.players?.length || 0} Players</span>
+                      {selectedTeam.manager && (
+                        <>
+                          <span className="text-white/20">•</span>
+                          <span className="text-chalkMuted">Mgr: {selectedTeam.manager.name}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
               
-              <div className="p-6 overflow-y-auto custom-scrollbar flex-1">
+              {/* Roster List */}
+              <div className="p-4 sm:p-8 overflow-y-auto custom-scrollbar flex-1 bg-ink/30">
                 {!selectedTeam.players || selectedTeam.players.length === 0 ? (
-                  <div className="text-center py-12">
+                  <div className="text-center py-16">
                     <Users size={48} className="mx-auto mb-4 opacity-20 text-chalkMuted" />
-                    <p className="text-chalkMuted text-sm italic">No players have been bought by this team yet.</p>
+                    <p className="text-chalkMuted text-base italic">No players in this roster yet.</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {selectedTeam.players.map((player: any) => (
-                      <div key={player.id} className="bg-white/5 border border-white/5 rounded-xl p-3 flex items-center justify-between group">
-                        <div className="flex items-center gap-3">
-                          <img 
-                            src={player.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(player.name)}&background=random`} 
-                            alt={player.name}
-                            className="w-10 h-10 rounded-lg object-cover bg-white/10 shrink-0" 
-                          />
-                          <div className="min-w-0">
-                            <p className="text-white font-medium text-sm truncate pr-2" title={player.name}>{player.name}</p>
-                            <p className="text-chalkMuted font-mono text-[9px] uppercase">{player.studentId} • {player.sessionId}</p>
+                  <div className="flex flex-col gap-3">
+                    {selectedTeam.players.map((player: any, index: number) => (
+                      <div key={player.id} className="bg-panel border border-white/5 hover:border-emerald-500/20 hover:bg-white/5 transition-colors rounded-2xl p-4 flex items-center gap-4 group">
+                        <div className="w-8 h-8 rounded-full bg-white/5 text-chalkMuted flex items-center justify-center font-bold text-xs shrink-0">
+                          {index + 1}
+                        </div>
+                        <img 
+                          src={player.imageUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(player.name)}&background=random`} 
+                          alt={player.name}
+                          className="w-12 h-12 rounded-full object-cover bg-white/10 shrink-0 shadow-md" 
+                        />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-white font-bold text-base truncate group-hover:text-emerald-400 transition-colors">{player.name}</p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-emerald-400/70 font-mono text-[10px] bg-emerald-400/10 px-2 py-0.5 rounded font-bold uppercase tracking-wider">{player.studentId}</span>
+                            <span className="text-chalkMuted font-mono text-[10px] uppercase tracking-wider bg-white/5 px-2 py-0.5 rounded">{player.sessionId}</span>
                           </div>
                         </div>
-                        {player.soldPrice && (
-                          <div className="text-right shrink-0">
-                            <p className="text-[9px] text-chalkMuted uppercase font-bold tracking-widest">Price</p>
-                            <p className="text-emerald-400 font-display text-sm">TK {player.soldPrice.toLocaleString('en-IN')}</p>
-                          </div>
-                        )}
                       </div>
                     ))}
                   </div>
