@@ -168,12 +168,19 @@ function PlayerStatsModal({ match, teamA, teamB, onClose, token, refresh }: any)
 }
 
 
-function MatchRow({ m, tA, tB, updateMatchScore, onOpenStats }: { m: any, tA: any, tB: any, updateMatchScore: any, onOpenStats: any }) {
+function MatchRow({ m, tA, tB, matchNumber, updateMatchScore, onOpenStats }: { m: any, tA: any, tB: any, matchNumber: number, updateMatchScore: any, onOpenStats: any }) {
   const [scoreA, setScoreA] = useState<string | number>(m.scoreA ?? 0);
   const [scoreB, setScoreB] = useState<string | number>(m.scoreB ?? 0);
   const [status, setStatus] = useState(m.status);
   const [date, setDate] = useState<Date | null>(m.scheduledAt ? new Date(m.scheduledAt) : null);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
+
+  useEffect(() => {
+    setScoreA(m.scoreA ?? 0);
+    setScoreB(m.scoreB ?? 0);
+    setStatus(m.status);
+    setDate(m.scheduledAt ? new Date(m.scheduledAt) : null);
+  }, [m]);
 
   const formatDisplayDate = (d: Date) => {
     return d.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
@@ -183,7 +190,7 @@ function MatchRow({ m, tA, tB, updateMatchScore, onOpenStats }: { m: any, tA: an
     <div className="bg-ink/30 hover:bg-ink/50 border border-white/5 hover:border-white/10 rounded-xl p-3 flex flex-col xl:flex-row items-center justify-between gap-4 transition-colors">
       <div className="flex items-center gap-3 w-full xl:w-auto">
         <div className="bg-white/10 px-3 py-1.5 rounded text-xs font-bold text-white tracking-wider uppercase whitespace-nowrap">
-          Leg {m.legNumber}
+          Match {matchNumber} {m.legNumber > 1 ? `(Leg ${m.legNumber})` : ''}
         </div>
         <div className="relative z-40 flex-1 xl:w-56">
           <button 
@@ -358,6 +365,19 @@ export default function TournamentAdmin() {
 
   if (loading) return <div className="p-10 text-white font-display text-2xl">Loading Dashboard...</div>;
 
+  // Compute absolute chronological match order for numbering
+  const allMatchesChronological = [...fixtures]
+    .flatMap(f => f.matches || [])
+    .sort((a, b) => new Date(a.scheduledAt || 0).getTime() - new Date(b.scheduledAt || 0).getTime());
+  const matchOrderMap = new Map(allMatchesChronological.map((m, idx) => [m.id, idx + 1]));
+
+  // Sort fixtures chronologically by their first match
+  const sortedFixtures = [...fixtures].sort((a, b) => {
+    const dateA = a.matches?.[0]?.scheduledAt ? new Date(a.matches[0].scheduledAt).getTime() : 0;
+    const dateB = b.matches?.[0]?.scheduledAt ? new Date(b.matches[0].scheduledAt).getTime() : 0;
+    return dateA - dateB;
+  });
+
   return (
     <div className="flex-1 p-6 md:p-10 text-chalk font-body max-w-[1400px] mx-auto w-full">
       <ConfirmModal
@@ -470,7 +490,7 @@ export default function TournamentAdmin() {
             <Target size={24} /> MANAGE MATCHES
           </h2>
           <div className="space-y-8">
-            {fixtures.map((fix: any) => {
+            {sortedFixtures.map((fix: any) => {
               const tA = teams.find(t => t.id === fix.teamAId) || { name: 'Unknown', players: [] };
               const tB = teams.find(t => t.id === fix.teamBId) || { name: 'Unknown', players: [] };
               return (
@@ -491,12 +511,13 @@ export default function TournamentAdmin() {
                     </div>
                   </div>
                   <div className="space-y-4">
-                    {fix.matches.map((m: any) => (
+                    {fix.matches.sort((a: any, b: any) => a.legNumber - b.legNumber).map((m: any) => (
                       <MatchRow 
                         key={m.id} 
                         m={m} 
                         tA={tA} 
                         tB={tB} 
+                        matchNumber={matchOrderMap.get(m.id) || 0}
                         updateMatchScore={updateMatchScore} 
                         onOpenStats={(match: any, teamA: any, teamB: any) => setStatsModalData({ match, teamA, teamB })} 
                       />

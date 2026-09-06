@@ -101,12 +101,13 @@ export const AppleCalendarPicker = ({ isOpen, onClose, onDateTimeSelect, initial
     };
 
     const triggerSelect = (day: number, hh: string, mm: string, ampmVal: string) => {
-        if (onDateTimeSelect && hh.length === 2 && mm.length === 2) {
+        if (onDateTimeSelect && hh && mm) {
             // Build JS Date
-            let h = parseInt(hh);
+            let h = parseInt(hh) || 12;
+            const m = parseInt(mm) || 0;
             if (ampmVal === 'PM' && h !== 12) h += 12;
             if (ampmVal === 'AM' && h === 12) h = 0;
-            const finalDate = new Date(currentYear, currentMonth, day, h, parseInt(mm));
+            const finalDate = new Date(currentYear, currentMonth, day, h, m);
             onDateTimeSelect(finalDate);
         }
     };
