@@ -89,7 +89,8 @@ export const updatePlayerStats = async (req: Request, res: Response): Promise<an
           assists: stat.assists,
           yellowCards: stat.yellowCards,
           redCards: stat.redCards,
-          cleanSheet: stat.cleanSheet
+          cleanSheet: stat.cleanSheet,
+          isMotm: stat.isMotm || false
         },
         create: {
           matchId,
@@ -98,7 +99,8 @@ export const updatePlayerStats = async (req: Request, res: Response): Promise<an
           assists: stat.assists,
           yellowCards: stat.yellowCards,
           redCards: stat.redCards,
-          cleanSheet: stat.cleanSheet
+          cleanSheet: stat.cleanSheet,
+          isMotm: stat.isMotm || false
         }
       });
     }

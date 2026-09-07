@@ -1,0 +1,3102 @@
+{
+  "timestamp": "2026-09-01T18:05:01.504Z",
+  "players": [
+    {
+      "id": "cmt873cvj00051vd9mokpapo1",
+      "name": "Shakib Al Hasan ",
+      "studentId": "24cse025",
+      "sessionId": "24-25",
+      "jerseyName": "SHAKIB",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787633940/gstu_liga_players/tr3pr5ckpvmvtx8lcxhz.jpg",
+      "imagePublicId": "gstu_liga_players/tr3pr5ckpvmvtx8lcxhz",
+      "status": "SOLD",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "soldPrice": 1500000,
+      "email": "shakibmahi524@gmail.com",
+      "categoryId": "cmthfbu13001q2da1e7tgb9ql",
+      "positions": [
+        {
+          "id": "cmthg2sdw00662da12ajizg2v",
+          "playerId": "cmt873cvj00051vd9mokpapo1",
+          "position": "CDM",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthg2sdw00672da1k7kf8yxh",
+          "playerId": "cmt873cvj00051vd9mokpapo1",
+          "position": "CM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8jp9xs001a2ecaxtpby32h",
+      "name": "Nahid Hossain",
+      "studentId": "21cse014",
+      "sessionId": "21-22",
+      "jerseyName": "NAHID",
+      "jerseyNumber": "014",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787655118/gstu_liga_players/hjvqjy88octj8uydsgpz.jpg",
+      "imagePublicId": "gstu_liga_players/hjvqjy88octj8uydsgpz",
+      "status": "SOLD",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "soldPrice": 1000000,
+      "email": "nahidhossianofficial14@gmail.com",
+      "categoryId": "cmthfcmk6001u2da159nhujfh",
+      "positions": [
+        {
+          "id": "cmthnskn100f82da1mjz3xo5x",
+          "playerId": "cmt8jp9xs001a2ecaxtpby32h",
+          "position": "CB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthnskn100f92da1w25hw2te",
+          "playerId": "cmt8jp9xs001a2ecaxtpby32h",
+          "position": "LB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt82adzg00051vf35j50834a",
+      "name": "Anninda Raj Das",
+      "studentId": "23cse024",
+      "sessionId": "23-24",
+      "jerseyName": "ANNINDA",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787625870/gstu_liga_players/wvnutncc9up3vnuo1799.jpg",
+      "imagePublicId": "gstu_liga_players/wvnutncc9up3vnuo1799",
+      "status": "SOLD",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "soldPrice": 5650000,
+      "email": "annindarajdas@gmail.com",
+      "categoryId": "cmthfce3d001t2da1mambdi5n",
+      "positions": [
+        {
+          "id": "cmthfun5k00432da10f0qu9f6",
+          "playerId": "cmt82adzg00051vf35j50834a",
+          "position": "RW",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfun5k00442da1kwqdfjgi",
+          "playerId": "cmt82adzg00051vf35j50834a",
+          "position": "CM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt7qftaq00091vdpp5wcinb5",
+      "name": "Abdullah ",
+      "studentId": "23cse002",
+      "sessionId": "23-24",
+      "jerseyName": "AH FAHIM",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787605967/gstu_liga_players/ya42rhln9jkhgjk0mc2v.jpg",
+      "imagePublicId": "gstu_liga_players/ya42rhln9jkhgjk0mc2v",
+      "status": "SOLD",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "soldPrice": 6150000,
+      "email": "www.abfahim12345@gmail.com",
+      "categoryId": "cmthfowkk00332da1oogf1dab",
+      "positions": [
+        {
+          "id": "cmthftmsu003v2da1wrax8m0w",
+          "playerId": "cmt7qftaq00091vdpp5wcinb5",
+          "position": "GK",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthftmsu003w2da1rrw4o2we",
+          "playerId": "cmt7qftaq00091vdpp5wcinb5",
+          "position": "ST",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt82h8nj000j1vf3g1bnnyod",
+      "name": "Arnob Roy",
+      "studentId": "23cse010",
+      "sessionId": "23-24",
+      "jerseyName": "420",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787626189/gstu_liga_players/wfdzirzgodthnpmyylbr.jpg",
+      "imagePublicId": "gstu_liga_players/wfdzirzgodthnpmyylbr",
+      "status": "SOLD",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "soldPrice": 27500000,
+      "email": "arnobroy2717@gmail.com",
+      "categoryId": "cmthfce3d001t2da1mambdi5n",
+      "positions": [
+        {
+          "id": "cmthfu5kj003z2da1fmv209v6",
+          "playerId": "cmt82h8nj000j1vf3g1bnnyod",
+          "position": "CB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfu5kj00402da1f7go59g7",
+          "playerId": "cmt82h8nj000j1vf3g1bnnyod",
+          "position": "LB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt80ptim00011v7pwwtatcf0",
+      "name": "Md. Anamul Haque",
+      "studentId": "20cse029",
+      "sessionId": "20-21",
+      "jerseyName": "ANAMUL",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787623230/gstu_liga_players/sduqdgsgnjj3b6fcvoee.jpg",
+      "imagePublicId": "gstu_liga_players/sduqdgsgnjj3b6fcvoee",
+      "status": "SOLD",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "soldPrice": 15150000,
+      "email": "anamhaque.5101@gmail.com",
+      "categoryId": "cmthfce3d001t2da1mambdi5n",
+      "positions": [
+        {
+          "id": "cmthfr6da003h2da1apgjjv0u",
+          "playerId": "cmt80ptim00011v7pwwtatcf0",
+          "position": "LW",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfr6da003i2da1eoc5vmu4",
+          "playerId": "cmt80ptim00011v7pwwtatcf0",
+          "position": "CAM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt88sm0o00081vicbrj5pfwl",
+      "name": "Farhan Zaman Aurko ",
+      "studentId": "24cse021",
+      "sessionId": "24-25",
+      "jerseyName": "AURKO ",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787636797/gstu_liga_players/pc1jc7ilunlcquozzndc.jpg",
+      "imagePublicId": "gstu_liga_players/pc1jc7ilunlcquozzndc",
+      "status": "SOLD",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "soldPrice": 3650000,
+      "email": "farhandaddy948@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthg1bbk005x2da18nib2jq4",
+          "playerId": "cmt88sm0o00081vicbrj5pfwl",
+          "position": "CDM",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthg1bbk005y2da1jxo0e4z2",
+          "playerId": "cmt88sm0o00081vicbrj5pfwl",
+          "position": "CM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmthelkfr000r2da1wnzltce1",
+      "name": "Sh Jisan ",
+      "studentId": "22cse029",
+      "sessionId": "22-23",
+      "jerseyName": "K.JISAN ",
+      "jerseyNumber": "69",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788190742/gstu_liga_players/wotdhdhuek6qqjppwghj.jpg",
+      "imagePublicId": "gstu_liga_players/wotdhdhuek6qqjppwghj",
+      "status": "SOLD",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "soldPrice": 1000000,
+      "email": "golammoula113739@gmail.com",
+      "categoryId": "cmthfcmk6001u2da159nhujfh",
+      "positions": [
+        {
+          "id": "cmthnjwkv00et2da1ozed6bbn",
+          "playerId": "cmthelkfr000r2da1wnzltce1",
+          "position": "ST",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthnjwkv00eu2da1leyadg8j",
+          "playerId": "cmthelkfr000r2da1wnzltce1",
+          "position": "GK",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt88sqvi000c1vicdxptjhwt",
+      "name": "Md. Towkir Ahmed Sajol",
+      "studentId": "24cse033",
+      "sessionId": "24-25",
+      "jerseyName": "TOWKIR",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787636804/gstu_liga_players/jeayrkdquvkbnxm8iwhw.jpg",
+      "imagePublicId": "gstu_liga_players/jeayrkdquvkbnxm8iwhw",
+      "status": "UNSOLD",
+      "teamId": null,
+      "soldPrice": null,
+      "email": "ahmedtowkirmac@gmail.com",
+      "categoryId": "cmthfcmk6001u2da159nhujfh",
+      "positions": [
+        {
+          "id": "cmthnzth600fj2da1i1vvslh1",
+          "playerId": "cmt88sqvi000c1vicdxptjhwt",
+          "position": "RB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthnzth600fk2da1x3b2uc6l",
+          "playerId": "cmt88sqvi000c1vicdxptjhwt",
+          "position": "CB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt88zdax000m1vicwlcvskcf",
+      "name": " Mahim",
+      "studentId": "24cse008",
+      "sessionId": "24-25",
+      "jerseyName": "MAHIM",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787637113/gstu_liga_players/coxsf1rrpfgry1tlhb1h.jpg",
+      "imagePublicId": "gstu_liga_players/coxsf1rrpfgry1tlhb1h",
+      "status": "SOLD",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "soldPrice": 3000000,
+      "email": "mahim10mahim@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthfzqi8005c2da1gl6zv3dx",
+          "playerId": "cmt88zdax000m1vicwlcvskcf",
+          "position": "CDM",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfzqi8005d2da1q3qjcpy3",
+          "playerId": "cmt88zdax000m1vicwlcvskcf",
+          "position": "LB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8918nv000r1vic60vcxahw",
+      "name": "Sk Nazmul Haque Afridi ",
+      "studentId": "24cse024",
+      "sessionId": "24-25",
+      "jerseyName": "AFRIDI",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788176191/gstu_liga_players/biptkcxuihuoh62z7tun.jpg",
+      "imagePublicId": "gstu_liga_players/biptkcxuihuoh62z7tun",
+      "status": "SOLD",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "soldPrice": 1800000,
+      "email": "skafridiskafridi677@gmail.com",
+      "categoryId": "cmthfbu13001q2da1e7tgb9ql",
+      "positions": [
+        {
+          "id": "cmthg3ics00682da1ndk3m0pu",
+          "playerId": "cmt8918nv000r1vic60vcxahw",
+          "position": "RB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthg3ics00692da17ldkplxk",
+          "playerId": "cmt8918nv000r1vic60vcxahw",
+          "position": "CB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt88xpt7000i1vic81l880ev",
+      "name": "Antar Biswas",
+      "studentId": "22cse032",
+      "sessionId": "22-23",
+      "jerseyName": "ANTAR",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787637036/gstu_liga_players/rgg7hmmpxenlopuntlhi.jpg",
+      "imagePublicId": "gstu_liga_players/rgg7hmmpxenlopuntlhi",
+      "status": "SOLD",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "soldPrice": 8150000,
+      "email": "antarbiswas@gmail.com",
+      "categoryId": "cmthfce3d001t2da1mambdi5n",
+      "positions": [
+        {
+          "id": "cmthfxhrb004j2da1t784ye82",
+          "playerId": "cmt88xpt7000i1vic81l880ev",
+          "position": "CM",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfxhrb004k2da18e7002hh",
+          "playerId": "cmt88xpt7000i1vic81l880ev",
+          "position": "CDM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt88lbd100011vic91y4cke1",
+      "name": "Sadhin Roy",
+      "studentId": "24cse012",
+      "sessionId": "24-25",
+      "jerseyName": "SADHIN ",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787636457/gstu_liga_players/zuq8x5wdneln47qfxyba.jpg",
+      "imagePublicId": "gstu_liga_players/zuq8x5wdneln47qfxyba",
+      "status": "SOLD",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "soldPrice": 1950000,
+      "email": "roysadhin598@gmail.com",
+      "categoryId": "cmthfbu13001q2da1e7tgb9ql",
+      "positions": [
+        {
+          "id": "cmthg0t0x005t2da100qpcdmd",
+          "playerId": "cmt88lbd100011vic91y4cke1",
+          "position": "LB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthg0t0x005u2da17znifalk",
+          "playerId": "cmt88lbd100011vic91y4cke1",
+          "position": "RB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt89w20600101viclko9hpg2",
+      "name": "Md Samiul Islam Omio ",
+      "studentId": "23cse030",
+      "sessionId": "23-24",
+      "jerseyName": "OMIO",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787638638/gstu_liga_players/kk16rzkoynafull4pgit.jpg",
+      "imagePublicId": "gstu_liga_players/kk16rzkoynafull4pgit",
+      "status": "SOLD",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "soldPrice": 3650000,
+      "email": "samiulislam66200@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthfxb03004h2da1aolnumdd",
+          "playerId": "cmt89w20600101viclko9hpg2",
+          "position": "CM",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfxb03004i2da19u5nlp1l",
+          "playerId": "cmt89w20600101viclko9hpg2",
+          "position": "RB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8ln7u700222ecaeffa8mhf",
+      "name": "Md. Abdur Rahman Rakib Hossain ",
+      "studentId": "25cse014",
+      "sessionId": "25-26",
+      "jerseyName": "RAKIB",
+      "jerseyNumber": "11",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787658381/gstu_liga_players/imgvrjchved2usrlahxs.jpg",
+      "imagePublicId": "gstu_liga_players/imgvrjchved2usrlahxs",
+      "status": "SOLD",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "soldPrice": 6650000,
+      "email": "rakibhasan382403@gmail.com",
+      "categoryId": "cmthfbu13001q2da1e7tgb9ql",
+      "positions": [
+        {
+          "id": "cmthfmxgx002y2da1ndo5d0x9",
+          "playerId": "cmt8ln7u700222ecaeffa8mhf",
+          "position": "ST",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfmxgx002z2da1a30mdiza",
+          "playerId": "cmt8ln7u700222ecaeffa8mhf",
+          "position": "LW",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8kzfq6001r2ecaew7idcv5",
+      "name": "Md Tarikul Islam ",
+      "studentId": "25cse001",
+      "sessionId": "25-26",
+      "jerseyName": "TARIKUL",
+      "jerseyNumber": "32",
+      "imageUrl": null,
+      "imagePublicId": null,
+      "status": "SOLD",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "soldPrice": 1300000,
+      "email": "tarikul24cse2005@gmail.com",
+      "categoryId": "cmthfcmk6001u2da159nhujfh",
+      "positions": [
+        {
+          "id": "cmthfr0g7003f2da1smdrfoj7",
+          "playerId": "cmt8kzfq6001r2ecaew7idcv5",
+          "position": "CB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfr0g7003g2da12sbj4kkl",
+          "playerId": "cmt8kzfq6001r2ecaew7idcv5",
+          "position": "CM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8eb8sk001g1vicugjo4tf2",
+      "name": "Kamrul Hasan",
+      "studentId": "24cse037",
+      "sessionId": "24-25",
+      "jerseyName": "KAMRUL",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787646065/gstu_liga_players/mkkce6v5frhizcjgpe70.jpg",
+      "imagePublicId": "gstu_liga_players/mkkce6v5frhizcjgpe70",
+      "status": "SOLD",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "soldPrice": 2100000,
+      "email": "kamrulhasanseyem2005@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": []
+    },
+    {
+      "id": "cmt8jvstj001e2ecapfn44sj2",
+      "name": "Md Saymun",
+      "studentId": "25cse009",
+      "sessionId": "25-26",
+      "jerseyName": "SAYMUN",
+      "jerseyNumber": "10",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787718975/gstu_liga_players/jrwnygytamwzl40qpnnp.jpg",
+      "imagePublicId": "gstu_liga_players/jrwnygytamwzl40qpnnp",
+      "status": "SOLD",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "soldPrice": 3600000,
+      "email": "matul.sarder01@gmail.com",
+      "categoryId": "cmthfcmk6001u2da159nhujfh",
+      "positions": [
+        {
+          "id": "cmthfqesp003a2da1cm84ciyb",
+          "playerId": "cmt8jvstj001e2ecapfn44sj2",
+          "position": "CAM",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfqesp003b2da19vljohoq",
+          "playerId": "cmt8jvstj001e2ecapfn44sj2",
+          "position": "LW",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8hs45600012eca5ttlr5e8",
+      "name": "Nahidul Islam",
+      "studentId": "25cse005",
+      "sessionId": "25-26",
+      "jerseyName": "NAHID",
+      "jerseyNumber": "30",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787651891/gstu_liga_players/upismavre3cfbf6n8lpi.jpg",
+      "imagePublicId": "gstu_liga_players/upismavre3cfbf6n8lpi",
+      "status": "SOLD",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "soldPrice": 1000000,
+      "email": "nahidulislam89090@gmail.com",
+      "categoryId": "cmthfcmk6001u2da159nhujfh",
+      "positions": [
+        {
+          "id": "cmthfrojh003l2da145q8gyzc",
+          "playerId": "cmt8hs45600012eca5ttlr5e8",
+          "position": "CM",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfrojh003m2da127y18a4z",
+          "playerId": "cmt8hs45600012eca5ttlr5e8",
+          "position": "CAM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8i3n9a00052ecagj63miys",
+      "name": "Nasir A. Efty",
+      "studentId": "24cse09",
+      "sessionId": "24-25",
+      "jerseyName": "EFTY",
+      "jerseyNumber": "17",
+      "imageUrl": null,
+      "imagePublicId": null,
+      "status": "UNSOLD",
+      "teamId": null,
+      "soldPrice": null,
+      "email": "efty@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthg23ac00622da13fgk4uvs",
+          "playerId": "cmt8i3n9a00052ecagj63miys",
+          "position": "RB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthg23ac00632da10kcn6p4s",
+          "playerId": "cmt8i3n9a00052ecagj63miys",
+          "position": "LB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8ec5vt001k1vicmr9ponvu",
+      "name": "Easir Arafat Shopnil",
+      "studentId": "21cse001",
+      "sessionId": "21-22",
+      "jerseyName": "SHOPNIL",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787646107/gstu_liga_players/b7nj5yg4thdrefptfeqn.jpg",
+      "imagePublicId": "gstu_liga_players/b7nj5yg4thdrefptfeqn",
+      "status": "SOLD",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "soldPrice": 3150000,
+      "email": "shopniel091@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthfy6iq004u2da1rc3c3cco",
+          "playerId": "cmt8ec5vt001k1vicmr9ponvu",
+          "position": "CAM",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfy6iq004v2da1kg2109rj",
+          "playerId": "cmt8ec5vt001k1vicmr9ponvu",
+          "position": "LW",
+          "isPrimary": false
+        },
+        {
+          "id": "cmthfy6iq004w2da1icwigt74",
+          "playerId": "cmt8ec5vt001k1vicmr9ponvu",
+          "position": "RB",
+          "isPrimary": false
+        },
+        {
+          "id": "cmthfy6iq004x2da15h9oln2n",
+          "playerId": "cmt8ec5vt001k1vicmr9ponvu",
+          "position": "CB",
+          "isPrimary": false
+        },
+        {
+          "id": "cmthfy6iq004y2da19dgdg7cv",
+          "playerId": "cmt8ec5vt001k1vicmr9ponvu",
+          "position": "CM",
+          "isPrimary": false
+        },
+        {
+          "id": "cmthfy6iq004z2da177gh1z1v",
+          "playerId": "cmt8ec5vt001k1vicmr9ponvu",
+          "position": "RW",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8avtl100171vico2a4bllb",
+      "name": "Md Alvi Ahamed ",
+      "studentId": "24cse002",
+      "sessionId": "24-25",
+      "jerseyName": "ALVI",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788190402/gstu_liga_players/vdehdbu9funh2dq7aweh.jpg",
+      "imagePublicId": "gstu_liga_players/vdehdbu9funh2dq7aweh",
+      "status": "SOLD",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "soldPrice": 2100000,
+      "email": "alviahmed252@gmail.com",
+      "categoryId": "cmthfbu13001q2da1e7tgb9ql",
+      "positions": [
+        {
+          "id": "cmthg1vd700602da1xemdib1u",
+          "playerId": "cmt8avtl100171vico2a4bllb",
+          "position": "CB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthg1vd700612da12zyj3qum",
+          "playerId": "cmt8avtl100171vico2a4bllb",
+          "position": "RB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8fw0j900261vicgkbr2u8o",
+      "name": "Md. Arafat Islam",
+      "studentId": "25cse038",
+      "sessionId": "25-26",
+      "jerseyName": "ARAFAT",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787648714/gstu_liga_players/jvoz2odbxhzh0wavtpav.jpg",
+      "imagePublicId": "gstu_liga_players/jvoz2odbxhzh0wavtpav",
+      "status": "SOLD",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "soldPrice": 5650000,
+      "email": "arafat.rsf@gmail.com",
+      "categoryId": "cmthfbu13001q2da1e7tgb9ql",
+      "positions": [
+        {
+          "id": "cmthfnhwb00302da1ggcpp1zl",
+          "playerId": "cmt8fw0j900261vicgkbr2u8o",
+          "position": "CAM",
+          "isPrimary": true
+        }
+      ]
+    },
+    {
+      "id": "cmt8477u4000n1vf3jzc87ekd",
+      "name": "Indronil Bhattacherjee ",
+      "studentId": "23cse013",
+      "sessionId": "23-24",
+      "jerseyName": "INDRO",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787629081/gstu_liga_players/jilz0vqsu5kcclpzovjs.jpg",
+      "imagePublicId": "gstu_liga_players/jilz0vqsu5kcclpzovjs",
+      "status": "SOLD",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "soldPrice": 5300000,
+      "email": "indrondc22@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthfwvt7004b2da1apwq5n32",
+          "playerId": "cmt8477u4000n1vf3jzc87ekd",
+          "position": "RB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfwvt7004c2da1fybothkp",
+          "playerId": "cmt8477u4000n1vf3jzc87ekd",
+          "position": "CB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8f4b34001s1vicquxsc3kp",
+      "name": "Golam Moula ",
+      "studentId": "23cse006",
+      "sessionId": "23-24",
+      "jerseyName": "G.MOULA",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787647421/gstu_liga_players/xnjy1a69c5ezvflcxqxx.jpg",
+      "imagePublicId": "gstu_liga_players/xnjy1a69c5ezvflcxqxx",
+      "status": "SOLD",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "soldPrice": 8150000,
+      "email": "golammoula927@gmail.com",
+      "categoryId": "cmthfce3d001t2da1mambdi5n",
+      "positions": [
+        {
+          "id": "cmthfwa5400492da11662fx01",
+          "playerId": "cmt8f4b34001s1vicquxsc3kp",
+          "position": "RB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfwa54004a2da1jmbefu6x",
+          "playerId": "cmt8f4b34001s1vicquxsc3kp",
+          "position": "LW",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8lljkv001y2ecad2xnzl9n",
+      "name": "Abu Uamam Md. Sakib",
+      "studentId": "25cse039",
+      "sessionId": "25-26",
+      "jerseyName": "SAKIB",
+      "jerseyNumber": "39",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787658303/gstu_liga_players/auyf5yipjxf36xvockq1.jpg",
+      "imagePublicId": "gstu_liga_players/auyf5yipjxf36xvockq1",
+      "status": "SOLD",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "soldPrice": 1000000,
+      "email": "au.sakib06@gmail.com",
+      "categoryId": "cmthfcmk6001u2da159nhujfh",
+      "positions": [
+        {
+          "id": "cmthfprbb00342da14c7s1aes",
+          "playerId": "cmt8lljkv001y2ecad2xnzl9n",
+          "position": "LB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfprbb00352da1o8y529u1",
+          "playerId": "cmt8lljkv001y2ecad2xnzl9n",
+          "position": "RB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt7qturu000d1vdpjizdma4q",
+      "name": "Mushfiq",
+      "studentId": "24cse031",
+      "sessionId": "24-25",
+      "jerseyName": "09",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787606622/gstu_liga_players/dngesoztjpn5rqlbjzxt.jpg",
+      "imagePublicId": "gstu_liga_players/dngesoztjpn5rqlbjzxt",
+      "status": "SOLD",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "soldPrice": 20150000,
+      "email": "mushfiq@gmail.com",
+      "categoryId": "cmthfce3d001t2da1mambdi5n",
+      "positions": [
+        {
+          "id": "cmthg052s005h2da1csos18lf",
+          "playerId": "cmt7qturu000d1vdpjizdma4q",
+          "position": "CM",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthg052s005i2da1g7ab7fvk",
+          "playerId": "cmt7qturu000d1vdpjizdma4q",
+          "position": "LW",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8drdcv001b1vic7jd3sklv",
+      "name": "Showaib Hossain Seyam ",
+      "studentId": "22cse007",
+      "sessionId": "22-23",
+      "jerseyName": "SEYAM",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787645138/gstu_liga_players/trla2wmpiw5dqnwuxrrt.jpg",
+      "imagePublicId": "gstu_liga_players/trla2wmpiw5dqnwuxrrt",
+      "status": "SOLD",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "soldPrice": 5650000,
+      "email": "showaibseyam5@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthfwy5w004d2da1c0zttqyy",
+          "playerId": "cmt8drdcv001b1vic7jd3sklv",
+          "position": "RB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfwy5w004e2da1op9lbs0f",
+          "playerId": "cmt8drdcv001b1vic7jd3sklv",
+          "position": "ST",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8mxfcc002c2ecamdl29rlv",
+      "name": "Md. Mehedi Hasan",
+      "studentId": "23cse022",
+      "sessionId": "23-24",
+      "jerseyName": "SAMI",
+      "jerseyNumber": "11",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787660537/gstu_liga_players/a3xe9rnmnavb02sjphyt.jpg",
+      "imagePublicId": "gstu_liga_players/a3xe9rnmnavb02sjphyt",
+      "status": "SOLD",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "soldPrice": 16150000,
+      "email": "mehedisami2003@gmail.com",
+      "categoryId": "cmthfowkk00332da1oogf1dab",
+      "positions": [
+        {
+          "id": "cmthftb3b003r2da1crg6zxwe",
+          "playerId": "cmt8mxfcc002c2ecamdl29rlv",
+          "position": "GK",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthftb3b003s2da1ocmgsfb3",
+          "playerId": "cmt8mxfcc002c2ecamdl29rlv",
+          "position": "CDM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8f6yu6001w1vic1ui04a78",
+      "name": "Abdur Rahim",
+      "studentId": "25cse035",
+      "sessionId": "25-26",
+      "jerseyName": "ABDUR RAHIM",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787647545/gstu_liga_players/jxowfubc5ulguzlvazof.png",
+      "imagePublicId": "gstu_liga_players/jxowfubc5ulguzlvazof",
+      "status": "SOLD",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "soldPrice": 7650000,
+      "email": "rahimbdsylhet630@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthfkn2b002m2da1uictx3me",
+          "playerId": "cmt8f6yu6001w1vic1ui04a78",
+          "position": "ST",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfkn2b002n2da1w6ywjrzj",
+          "playerId": "cmt8f6yu6001w1vic1ui04a78",
+          "position": "RW",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8g1h7x00291vichhqzny8t",
+      "name": "Atahar Hossain ",
+      "studentId": "20cse038",
+      "sessionId": "20-21",
+      "jerseyName": "SHOHAG",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787648969/gstu_liga_players/hfrlujptu8jlfl3gvn14.jpg",
+      "imagePublicId": "gstu_liga_players/hfrlujptu8jlfl3gvn14",
+      "status": "SOLD",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "soldPrice": 12150000,
+      "email": "smataharhossain@gmail.com",
+      "categoryId": "cmthfce3d001t2da1mambdi5n",
+      "positions": [
+        {
+          "id": "cmthfqeeu00382da1e08qijf5",
+          "playerId": "cmt8g1h7x00291vichhqzny8t",
+          "position": "CM",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfqeeu00392da19q4sgvzq",
+          "playerId": "cmt8g1h7x00291vichhqzny8t",
+          "position": "CDM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8mv8xz00262ecay8cexpmh",
+      "name": "Chondon Kumar Malo ",
+      "studentId": "25cse010",
+      "sessionId": "25-26",
+      "jerseyName": "CHONDON ",
+      "jerseyNumber": "4",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787660435/gstu_liga_players/xbezbxc31bhkqj5suwhw.jpg",
+      "imagePublicId": "gstu_liga_players/xbezbxc31bhkqj5suwhw",
+      "status": "SOLD",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "soldPrice": 13150000,
+      "email": "chondonkumar2354@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthfl88n002o2da1okgkwq7d",
+          "playerId": "cmt8mv8xz00262ecay8cexpmh",
+          "position": "CB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfl88n002p2da1kguaib6s",
+          "playerId": "cmt8mv8xz00262ecay8cexpmh",
+          "position": "RB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt898hup000w1vicxq99jaio",
+      "name": "Md. Akhinur Habib Soral",
+      "studentId": "22cse026",
+      "sessionId": "22-23",
+      "jerseyName": "A.H.SORAL",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787637539/gstu_liga_players/vrwyqzrc6f9xyrx26yfu.jpg",
+      "imagePublicId": "gstu_liga_players/vrwyqzrc6f9xyrx26yfu",
+      "status": "SOLD",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "soldPrice": 20150000,
+      "email": "ahsoral02@gmail.com",
+      "categoryId": "cmthfce3d001t2da1mambdi5n",
+      "positions": [
+        {
+          "id": "cmthfxqo2004n2da1bsteeaab",
+          "playerId": "cmt898hup000w1vicxq99jaio",
+          "position": "CB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfxqo2004o2da1nebwi7xr",
+          "playerId": "cmt898hup000w1vicxq99jaio",
+          "position": "LB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt86vjmz00011vd98ybh2wt7",
+      "name": "Md Monju",
+      "studentId": "23cse032",
+      "sessionId": "23-24",
+      "jerseyName": "MONJU",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787633575/gstu_liga_players/gmoijvbilkbjzimjzw54.jpg",
+      "imagePublicId": "gstu_liga_players/gmoijvbilkbjzimjzw54",
+      "status": "SOLD",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "soldPrice": 2550000,
+      "email": "shahinalammahbub@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthfx3qr004f2da1f1j403rr",
+          "playerId": "cmt86vjmz00011vd98ybh2wt7",
+          "position": "ST",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfx3qr004g2da184l72mhv",
+          "playerId": "cmt86vjmz00011vd98ybh2wt7",
+          "position": "LW",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8i68ay00092ecap01pf6j5",
+      "name": "Md Mahfuj Ahmed ",
+      "studentId": "25cse007",
+      "sessionId": "25-26",
+      "jerseyName": "MAHFUJ ",
+      "jerseyNumber": "9",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788188117/gstu_liga_players/xbk3zvgbfvct3unffhkf.jpg",
+      "imagePublicId": "gstu_liga_players/xbk3zvgbfvct3unffhkf",
+      "status": "SOLD",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "soldPrice": 6150000,
+      "email": "mahfuj911991@gmail.com",
+      "categoryId": "cmthfbu13001q2da1e7tgb9ql",
+      "positions": [
+        {
+          "id": "cmthfm06q002r2da18pkcakaa",
+          "playerId": "cmt8i68ay00092ecap01pf6j5",
+          "position": "RW",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfm06q002s2da128vxx03g",
+          "playerId": "cmt8i68ay00092ecap01pf6j5",
+          "position": "CDM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8ka56g001j2ecauunvxa1c",
+      "name": "Rakib",
+      "studentId": "23cse043",
+      "sessionId": "23-24",
+      "jerseyName": "RAKIB",
+      "jerseyNumber": "12",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787656091/gstu_liga_players/jbahthps8a0vk948lsmh.jpg",
+      "imagePublicId": "gstu_liga_players/jbahthps8a0vk948lsmh",
+      "status": "SOLD",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "soldPrice": 3650000,
+      "email": "cyberbd112@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthfxrl1004p2da13db67u6i",
+          "playerId": "cmt8ka56g001j2ecauunvxa1c",
+          "position": "LW",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfxrl1004q2da1b2bu2j90",
+          "playerId": "cmt8ka56g001j2ecauunvxa1c",
+          "position": "CM",
+          "isPrimary": false
+        },
+        {
+          "id": "cmthfxrl1004r2da1ddc2q41w",
+          "playerId": "cmt8ka56g001j2ecauunvxa1c",
+          "position": "CDM",
+          "isPrimary": false
+        },
+        {
+          "id": "cmthfxrl1004s2da1s1k7a5l7",
+          "playerId": "cmt8ka56g001j2ecauunvxa1c",
+          "position": "LB",
+          "isPrimary": false
+        },
+        {
+          "id": "cmthfxrl1004t2da128zygnrr",
+          "playerId": "cmt8ka56g001j2ecauunvxa1c",
+          "position": "CAM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8fss9e00201vicne5f2pu2",
+      "name": "Mohammad Rohan",
+      "studentId": "25cse024",
+      "sessionId": "25-26",
+      "jerseyName": "ROHAN",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787648563/gstu_liga_players/frq3jojl19l66jdotubw.jpg",
+      "imagePublicId": "gstu_liga_players/frq3jojl19l66jdotubw",
+      "status": "SOLD",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "soldPrice": 26150000,
+      "email": "rohanmohammad098@gmail.com",
+      "categoryId": "cmthfowkk00332da1oogf1dab",
+      "positions": [
+        {
+          "id": "cmthfr9e5003j2da1co7um70j",
+          "playerId": "cmt8fss9e00201vicne5f2pu2",
+          "position": "GK",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfr9e5003k2da1rfu793sx",
+          "playerId": "cmt8fss9e00201vicne5f2pu2",
+          "position": "LB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmthdiyjv000a2da15f8dsv4i",
+      "name": "Sakib Imtiaz ",
+      "studentId": "22cse019",
+      "sessionId": "22-23",
+      "jerseyName": "IMTIAZ ",
+      "jerseyNumber": "19",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788188940/gstu_liga_players/ktwmf9ldgrjhmhnsifho.jpg",
+      "imagePublicId": "gstu_liga_players/ktwmf9ldgrjhmhnsifho",
+      "status": "UNSOLD",
+      "teamId": null,
+      "soldPrice": null,
+      "email": "sakib007imtiaz@gmail.com",
+      "categoryId": null,
+      "positions": [
+        {
+          "id": "cmthdiymh000b2da1tbw0txru",
+          "playerId": "cmthdiyjv000a2da15f8dsv4i",
+          "position": "CDM",
+          "isPrimary": true
+        }
+      ]
+    },
+    {
+      "id": "cmt8p0goc002o2ecazdrw599u",
+      "name": "Firoz",
+      "studentId": "23cse28",
+      "sessionId": "23-24",
+      "jerseyName": "FIROZ",
+      "jerseyNumber": "75",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787664037/gstu_liga_players/kar8zllrzsub7kyafd7s.jpg",
+      "imagePublicId": "gstu_liga_players/kar8zllrzsub7kyafd7s",
+      "status": "SOLD",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "soldPrice": 2100000,
+      "email": "firoz@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthfvv1400472da156bhhnth",
+          "playerId": "cmt8p0goc002o2ecazdrw599u",
+          "position": "ST",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfvv1400482da1awnv8bgk",
+          "playerId": "cmt8p0goc002o2ecazdrw599u",
+          "position": "LB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8p6wad002s2ecaw13ulr2d",
+      "name": "Deep Biswas",
+      "studentId": "25cseo25",
+      "sessionId": "25-26",
+      "jerseyName": "DEEP",
+      "jerseyNumber": "11",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787664338/gstu_liga_players/k1sbvayo31uhq3dhsy4g.png",
+      "imagePublicId": "gstu_liga_players/k1sbvayo31uhq3dhsy4g",
+      "status": "SOLD",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "soldPrice": 2350000,
+      "email": "deepcse025@gmail.com",
+      "categoryId": "cmthfcmk6001u2da159nhujfh",
+      "positions": [
+        {
+          "id": "cmthfq2xa00362da1al2warzv",
+          "playerId": "cmt8p6wad002s2ecaw13ulr2d",
+          "position": "LW",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfq2xa00372da11ggcxs9m",
+          "playerId": "cmt8p6wad002s2ecaw13ulr2d",
+          "position": "RW",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmthe5yxt000m2da1v48u7i7k",
+      "name": "Shazid Bin Hamid",
+      "studentId": "21cse019",
+      "sessionId": "21-22",
+      "jerseyName": "SHAZID",
+      "jerseyNumber": "19",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788190014/gstu_liga_players/yyzv61smkln6yjkcqk6v.jpg",
+      "imagePublicId": "gstu_liga_players/yyzv61smkln6yjkcqk6v",
+      "status": "SOLD",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "soldPrice": 2100000,
+      "email": "gfhg@gdf",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthg0zaw005v2da1xdg732cr",
+          "playerId": "cmthe5yxt000m2da1v48u7i7k",
+          "position": "RB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthg0zaw005w2da10io3pj1j",
+          "playerId": "cmthe5yxt000m2da1v48u7i7k",
+          "position": "CDM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmtgzdquz00091vin0vy8jswj",
+      "name": "Safi Al Sadi ",
+      "studentId": "21cse003",
+      "sessionId": "21-22",
+      "jerseyName": "SAFI",
+      "jerseyNumber": "03",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788165183/gstu_liga_players/dehxdb5ygybayywexisp.jpg",
+      "imagePublicId": "gstu_liga_players/dehxdb5ygybayywexisp",
+      "status": "SOLD",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "soldPrice": 6650000,
+      "email": "sadisafi480@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthg0k5u005p2da113257838",
+          "playerId": "cmtgzdquz00091vin0vy8jswj",
+          "position": "LB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthg0k5u005q2da17zdfrtwk",
+          "playerId": "cmtgzdquz00091vin0vy8jswj",
+          "position": "CDM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8vozyk000a1vai5vz4u2is",
+      "name": "Saimun ",
+      "studentId": "23cse029",
+      "sessionId": "23-24",
+      "jerseyName": "SAIMUN ",
+      "jerseyNumber": "18",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787675260/gstu_liga_players/frdvovobntzmkcvlapvz.jpg",
+      "imagePublicId": "gstu_liga_players/frdvovobntzmkcvlapvz",
+      "status": "SOLD",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "soldPrice": 3650000,
+      "email": "mamunsaimun955@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthfy7gi00502da17y3bjjxx",
+          "playerId": "cmt8vozyk000a1vai5vz4u2is",
+          "position": "LB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfy7gi00512da1l7h706ne",
+          "playerId": "cmt8vozyk000a1vai5vz4u2is",
+          "position": "RB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmth4o92m00011vcy98rldhht",
+      "name": "Aranya Debnath Ovi",
+      "studentId": "21cse025",
+      "sessionId": "21-22",
+      "jerseyName": "OVI",
+      "jerseyNumber": "03",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788174071/gstu_liga_players/i5mbwkacstegjhjqajoy.jpg",
+      "imagePublicId": "gstu_liga_players/i5mbwkacstegjhjqajoy",
+      "status": "UNSOLD",
+      "teamId": null,
+      "soldPrice": null,
+      "email": "aranyadebnath61@gmail.com",
+      "categoryId": null,
+      "positions": [
+        {
+          "id": "cmth4o95800021vcy4nhwbfqv",
+          "playerId": "cmth4o92m00011vcy98rldhht",
+          "position": "RB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmth4o95800031vcye3erqn07",
+          "playerId": "cmth4o92m00011vcy98rldhht",
+          "position": "CB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmtduurbv00011v82drrao8nz",
+      "name": "S M Masum Billah",
+      "studentId": "21cse012",
+      "sessionId": "21-22",
+      "jerseyName": "MASUM",
+      "jerseyNumber": "12",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787976862/gstu_liga_players/gfdupnoonxg73jyuetaj.jpg",
+      "imagePublicId": "gstu_liga_players/gfdupnoonxg73jyuetaj",
+      "status": "SOLD",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "soldPrice": 2100000,
+      "email": "smmasumbillah012@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthg08aj005j2da1tnaw1ehc",
+          "playerId": "cmtduurbv00011v82drrao8nz",
+          "position": "CB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthg08aj005k2da1vh5ht9oa",
+          "playerId": "cmtduurbv00011v82drrao8nz",
+          "position": "LB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmthcyvpz00062da1mhq11694",
+      "name": "Meheraj Hossain Shanto",
+      "studentId": "21cse013",
+      "sessionId": "21-22",
+      "jerseyName": "MEHERAJ",
+      "jerseyNumber": "91",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788198936/gstu_liga_players/fv8p9zmbrgxx1nk0lmhx.jpg",
+      "imagePublicId": "gstu_liga_players/fv8p9zmbrgxx1nk0lmhx",
+      "status": "SOLD",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "soldPrice": 2100000,
+      "email": "meherazshanto20@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthfyfp100522da15xvft5ec",
+          "playerId": "cmthcyvpz00062da1mhq11694",
+          "position": "RB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfyfp100532da1b4oylgzy",
+          "playerId": "cmthcyvpz00062da1mhq11694",
+          "position": "RW",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmth94mdy00052dcwd2cc6qya",
+      "name": "Shahriar Khan Sakib",
+      "studentId": "22cse009",
+      "sessionId": "22-23",
+      "jerseyName": "SAKIB",
+      "jerseyNumber": "09",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788181554/gstu_liga_players/myv7rlmbwrfig8bvzkra.jpg",
+      "imagePublicId": "gstu_liga_players/myv7rlmbwrfig8bvzkra",
+      "status": "UNSOLD",
+      "teamId": null,
+      "soldPrice": null,
+      "email": "sakibshahriarkhan.88@gmail.com",
+      "categoryId": null,
+      "positions": [
+        {
+          "id": "cmth94mgn00062dcw9kmipzgf",
+          "playerId": "cmth94mdy00052dcwd2cc6qya",
+          "position": "CAM",
+          "isPrimary": true
+        }
+      ]
+    },
+    {
+      "id": "cmthdrrzf000d2da1ihy5356s",
+      "name": "Peyal Mojumder ",
+      "studentId": "21cse009",
+      "sessionId": "21-22",
+      "jerseyName": "PEYAL",
+      "jerseyNumber": "18",
+      "imageUrl": null,
+      "imagePublicId": null,
+      "status": "SOLD",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "soldPrice": 200000,
+      "email": "mojumderpeyal@gmail.com",
+      "categoryId": "cmthfcmk6001u2da159nhujfh",
+      "positions": [
+        {
+          "id": "cmthnxl1j00fe2da1y6xvc93n",
+          "playerId": "cmthdrrzf000d2da1ihy5356s",
+          "position": "RB",
+          "isPrimary": true
+        }
+      ]
+    },
+    {
+      "id": "cmth9ku0w000k2dcwueg7i78j",
+      "name": "Md Shahinur Rahman ",
+      "studentId": "25cse004",
+      "sessionId": "25-26",
+      "jerseyName": "SHAWON",
+      "jerseyNumber": "22",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788182310/gstu_liga_players/rodsksbwhzbabxg5bst0.jpg",
+      "imagePublicId": "gstu_liga_players/rodsksbwhzbabxg5bst0",
+      "status": "SOLD",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "soldPrice": 1000000,
+      "email": "shawon2252007@gmail.com",
+      "categoryId": "cmthfcmk6001u2da159nhujfh",
+      "positions": [
+        {
+          "id": "cmthfqobu003c2da16y0p9z28",
+          "playerId": "cmth9ku0w000k2dcwueg7i78j",
+          "position": "CM",
+          "isPrimary": true
+        }
+      ]
+    },
+    {
+      "id": "cmtgyzf7e00051vinn3cwfpcr",
+      "name": "Ahsan Habib",
+      "studentId": "22cse012",
+      "sessionId": "22-23",
+      "jerseyName": "H@BIB",
+      "jerseyNumber": "12",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788194660/gstu_liga_players/ndxfidu9mn0ou9epruar.jpg",
+      "imagePublicId": "gstu_liga_players/ndxfidu9mn0ou9epruar",
+      "status": "SOLD",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "soldPrice": 1000000,
+      "email": "22cseahsanhabib@gmail.com",
+      "categoryId": "cmthfcmk6001u2da159nhujfh",
+      "positions": [
+        {
+          "id": "cmthny9gn00fg2da1xt3qdbye",
+          "playerId": "cmtgyzf7e00051vinn3cwfpcr",
+          "position": "RB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthny9gn00fh2da17tgxlq5x",
+          "playerId": "cmtgyzf7e00051vinn3cwfpcr",
+          "position": "LB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmthe06ly000i2da1z1ykmd0o",
+      "name": "Sakib Ahmed",
+      "studentId": "21cse016",
+      "sessionId": "21-22",
+      "jerseyName": "SAKIB",
+      "jerseyNumber": "00",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788189744/gstu_liga_players/zewovv0trrntbvgogpxa.jpg",
+      "imagePublicId": "gstu_liga_players/zewovv0trrntbvgogpxa",
+      "status": "SOLD",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "soldPrice": 1000000,
+      "email": "afdsfd@gfg",
+      "categoryId": "cmthfcmk6001u2da159nhujfh",
+      "positions": [
+        {
+          "id": "cmthnpn1k00f32da139ii82rt",
+          "playerId": "cmthe06ly000i2da1z1ykmd0o",
+          "position": "RB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthnpn1k00f42da1oftgvy9k",
+          "playerId": "cmthe06ly000i2da1z1ykmd0o",
+          "position": "CAM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmth16fyd000d1vinkupx1c1d",
+      "name": "Shrafat Khan Riad ",
+      "studentId": "23cse004",
+      "sessionId": "23-24",
+      "jerseyName": "RIAD",
+      "jerseyNumber": "4",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788168201/gstu_liga_players/yr3itwelxwikbwjv71rl.jpg",
+      "imagePublicId": "gstu_liga_players/yr3itwelxwikbwjv71rl",
+      "status": "UNSOLD",
+      "teamId": null,
+      "soldPrice": null,
+      "email": "riadk8396@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthfypmg00562da1s2o0562f",
+          "playerId": "cmth16fyd000d1vinkupx1c1d",
+          "position": "CAM",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfypmg00572da1nh2hvmwd",
+          "playerId": "cmth16fyd000d1vinkupx1c1d",
+          "position": "CDM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmtgmi9vt00011vb3xt83n432",
+      "name": "Md Fahim Gazi ",
+      "studentId": "22cse035",
+      "sessionId": "22-23",
+      "jerseyName": "FAHIM",
+      "jerseyNumber": "35",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788183960/gstu_liga_players/hdeda9a5ekvmdink59ry.jpg",
+      "imagePublicId": "gstu_liga_players/hdeda9a5ekvmdink59ry",
+      "status": "SOLD",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "soldPrice": 5650000,
+      "email": "gazifahim78@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthfueb400412da14udgqxhc",
+          "playerId": "cmtgmi9vt00011vb3xt83n432",
+          "position": "CAM",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfueb400422da1hoy8iolv",
+          "playerId": "cmtgmi9vt00011vb3xt83n432",
+          "position": "CM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8uwc3l00051vaiec0v8bje",
+      "name": "Is Tanveer",
+      "studentId": "20cse036",
+      "sessionId": "20-21",
+      "jerseyName": "IF_SI_TA",
+      "jerseyNumber": "10",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787673923/gstu_liga_players/sqd1htrx6gzdufp96cfx.png",
+      "imagePublicId": "gstu_liga_players/sqd1htrx6gzdufp96cfx",
+      "status": "SOLD",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "soldPrice": 9000000,
+      "email": "tanveerctg32@gmail.com",
+      "categoryId": "cmthfce3d001t2da1mambdi5n",
+      "positions": [
+        {
+          "id": "cmthfqw8h003d2da19k1c6yos",
+          "playerId": "cmt8uwc3l00051vaiec0v8bje",
+          "position": "LW",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfqw8h003e2da1op80j3nk",
+          "playerId": "cmt8uwc3l00051vaiec0v8bje",
+          "position": "RW",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmthgq7xb006m2da1jeo260hk",
+      "name": "Shamim",
+      "studentId": "20cse013",
+      "sessionId": "21-22",
+      "jerseyName": "SHAMIM",
+      "jerseyNumber": "10",
+      "imageUrl": null,
+      "imagePublicId": null,
+      "status": "SOLD",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "soldPrice": 32500000,
+      "email": "shamim123@gmail.com",
+      "categoryId": "cmthfczhl001w2da1ch0ifalo",
+      "positions": [
+        {
+          "id": "cmthgseps006r2da1mi9j494w",
+          "playerId": "cmthgq7xb006m2da1jeo260hk",
+          "position": "CAM",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthgseps006s2da16nn51ype",
+          "playerId": "cmthgq7xb006m2da1jeo260hk",
+          "position": "ST",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmth4z5nj00051vcy7js0eyhu",
+      "name": "Md. Shakil Ahmed ",
+      "studentId": "22cse010",
+      "sessionId": "22-23",
+      "jerseyName": "SHAKIL",
+      "jerseyNumber": "21",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788174579/gstu_liga_players/kgmjbdogbfh0q121mimh.jpg",
+      "imagePublicId": "gstu_liga_players/kgmjbdogbfh0q121mimh",
+      "status": "SOLD",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "soldPrice": 4150000,
+      "email": "shakil3978@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthftlzu003t2da1dbj3yhef",
+          "playerId": "cmth4z5nj00051vcy7js0eyhu",
+          "position": "LB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthftlzu003u2da11nyviuj8",
+          "playerId": "cmth4z5nj00051vcy7js0eyhu",
+          "position": "RB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8o0v6b002i2ecaq1ev79bh",
+      "name": "Anjon Bosu",
+      "studentId": "25cse027",
+      "sessionId": "25-26",
+      "jerseyName": "ANJON",
+      "jerseyNumber": "5",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787778903/gstu_liga_players/necz1ehpoyupd3arbreu.jpg",
+      "imagePublicId": "gstu_liga_players/necz1ehpoyupd3arbreu",
+      "status": "SOLD",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "soldPrice": 6150000,
+      "email": "anjonbosu33@gmail.com",
+      "categoryId": "cmthfbu13001q2da1e7tgb9ql",
+      "positions": [
+        {
+          "id": "cmthfmd29002t2da1ru5pd0rk",
+          "playerId": "cmt8o0v6b002i2ecaq1ev79bh",
+          "position": "LB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfmd29002u2da1ywf3747s",
+          "playerId": "cmt8o0v6b002i2ecaq1ev79bh",
+          "position": "CDM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8t033b00011vaiaz3ylwgo",
+      "name": "Mahbub Ur Rahman",
+      "studentId": "24cse010",
+      "sessionId": "24-25",
+      "jerseyName": "ABIR",
+      "jerseyNumber": "10",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788186931/gstu_liga_players/bue5sgjjsrzd3nuulpix.jpg",
+      "imagePublicId": "gstu_liga_players/bue5sgjjsrzd3nuulpix",
+      "status": "SOLD",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "soldPrice": 3000000,
+      "email": "monstercse010@gmail.com",
+      "categoryId": "cmthfowkk00332da1oogf1dab",
+      "positions": [
+        {
+          "id": "cmthfyzx300582da12h6yjg9z",
+          "playerId": "cmt8t033b00011vaiaz3ylwgo",
+          "position": "LW",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfyzx300592da151xxyf2m",
+          "playerId": "cmt8t033b00011vaiaz3ylwgo",
+          "position": "CAM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt8q2pii00011v94uqemxoiv",
+      "name": "Azim Khan",
+      "studentId": "21cse031",
+      "sessionId": "21-22",
+      "jerseyName": "@ZIM",
+      "jerseyNumber": "31",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787665822/gstu_liga_players/d3ygakavbiedqgd7vuhh.jpg",
+      "imagePublicId": "gstu_liga_players/d3ygakavbiedqgd7vuhh",
+      "status": "SOLD",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "soldPrice": 4650000,
+      "email": "azimkhan12212@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthfxpr3004l2da10w22ker4",
+          "playerId": "cmt8q2pii00011v94uqemxoiv",
+          "position": "ST",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthfxpr3004m2da1pxirvbnk",
+          "playerId": "cmt8q2pii00011v94uqemxoiv",
+          "position": "CAM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmt81srt300011vf3lxnoqy40",
+      "name": "Riad ",
+      "studentId": "23cse009",
+      "sessionId": "23-24",
+      "jerseyName": "RIAD",
+      "jerseyNumber": null,
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1787663204/gstu_liga_players/mekccntvj6kvwvll908k.jpg",
+      "imagePublicId": "gstu_liga_players/mekccntvj6kvwvll908k",
+      "status": "SOLD",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "soldPrice": 35000000,
+      "email": "pes29id@gmail.com",
+      "categoryId": "cmthfczhl001w2da1ch0ifalo",
+      "positions": [
+        {
+          "id": "cmthft0gq003n2da14advg4uf",
+          "playerId": "cmt81srt300011vf3lxnoqy40",
+          "position": "CAM",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthft0gq003o2da1pp5u7m94",
+          "playerId": "cmt81srt300011vf3lxnoqy40",
+          "position": "CM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmtgyxip300011vinic1ze4xz",
+      "name": "Ruhin Arman Omi",
+      "studentId": "21cse034",
+      "sessionId": "21-22",
+      "jerseyName": "RUHIN",
+      "jerseyNumber": "101",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788164426/gstu_liga_players/hrpyjpke0zvapiazswpz.jpg",
+      "imagePublicId": "gstu_liga_players/hrpyjpke0zvapiazswpz",
+      "status": "SOLD",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "soldPrice": 4150000,
+      "email": "ruhinarmanomi@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthg0e7x005l2da1o7kgihiq",
+          "playerId": "cmtgyxip300011vinic1ze4xz",
+          "position": "RW",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthg0e7x005m2da1ui1bxhhw",
+          "playerId": "cmtgyxip300011vinic1ze4xz",
+          "position": "CDM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmthh15fq00882da11de0ju9v",
+      "name": "Nasir Efty",
+      "studentId": "24cse009 ",
+      "sessionId": "24-25",
+      "jerseyName": "EFTY",
+      "jerseyNumber": "17",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788194828/gstu_liga_players/okqan2oyo2ctexjrrimy.jpg",
+      "imagePublicId": "gstu_liga_players/okqan2oyo2ctexjrrimy",
+      "status": "SOLD",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "soldPrice": 9150000,
+      "email": "nasir@gmail.com",
+      "categoryId": "cmthfc3w0001r2da18aj72x6k",
+      "positions": [
+        {
+          "id": "cmthh5sco00ba2da1247msfq7",
+          "playerId": "cmthh15fq00882da11de0ju9v",
+          "position": "RB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthh5sco00bb2da105wnxtor",
+          "playerId": "cmthh15fq00882da11de0ju9v",
+          "position": "LB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmthgwkv2006v2da1bfp8pp7q",
+      "name": "Asraful Islam ",
+      "studentId": "23cse038",
+      "sessionId": "23-24",
+      "jerseyName": "AFRIDI",
+      "jerseyNumber": "19",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788194615/gstu_liga_players/wtzpdqxww4adgdtzq3xg.jpg",
+      "imagePublicId": "gstu_liga_players/wtzpdqxww4adgdtzq3xg",
+      "status": "SOLD",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "soldPrice": 5150000,
+      "email": "asrafulislamafridi@gmail.com",
+      "categoryId": "cmthfce3d001t2da1mambdi5n",
+      "positions": [
+        {
+          "id": "cmthgzl8v007i2da1agklq2x6",
+          "playerId": "cmthgwkv2006v2da1bfp8pp7q",
+          "position": "CDM",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthgzl8v007j2da1no6yicvo",
+          "playerId": "cmthgwkv2006v2da1bfp8pp7q",
+          "position": "CB",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmthh5kh000b22da1yhhpxofy",
+      "name": "Arun Roy",
+      "studentId": "21cse020",
+      "sessionId": "21-22",
+      "jerseyName": "ARUN",
+      "jerseyNumber": "99",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788195034/gstu_liga_players/osxjhbtkjwovaj5mnab3.jpg",
+      "imagePublicId": "gstu_liga_players/osxjhbtkjwovaj5mnab3",
+      "status": "SOLD",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "soldPrice": 1000000,
+      "email": "arunkumarroy.cse2021@gmail.com",
+      "categoryId": "cmthfcmk6001u2da159nhujfh",
+      "positions": [
+        {
+          "id": "cmthnkwbo00ex2da19c8fkqrk",
+          "playerId": "cmthh5kh000b22da1yhhpxofy",
+          "position": "LB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthnkwbo00ey2da1hjavkkbd",
+          "playerId": "cmthh5kh000b22da1yhhpxofy",
+          "position": "CDM",
+          "isPrimary": false
+        }
+      ]
+    },
+    {
+      "id": "cmthh5fja00av2da1vvl01h3v",
+      "name": "Md Miftahul Jannat",
+      "studentId": "23cse005",
+      "sessionId": "23-24",
+      "jerseyName": "MIFTAH",
+      "jerseyNumber": "729",
+      "imageUrl": "https://res.cloudinary.com/eb1gut3r/image/upload/v1788195028/gstu_liga_players/yjkxtcwxm0bqojznsgnq.jpg",
+      "imagePublicId": "gstu_liga_players/yjkxtcwxm0bqojznsgnq",
+      "status": "SOLD",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "soldPrice": 200000,
+      "email": "miftahul81243@gmail.com",
+      "categoryId": "cmthfcmk6001u2da159nhujfh",
+      "positions": [
+        {
+          "id": "cmthns9ei00f62da1g15qu6yl",
+          "playerId": "cmthh5fja00av2da1vvl01h3v",
+          "position": "LB",
+          "isPrimary": true
+        },
+        {
+          "id": "cmthns9ei00f72da17td20tgr",
+          "playerId": "cmthh5fja00av2da1vvl01h3v",
+          "position": "GK",
+          "isPrimary": false
+        }
+      ]
+    }
+  ],
+  "teams": [
+    {
+      "id": "cmthgbrzq006b2da179lhns9v",
+      "name": "Team Sakib Imtiaz",
+      "logoUrl": null,
+      "logoPublicId": null,
+      "managerId": "cmthgbco5006a2da16d6e4cba",
+      "remainingBudget": 0
+    },
+    {
+      "id": "cmthgf2fm006d2da1izdq4s9w",
+      "name": "Team Shahriar Sakib",
+      "logoUrl": null,
+      "logoPublicId": null,
+      "managerId": "cmthgei3i006c2da1521dltjc",
+      "remainingBudget": 200000
+    },
+    {
+      "id": "cmthggnmy006f2da1zyyhx3dt",
+      "name": "Dark knight FC",
+      "logoUrl": null,
+      "logoPublicId": null,
+      "managerId": "cmthgg6a1006e2da1zlpuuvc5",
+      "remainingBudget": 850000
+    },
+    {
+      "id": "cmthghr3y006h2da130ah174p",
+      "name": "Offside Again",
+      "logoUrl": null,
+      "logoPublicId": null,
+      "managerId": "cmthghiqm006g2da19xm7ye78",
+      "remainingBudget": 1250000
+    }
+  ],
+  "users": [
+    {
+      "id": "cmt88lb7m00001victhrw6vfi",
+      "name": "Sadhin Roy",
+      "email": "roysadhin598@gmail.com",
+      "passwordHash": "$2b$10$xWSM37RDig6hvcvj8M055eTKb7wfbkESV8G8mmYOWoVaHO243zJdO",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmthh5ked00b12da1lypqbb7v",
+      "name": "Arun Roy",
+      "email": "arunkumarroy.cse2021@gmail.com",
+      "passwordHash": "$2b$10$zu9u.S11ivdx.Hh3J8jBs.zLTVMHEyB8Y8jMKbPX2wCaexg7bEOXC",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt88slxt00071vicebd5dgtm",
+      "name": "Farhan Zaman Aurko ",
+      "email": "farhandaddy948@gmail.com",
+      "passwordHash": "$2b$10$sgqVMFEtNK5mZNdM0WtB1Oegeo1Y6l/Dh1KFjJt/7GMBCR8DdMm/2",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt88sqsv000b1vicdpa7xl9q",
+      "name": "Md. Towkir Ahmed Sajol",
+      "email": "ahmedtowkirmac@gmail.com",
+      "passwordHash": "$2b$10$aPpz5HHFWbKdBegtZiayYOElkSeF0.IFe/caeNLLbta6uHEhRyH02",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt88xpqj000h1vicbgpnu3io",
+      "name": "Antar Biswas",
+      "email": "antarbiswas@gmail.com",
+      "passwordHash": "$2b$10$osbKz.yDN6U80Z0G1FQweeD5.Ypfw0Los.URvtIkKDCANeDMmRfwu",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt88zd8a000l1vichjewgfh6",
+      "name": " Mahim",
+      "email": "mahim10mahim@gmail.com",
+      "passwordHash": "$2b$10$Q5np92mnZ.lBO7JM4fiBSe.k.4MFT0AmGBy/j5SZDT91szBW8yglG",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8918l7000q1vic7anf9io0",
+      "name": "Sk Nazmul Haque Afridi ",
+      "email": "skafridiskafridi677@gmail.com",
+      "passwordHash": "$2b$10$lIW7a.yXk/4y1peeONATiui6/3K9xCr14TAiyhAqiU1wwIeRBPIzu",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt898hry000v1vic4lxk3hde",
+      "name": "Md. Akhinur Habib Soral",
+      "email": "ahsoral02@gmail.com",
+      "passwordHash": "$2b$10$Bl0tgDy.iF9G8uRff5gMq.vZRMtVJK9JeTwDOmAk4aLWQ85K9OxWe",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt89w1xc000z1vic8rkkx6nn",
+      "name": "Md Samiul Islam Omio ",
+      "email": "samiulislam66200@gmail.com",
+      "passwordHash": "$2b$10$A3tbPeZynQ28QFEz9muPOujYYAiJwRtvAdPLy2qpqOXetui0PfD3S",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8avti200161vic4mpbb6uq",
+      "name": "Md Alvi Ahamed ",
+      "email": "alviahmed252@gmail.com",
+      "passwordHash": "$2b$10$mxcgzZRjtOV4l80ajvp5j.9KH5mciV9fxL9.1YGJrT.rzeorAvRNC",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8cw28k000054fnxvxktp0o",
+      "name": "Super Admin",
+      "email": "admin3369@gstu.edu",
+      "passwordHash": "$2b$10$CoigHMT3b4jxDEw3VMLU8O1XHp7YVaMyJB291Slmrj6Mln4khS4GS",
+      "role": "SUPER_ADMIN",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8drda2001a1vicqbwxrrfo",
+      "name": "Showaib Hossain Seyam ",
+      "email": "showaibseyam5@gmail.com",
+      "passwordHash": "$2b$10$k/8cufjqZHxPtNskq5KFMu4nBP79MdKh8VU0AXB5nVNiQiRuIwWZu",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8eb8pp001f1vicbo8q0rsq",
+      "name": "Kamrul Hasan",
+      "email": "kamrulhasanseyem2005@gmail.com",
+      "passwordHash": "$2b$10$uavFYyQCpbZualUazvvNoOS2VCLG1LvAPXO4qwT4Vpk1jwWinBpVu",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8ec5t5001j1vicozw9d5ww",
+      "name": "Easir Arafat Shopnil",
+      "email": "shopniel091@gmail.com",
+      "passwordHash": "$2b$10$O.WY2As2a7089EoyOoJGAuthlqTL5HQFoT1Vucg/veBI5gUbCx9AG",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8f4b08001r1vicuw9vpvga",
+      "name": "Golam Moula ",
+      "email": "golammoula927@gmail.com",
+      "passwordHash": "$2b$10$.f9HmI2YFnJQM7IDScWzPuvvf3huWVoVLesB0FlcQ2fWuq/eehYmO",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8f6yrj001v1vic6pxstwzo",
+      "name": "Abdur Rahim",
+      "email": "rahimbdsylhet630@gmail.com",
+      "passwordHash": "$2b$10$ciYhw3uTgID8SX/wRefz3.ALzFvzGeBjQW774Hm.QWu1OE7E8rNh2",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmsei9jnc00003cfnhs68iz3w",
+      "name": "podium",
+      "email": "podium@gmail.com",
+      "passwordHash": "$2b$10$4UKnDreMjfRgPqRwawSL1.FA7LJ2rJnkn3fAIfIjy29xjy6eegmv6",
+      "role": "PODIUM_ADMIN",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8fss6i001z1vicbg6v6ucr",
+      "name": "Mohammad Rohan",
+      "email": "rohanmohammad098@gmail.com",
+      "passwordHash": "$2b$10$vdjazjb0xVALo6rvFGR0n.50l0aVEw9ebdSKhctAwLVYPlZBnYAgC",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt86vjjs00001vd9zlaqc40r",
+      "name": "Md Monju",
+      "email": "shahinalammahbub@gmail.com",
+      "passwordHash": "$2b$10$jNfq2470e7khGlnG9cZN.esEl4US4iriysEmTcigmtMpja4hm78Ym",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8fw0gn00251viccok5tq6f",
+      "name": "Md. Arafat Islam",
+      "email": "arafat.rsf@gmail.com",
+      "passwordHash": "$2b$10$Y41apBB7ZQ2nvTkD2H9Hz.5w79zlckKU3z13nmBwrLjxlBLOmrlZO",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8g1h5600281vicdcngs4iy",
+      "name": "Atahar Hossain ",
+      "email": "smataharhossain@gmail.com",
+      "passwordHash": "$2b$10$AtPVmvZkhfg1RvLYNDm4Uu/43lGD2pkU.57Dsf8NAIoe8KYPQQDn.",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8hs41z00002eca1z6gsqj8",
+      "name": "Nahidul Islam",
+      "email": "nahidulislam89090@gmail.com",
+      "passwordHash": "$2b$10$RzZmvXdqqEOcZr6PdLlEieG2k2VNv4JbqPkJrCj8uhFbUlnd5oPDK",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt873cst00041vd9bkbn7y32",
+      "name": "Shakib Al Hasan ",
+      "email": "shakibmahi524@gmail.com",
+      "passwordHash": "$2b$10$.pyeZRuxxnTXmwctAl/8OeGrSdrsGQIjWHMHnL3L8e3cQbIGRTWdG",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8i3n6b00042ecawe6d1o8x",
+      "name": "Nasir A. Efty",
+      "email": "efty@gmail.com",
+      "passwordHash": "$2b$10$HLdPCy8q98G6dyJBw3di...cXMttQMTqio/w7K5JEOZcgvUqlKH3i",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8i688b00082eca33y6yfhg",
+      "name": "Md Mahfuj Ahmed ",
+      "email": "mahfuj911991@gmail.com",
+      "passwordHash": "$2b$10$m1XHMW8buCZSN7AA.PKLQudEy53/8nLCxca8deqxey1WK3BTrlRs.",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8jp9v500192ecawnijduxu",
+      "name": "Nahid Hossain",
+      "email": "nahidhossianofficial14@gmail.com",
+      "passwordHash": "$2b$10$MEDPA8BmRs/xv/4vROOrHes41iE8kLhhAtoHG34jqpP6DPy2q6yy2",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8jvsqt001d2eca4oqohkj4",
+      "name": "Md Saymun",
+      "email": "matul.sarder01@gmail.com",
+      "passwordHash": "$2b$10$CI6p8PYat4HbS.JGek4.geKggnL.xwZ8TJxZgSORU//u0OKZS7SfK",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt7qft7q00081vdp09cx9g5y",
+      "name": "Abdullah ",
+      "email": "www.abfahim12345@gmail.com",
+      "passwordHash": "$2b$10$9bIlMMyGrqTz1bIhTRtaOOD1Zvcqj0UCmMhg4T67/IH9aw6o54HKK",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt7qtup7000c1vdpav54uwtg",
+      "name": "Mushfiq",
+      "email": "mushfiq@gmail.com",
+      "passwordHash": "$2b$10$roKtuAq17s4rgBmrpx9Q5OD7ZDVaB0Tec.HWmpOOEsB4NRjEpSKfq",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt80ptf600001v7pmyogod1w",
+      "name": "Md. Anamul Haque",
+      "email": "anamhaque.5101@gmail.com",
+      "passwordHash": "$2b$10$w44N1SVytKL6Teq7ifJpp.MKCidERulCc2wL6OFfL/..2m9kh.lwu",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt81srpt00001vf3264eowxe",
+      "name": "Riad ",
+      "email": "pes29id@gmail.com",
+      "passwordHash": "$2b$10$3c3Rs3mJkcyZ8uU8fRCY9uZVIN7l8IbbPK6wPtEtyPPtlwbX2knyG",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt82adwg00041vf3zunx0ula",
+      "name": "Anninda Raj Das",
+      "email": "annindarajdas@gmail.com",
+      "passwordHash": "$2b$10$Y1FbqYiOydwsCgS49p3dH.PK4/pvQA/nL9hEh7CD1AhkFYO7KmgUS",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt82h8kw000i1vf3kma67awa",
+      "name": "Arnob Roy",
+      "email": "arnobroy2717@gmail.com",
+      "passwordHash": "$2b$10$sXQDCMMMmWFnPWDr5Lho/u7kCxE7nxWwfrlEdQBl8y2up.4iA07gy",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8477r7000m1vf3oea5h19l",
+      "name": "Indronil Bhattacherjee ",
+      "email": "indrondc22@gmail.com",
+      "passwordHash": "$2b$10$lOiL73ycwPfvAPMTjncvyeS2wD8Iy4uN1xqypxE6k/cHrbuUA.UIS",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmthh5fgm00au2da1pfgpuaz0",
+      "name": "Md Miftahul Jannat",
+      "email": "miftahul81243@gmail.com",
+      "passwordHash": "$2b$10$qETOQYIKOremVj8wJhkIIOAwspf2Ss9kMKiBAvsU2w.exCSJ5P6v.",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8ka53k001i2eca9n6926rf",
+      "name": "Rakib",
+      "email": "cyberbd112@gmail.com",
+      "passwordHash": "$2b$10$YOBOrHQVdR.RH9Dc83ZxPedp/TcJiW041/7Nd3YJr2.PaQJFKzq.i",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmthgg6a1006e2da1zlpuuvc5",
+      "name": "Ovi ",
+      "email": "ovi@gmail.com",
+      "passwordHash": "$2b$10$46KW9nYHkiJqIol4P0cm1uJ8x7TzoOINvqn66RLJrGrRjByyCGP4.",
+      "role": "TEAM_MANAGER",
+      "phone": "0123456778",
+      "desiredTeamName": "Team Ovi",
+      "isApproved": true
+    },
+    {
+      "id": "cmt8kzfmd001q2ecallnxe340",
+      "name": "Md Tarikul Islam ",
+      "email": "tarikul24cse2005@gmail.com",
+      "passwordHash": "$2b$10$beFKusX4zWxHZGYbXLa8vemuW06pcLEbsQ94Scwa2zw6DTT0d7uTa",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmthghiqm006g2da19xm7ye78",
+      "name": "Antu",
+      "email": "antu@gmail.com",
+      "passwordHash": "$2b$10$BjaOmHmy/MTp8g5zO10o6OrRW5SmE8NFG9JlAEnTT.PiYtp9KoSyW",
+      "role": "TEAM_MANAGER",
+      "phone": "012345678",
+      "desiredTeamName": "Team Antu",
+      "isApproved": true
+    },
+    {
+      "id": "cmt8llji3001x2ecax2xztem1",
+      "name": "Abu Uamam Md. Sakib",
+      "email": "au.sakib06@gmail.com",
+      "passwordHash": "$2b$10$wqvO61QKT0VfQ/SDdxHOy.0IFd9UortcDnmeZMZqd5Nnx8UGLJtRW",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8ln7rk00212eca2h8j3das",
+      "name": "Md. Abdur Rahman Rakib Hossain ",
+      "email": "rakibhasan382403@gmail.com",
+      "passwordHash": "$2b$10$ajDNy/o/oIpj2GUb5hZXt.LD8Bi9brJQkbHMJXZW.kBWjuKF0rRYO",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8mv8va00252eca614j0lbu",
+      "name": "Chondon Kumar Malo ",
+      "email": "chondonkumar2354@gmail.com",
+      "passwordHash": "$2b$10$8ZwReKeXdMczxqr..TVoROzF295AbnMRfqiwYlpyFSCBR/rkNRWXS",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8mxf9p002b2eca3nyvx8o3",
+      "name": "Md. Mehedi Hasan",
+      "email": "mehedisami2003@gmail.com",
+      "passwordHash": "$2b$10$n7.bNrgTQwl.iMsWfOJzwODmwGKT0w25hdRitdRyEhJs30aNH2Dj2",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8o0v24002h2ecaaoza9oap",
+      "name": "Anjon Bosu",
+      "email": "anjonbosu33@gmail.com",
+      "passwordHash": "$2b$10$vYma0MBOxdjbJoJgLuQG3OJz/WnAKBfx2gTV7LX8WoUdy2WKuWM3i",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8p0gh8002n2ecazn5ydb4h",
+      "name": "Firoz",
+      "email": "firoz@gmail.com",
+      "passwordHash": "$2b$10$de/CMB1hC3WxdKTISIJk8Omfp5QRrApXsdgdhKfpo6Ecka7VEV5V6",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8p6w3b002r2ecacvcw0lib",
+      "name": "Deep Biswas",
+      "email": "deepcse025@gmail.com",
+      "passwordHash": "$2b$10$LQujkX35V38SIPz9tZs23.pO.G2X/ENGlxsxtwTWBZ3xWM8ZFoloe",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8q2pfg00001v94qncr7lhq",
+      "name": "Azim Khan",
+      "email": "azimkhan12212@gmail.com",
+      "passwordHash": "$2b$10$lng9BxoKqlGfR3uqZ.Ca7Onw0fwJAuOhwSVqHuK9DCv7mz3L8flOG",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8t02zv00001vaizrjes2cu",
+      "name": "Mahbub Ur Rahman",
+      "email": "monstercse010@gmail.com",
+      "passwordHash": "$2b$10$W0VtgoLVUgWif3KGPJXWUeHZEN0ambc./9kntFs22XOvOz9JftMw2",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8uwc0h00041vaiiuahyj8w",
+      "name": "Is Tanveer",
+      "email": "tanveerctg32@gmail.com",
+      "passwordHash": "$2b$10$4ACgWxQoMeuWQizw.ea60.uES06C5HW5a8gRmW4jRJNjH55HZBHO2",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmt8vozvo00091vai2kdqnfq4",
+      "name": "Saimun ",
+      "email": "mamunsaimun955@gmail.com",
+      "passwordHash": "$2b$10$obSe.D7EV6S8AAzZ4rcg1uSa3Wx4KGhDpmjK07lS2EDPhhi47Tjei",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmtduur6a00001v820k1rl47v",
+      "name": "S M Masum Billah",
+      "email": "smmasumbillah012@gmail.com",
+      "passwordHash": "$2b$10$5Vd4Ll2NPdH4c/mfaAUPx.kMXar5kX/Uc9IV40Fu2xSRbqo9HDZzS",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmtgmi9pz00001vb3vt97yan7",
+      "name": "Md Fahim Gazi ",
+      "email": "gazifahim78@gmail.com",
+      "passwordHash": "$2b$10$e9oVtb.bHjUp6t68htaf6ei8Mt17vzjKluU7WfCY/cYIrnlvyvcSq",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmtgyxilt00001viny6cdt1rj",
+      "name": "Ruhin Arman Omi",
+      "email": "ruhinarmanomi@gmail.com",
+      "passwordHash": "$2b$10$IGSqWM9rYz5b4K77Tz6lruNvyctI2kX172OU6csp847fJD6Cw5FOC",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmtgyzf4b00041vinr0zk7ej6",
+      "name": "Ahsan Habib",
+      "email": "22cseahsanhabib@gmail.com",
+      "passwordHash": "$2b$10$QGb7E6pR5wzo1/41ti1H7eWzUbreMFqw784ofbGOTLaiP5PjveUju",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmtgzdqs500081vin1tzq9qh7",
+      "name": "Safi Al Sadi ",
+      "email": "sadisafi480@gmail.com",
+      "passwordHash": "$2b$10$cVDynlZmrKjuk8eZkDX50uRSM5dV2onlpr/oCnDvUbMwA3ZnmDrAC",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmth16fve000c1vinhv8dzip2",
+      "name": "Shrafat Khan Riad ",
+      "email": "riadk8396@gmail.com",
+      "passwordHash": "$2b$10$LCbI7A0vQ4OQNO8roSOvK.9Hh.TCqADC/YeZub5Ab2U1szNadKp06",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmth4o8zk00001vcy2afu05u1",
+      "name": "Aranya Debnath Ovi",
+      "email": "aranyadebnath61@gmail.com",
+      "passwordHash": "$2b$10$5JfLgPl.HmWoWA80T4YEU.rYxZSX8B4gcgAdU4N6yVm1k9aqfELve",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmth4z5kp00041vcyzb0xe4r5",
+      "name": "Md. Shakil Ahmed ",
+      "email": "shakil3978@gmail.com",
+      "passwordHash": "$2b$10$u8ebhZ5VMejHhXbguPwVhOZuU9xdm1yqRaJyX8oE1O643SkVsNvsO",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmth94m8g00042dcwcx397pwr",
+      "name": "Shahriar Khan Sakib",
+      "email": "sakibshahriarkhan.88@gmail.com",
+      "passwordHash": "$2b$10$88LN8I/rwF3cuvwmnkK7rODcW.MAsiNW4zei0xjmUyJG.ucMltQJ.",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmth9kty0000j2dcwifluig00",
+      "name": "Md Shahinur Rahman ",
+      "email": "shawon2252007@gmail.com",
+      "passwordHash": "$2b$10$JEs2EbTKR.jqam65Uuh3yOnornwD3GOIFGsuYKU7pnF3Vt5OpUEsa",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmthcyvms00052da1g84b1h9p",
+      "name": "Meheraj Hossain Shanto",
+      "email": "meherazshanto20@gmail.com",
+      "passwordHash": "$2b$10$pDpXCGFFDvXJtMhjk8coveoHYkXASnl7WaE7iHd0xoNzARxTSCo46",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmthdiygz00092da103ga33tm",
+      "name": "Sakib Imtiaz ",
+      "email": "sakib007imtiaz@gmail.com",
+      "passwordHash": "$2b$10$TtfayV1o1PEliD0lRQi.Z.4jMPQKURQE635jzVmyiNzF8mtl6cjrO",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmthdrrwo000c2da14s8dnruv",
+      "name": "Peyal Mojumder ",
+      "email": "mojumderpeyal@gmail.com",
+      "passwordHash": "$2b$10$uZwLT2guNG32f8gOGEsi8uPbE4bOMHE44KiB9i2rHRevA/WqN/T2C",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmthe06iw000h2da16kon5h02",
+      "name": "Sakib Ahmed",
+      "email": "afdsfd@gfg",
+      "passwordHash": "$2b$10$yAm8vGmLT3UvJ3KfTPR25eWSZbnf/ipYVepthbncaUQI3EJbvVu7W",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmthe5yv5000l2da1zvaasidk",
+      "name": "Shazid Bin Hamid",
+      "email": "gfhg@gdf",
+      "passwordHash": "$2b$10$XEeAJwy4BEpT4A8OTMpDkesLZ89JpzU9ewZ1p2FyqoApxN02kQUu6",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmthelkd2000q2da1phwnij1i",
+      "name": "Sh Jisan ",
+      "email": "golammoula113739@gmail.com",
+      "passwordHash": "$2b$10$ucYquYGeVH5ShnTkp783v.EfsjKXKh9NwsOZCRY7FpWV6EHQxaHSK",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmthgei3i006c2da1521dltjc",
+      "name": "Shahriar Khan Sakib",
+      "email": "sakib123@gmail.com",
+      "passwordHash": "$2b$10$QyJ4JiTl6zLB0/grWSO4TOnBxGWSrwZUUTkVBpXUvaS7GBqPL.mym",
+      "role": "TEAM_MANAGER",
+      "phone": "0123456788",
+      "desiredTeamName": "Team Shahriar Sakib",
+      "isApproved": true
+    },
+    {
+      "id": "cmthgbco5006a2da16d6e4cba",
+      "name": "Sakib Imtiaz",
+      "email": "sakibimtiaz@gmail.com",
+      "passwordHash": "$2b$10$sKbk24jf41qkjA70OKJLQO2jt7BW2ckl3FsWQ/n2DhhuaxbuZQNKi",
+      "role": "TEAM_MANAGER",
+      "phone": "0123456789",
+      "desiredTeamName": "Imtiaz team",
+      "isApproved": true
+    },
+    {
+      "id": "cmthgq7uo006l2da1igdw6dkl",
+      "name": "Shamim",
+      "email": "shamim123@gmail.com",
+      "passwordHash": "$2b$10$ALL4t90kX/3G0ok5lkKphOzAtPsCrtO8.XWU.CWEOXaJVsJFK3Fxy",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmthgwkse006u2da1bbk6svpl",
+      "name": "Asraful Islam ",
+      "email": "asrafulislamafridi@gmail.com",
+      "passwordHash": "$2b$10$wo/XRszXfdSBrlIzMvLQ.uJgWEo0xc1FB9ev0CrQ48tIlErwbew2K",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    },
+    {
+      "id": "cmthh15d300872da1gumb60rp",
+      "name": "Nasir Efty",
+      "email": "nasir@gmail.com",
+      "passwordHash": "$2b$10$AagF19IacGWBbr0.YAaxG.NwczhvYxvZLb9vOYoaKnYvDf3MplkHS",
+      "role": "PLAYER",
+      "phone": null,
+      "desiredTeamName": null,
+      "isApproved": true
+    }
+  ],
+  "ledger": [
+    {
+      "id": "cmthib3pz00dg2da1w0wigarl",
+      "playerId": "cmt8mv8xz00262ecay8cexpmh",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "amount": 13150000,
+      "createdAt": "2026-08-31T17:22:53.975Z"
+    },
+    {
+      "id": "cmthifxi600dh2da1jkl95ked",
+      "playerId": "cmthh15fq00882da11de0ju9v",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "amount": 9150000,
+      "createdAt": "2026-08-31T17:26:39.198Z"
+    },
+    {
+      "id": "cmthilgqm00di2da1vv314olu",
+      "playerId": "cmtgyxip300011vinic1ze4xz",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "amount": 4150000,
+      "createdAt": "2026-08-31T17:30:57.406Z"
+    },
+    {
+      "id": "cmthinxq100dj2da106eubo32",
+      "playerId": "cmtgzdquz00091vin0vy8jswj",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "amount": 6650000,
+      "createdAt": "2026-08-31T17:32:52.729Z"
+    },
+    {
+      "id": "cmthiqo3r00dk2da1inbci2c2",
+      "playerId": "cmt82adzg00051vf35j50834a",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "amount": 5650000,
+      "createdAt": "2026-08-31T17:35:00.231Z"
+    },
+    {
+      "id": "cmthiumj100dl2da1hin03w57",
+      "playerId": "cmt88zdax000m1vicwlcvskcf",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "amount": 3000000,
+      "createdAt": "2026-08-31T17:38:04.813Z"
+    },
+    {
+      "id": "cmthixby700dm2da1upbsenzk",
+      "playerId": "cmt8f4b34001s1vicquxsc3kp",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "amount": 8150000,
+      "createdAt": "2026-08-31T17:40:11.071Z"
+    },
+    {
+      "id": "cmthj0pdv00dn2da19b6bl2h4",
+      "playerId": "cmt8918nv000r1vic60vcxahw",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "amount": 1800000,
+      "createdAt": "2026-08-31T17:42:48.451Z"
+    },
+    {
+      "id": "cmthj2u5h00do2da118wt2auq",
+      "playerId": "cmt88xpt7000i1vic81l880ev",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "amount": 8150000,
+      "createdAt": "2026-08-31T17:44:27.941Z"
+    },
+    {
+      "id": "cmthj7urs00dp2da1df7i2lx8",
+      "playerId": "cmt898hup000w1vicxq99jaio",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "amount": 20150000,
+      "createdAt": "2026-08-31T17:48:22.024Z"
+    },
+    {
+      "id": "cmthjc3dn00dq2da1zyreaioq",
+      "playerId": "cmt8i68ay00092ecap01pf6j5",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "amount": 6150000,
+      "createdAt": "2026-08-31T17:51:39.803Z"
+    },
+    {
+      "id": "cmthjf2s900dr2da1az8iz6hi",
+      "playerId": "cmthgwkv2006v2da1bfp8pp7q",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "amount": 5150000,
+      "createdAt": "2026-08-31T17:53:59.001Z"
+    },
+    {
+      "id": "cmthjinwt00ds2da1l0omftye",
+      "playerId": "cmt7qftaq00091vdpp5wcinb5",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "amount": 6150000,
+      "createdAt": "2026-08-31T17:56:46.349Z"
+    },
+    {
+      "id": "cmthjpcmc00dt2da12ykhyro4",
+      "playerId": "cmt7qturu000d1vdpjizdma4q",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "amount": 20150000,
+      "createdAt": "2026-08-31T18:01:58.308Z"
+    },
+    {
+      "id": "cmthjyl2b00du2da15kn5dt7f",
+      "playerId": "cmt82h8nj000j1vf3g1bnnyod",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "amount": 27500000,
+      "createdAt": "2026-08-31T18:09:09.155Z"
+    },
+    {
+      "id": "cmthk009300dv2da11chzj3bo",
+      "playerId": "cmt8t033b00011vaiaz3ylwgo",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "amount": 3000000,
+      "createdAt": "2026-08-31T18:10:15.495Z"
+    },
+    {
+      "id": "cmthk5up900dw2da1v6yeywnh",
+      "playerId": "cmt8mxfcc002c2ecamdl29rlv",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "amount": 16150000,
+      "createdAt": "2026-08-31T18:14:48.237Z"
+    },
+    {
+      "id": "cmthkbcjr00dx2da1eh32w4k0",
+      "playerId": "cmt8g1h7x00291vichhqzny8t",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "amount": 12150000,
+      "createdAt": "2026-08-31T18:19:04.647Z"
+    },
+    {
+      "id": "cmthkez0p00dy2da1hxzqpl1u",
+      "playerId": "cmt8f6yu6001w1vic1ui04a78",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "amount": 7650000,
+      "createdAt": "2026-08-31T18:21:53.737Z"
+    },
+    {
+      "id": "cmthkisok00dz2da1i3shrkjl",
+      "playerId": "cmth4z5nj00051vcy7js0eyhu",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "amount": 4150000,
+      "createdAt": "2026-08-31T18:24:52.149Z"
+    },
+    {
+      "id": "cmthkoi0g00e02da1w5u7av3g",
+      "playerId": "cmt80ptim00011v7pwwtatcf0",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "amount": 15150000,
+      "createdAt": "2026-08-31T18:29:18.256Z"
+    },
+    {
+      "id": "cmthl3g7f00e12da1usnrvcxu",
+      "playerId": "cmthgq7xb006m2da1jeo260hk",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "amount": 32500000,
+      "createdAt": "2026-08-31T18:40:55.755Z"
+    },
+    {
+      "id": "cmthl5yh600e22da1rqhq22r0",
+      "playerId": "cmt81srt300011vf3lxnoqy40",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "amount": 35000000,
+      "createdAt": "2026-08-31T18:42:52.746Z"
+    },
+    {
+      "id": "cmthladmz00e32da1swrgum99",
+      "playerId": "cmt8ka56g001j2ecauunvxa1c",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "amount": 3650000,
+      "createdAt": "2026-08-31T18:46:19.019Z"
+    },
+    {
+      "id": "cmthlcia300e42da1mruq794r",
+      "playerId": "cmt8uwc3l00051vaiec0v8bje",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "amount": 9000000,
+      "createdAt": "2026-08-31T18:47:58.347Z"
+    },
+    {
+      "id": "cmthlk6xj00e52da1g90ul9y9",
+      "playerId": "cmt8fss9e00201vicne5f2pu2",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "amount": 26150000,
+      "createdAt": "2026-08-31T18:53:56.887Z"
+    },
+    {
+      "id": "cmthlmzwg00e62da1bla7lcuu",
+      "playerId": "cmtgmi9vt00011vb3xt83n432",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "amount": 5650000,
+      "createdAt": "2026-08-31T18:56:07.745Z"
+    },
+    {
+      "id": "cmthlo06t00e72da1k8gvn2qm",
+      "playerId": "cmt8p0goc002o2ecazdrw599u",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "amount": 2100000,
+      "createdAt": "2026-08-31T18:56:54.773Z"
+    },
+    {
+      "id": "cmthltf2400e82da11l1kqdoy",
+      "playerId": "cmt8fw0j900261vicgkbr2u8o",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "amount": 5650000,
+      "createdAt": "2026-08-31T19:01:07.324Z"
+    },
+    {
+      "id": "cmthm2szn00e92da1wxdmsl2k",
+      "playerId": "cmt8q2pii00011v94uqemxoiv",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "amount": 4650000,
+      "createdAt": "2026-08-31T19:08:25.283Z"
+    },
+    {
+      "id": "cmthm6ukn00ea2da1m91wt1xm",
+      "playerId": "cmt8drdcv001b1vic7jd3sklv",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "amount": 5650000,
+      "createdAt": "2026-08-31T19:11:33.959Z"
+    },
+    {
+      "id": "cmthmawnd00eb2da12c4obr7x",
+      "playerId": "cmt8o0v6b002i2ecaq1ev79bh",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "amount": 6150000,
+      "createdAt": "2026-08-31T19:14:43.273Z"
+    },
+    {
+      "id": "cmthmd4p900ec2da1p68fh3tt",
+      "playerId": "cmt86vjmz00011vd98ybh2wt7",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "amount": 2550000,
+      "createdAt": "2026-08-31T19:16:27.021Z"
+    },
+    {
+      "id": "cmthmf4ev00ed2da1rw1r0n2p",
+      "playerId": "cmt88lbd100011vic91y4cke1",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "amount": 1950000,
+      "createdAt": "2026-08-31T19:17:59.959Z"
+    },
+    {
+      "id": "cmthmlbof00ee2da18c026auk",
+      "playerId": "cmt89w20600101viclko9hpg2",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "amount": 3650000,
+      "createdAt": "2026-08-31T19:22:49.311Z"
+    },
+    {
+      "id": "cmthmnsop00ef2da1lcv1mksx",
+      "playerId": "cmt8kzfq6001r2ecaew7idcv5",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "amount": 1300000,
+      "createdAt": "2026-08-31T19:24:44.665Z"
+    },
+    {
+      "id": "cmthms28u00eg2da11kuv6yjb",
+      "playerId": "cmt8ln7u700222ecaeffa8mhf",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "amount": 6650000,
+      "createdAt": "2026-08-31T19:28:03.678Z"
+    },
+    {
+      "id": "cmthmtgvi00eh2da1xo8ilc5u",
+      "playerId": "cmt873cvj00051vd9mokpapo1",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "amount": 1500000,
+      "createdAt": "2026-08-31T19:29:09.294Z"
+    },
+    {
+      "id": "cmthmudls00ei2da16h21ewjc",
+      "playerId": "cmthcyvpz00062da1mhq11694",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "amount": 2100000,
+      "createdAt": "2026-08-31T19:29:51.712Z"
+    },
+    {
+      "id": "cmthmwtof00ej2da1ik5sru09",
+      "playerId": "cmt8p6wad002s2ecaw13ulr2d",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "amount": 2350000,
+      "createdAt": "2026-08-31T19:31:45.855Z"
+    },
+    {
+      "id": "cmthmxxas00ek2da1cibgxfjk",
+      "playerId": "cmthe5yxt000m2da1v48u7i7k",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "amount": 2100000,
+      "createdAt": "2026-08-31T19:32:37.204Z"
+    },
+    {
+      "id": "cmthmyuvd00el2da17tdqlxip",
+      "playerId": "cmt8eb8sk001g1vicugjo4tf2",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "amount": 2100000,
+      "createdAt": "2026-08-31T19:33:20.713Z"
+    },
+    {
+      "id": "cmthn04e500em2da1tvasquha",
+      "playerId": "cmt88sm0o00081vicbrj5pfwl",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "amount": 3650000,
+      "createdAt": "2026-08-31T19:34:19.709Z"
+    },
+    {
+      "id": "cmthncyj400eq2da1tsmom6or",
+      "playerId": "cmtduurbv00011v82drrao8nz",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "amount": 2100000,
+      "createdAt": "2026-08-31T19:44:18.640Z"
+    },
+    {
+      "id": "cmthnn2ta00f02da18aw52pkj",
+      "playerId": "cmthh5kh000b22da1yhhpxofy",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "amount": 1000000,
+      "createdAt": "2026-08-31T19:52:10.750Z"
+    },
+    {
+      "id": "cmthnnreh00f12da1xtmvoyk9",
+      "playerId": "cmth9ku0w000k2dcwueg7i78j",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "amount": 1000000,
+      "createdAt": "2026-08-31T19:52:42.617Z"
+    },
+    {
+      "id": "cmthnofmf00f22da1uc910nm7",
+      "playerId": "cmt8lljkv001y2ecad2xnzl9n",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "amount": 1000000,
+      "createdAt": "2026-08-31T19:53:14.007Z"
+    },
+    {
+      "id": "cmthnt7pp00fa2da19gdmfvpi",
+      "playerId": "cmt8jp9xs001a2ecaxtpby32h",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "amount": 1000000,
+      "createdAt": "2026-08-31T19:56:57.037Z"
+    },
+    {
+      "id": "cmthntya100fb2da1vh95azcb",
+      "playerId": "cmthelkfr000r2da1wnzltce1",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "amount": 1000000,
+      "createdAt": "2026-08-31T19:57:31.465Z"
+    },
+    {
+      "id": "cmthny6mt00ff2da1e7u1446a",
+      "playerId": "cmthdrrzf000d2da1ihy5356s",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "amount": 200000,
+      "createdAt": "2026-08-31T20:00:48.917Z"
+    },
+    {
+      "id": "cmthn2lid00en2da1rx914lxp",
+      "playerId": "cmt8vozyk000a1vai5vz4u2is",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "amount": 3650000,
+      "createdAt": "2026-08-31T19:36:15.205Z"
+    },
+    {
+      "id": "cmthn6euz00ep2da17ceng98c",
+      "playerId": "cmt8hs45600012eca5ttlr5e8",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "amount": 1000000,
+      "createdAt": "2026-08-31T19:39:13.211Z"
+    },
+    {
+      "id": "cmthn5j2900eo2da1gkx2xq4w",
+      "playerId": "cmt8jvstj001e2ecapfn44sj2",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "amount": 3600000,
+      "createdAt": "2026-08-31T19:38:32.001Z"
+    },
+    {
+      "id": "cmthngd6100er2da1xe5uvdd9",
+      "playerId": "cmt8ec5vt001k1vicmr9ponvu",
+      "teamId": "cmthgf2fm006d2da1izdq4s9w",
+      "amount": 3150000,
+      "createdAt": "2026-08-31T19:46:57.577Z"
+    },
+    {
+      "id": "cmthnivgp00es2da1ocp5q685",
+      "playerId": "cmt8avtl100171vico2a4bllb",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "amount": 2100000,
+      "createdAt": "2026-08-31T19:48:54.601Z"
+    },
+    {
+      "id": "cmthnltqw00ez2da14n066qed",
+      "playerId": "cmt8477u4000n1vf3jzc87ekd",
+      "teamId": "cmthgbrzq006b2da179lhns9v",
+      "amount": 5300000,
+      "createdAt": "2026-08-31T19:51:12.344Z"
+    },
+    {
+      "id": "cmthnrlw600f52da1krfyxy69",
+      "playerId": "cmthe06ly000i2da1z1ykmd0o",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "amount": 1000000,
+      "createdAt": "2026-08-31T19:55:42.102Z"
+    },
+    {
+      "id": "cmthnytxu00fi2da1rkd5qzcx",
+      "playerId": "cmthh5fja00av2da1vvl01h3v",
+      "teamId": "cmthghr3y006h2da130ah174p",
+      "amount": 200000,
+      "createdAt": "2026-08-31T20:01:19.122Z"
+    },
+    {
+      "id": "cmthnuhks00fc2da16w16p2j3",
+      "playerId": "cmtgyzf7e00051vinn3cwfpcr",
+      "teamId": "cmthggnmy006f2da1zyyhx3dt",
+      "amount": 1000000,
+      "createdAt": "2026-08-31T19:57:56.476Z"
+    }
+  ],
+  "config": [
+    {
+      "id": "singleton",
+      "currentPhase": "AUCTION",
+      "auctionMode": "OPEN",
+      "totalBudget": 100000000,
+      "minRosterSize": 14,
+      "defaultTimer": 15,
+      "maxRosterSize": 15,
+      "timerLocked": false,
+      "draftOrder": [
+        "cmsel1ee8000abwfn8v389ubf",
+        "cmsey6ii500022djraf2ugc7l",
+        "cmsekru120000bwfnir4saax0"
+      ],
+      "currentDraftTurn": 2,
+      "playerBasePrice": 5000,
+      "jerseyVotingOpen": false
+    }
+  ],
+  "categories": [
+    {
+      "id": "cmthfczhl001w2da1ch0ifalo",
+      "name": "Plastic",
+      "basePrice": 4000000
+    },
+    {
+      "id": "cmthfce3d001t2da1mambdi5n",
+      "name": "Diamond",
+      "basePrice": 3000000
+    },
+    {
+      "id": "cmthfc3w0001r2da18aj72x6k",
+      "name": "Platinum",
+      "basePrice": 2100000
+    },
+    {
+      "id": "cmthfbu13001q2da1e7tgb9ql",
+      "name": "Gold",
+      "basePrice": 1500000
+    },
+    {
+      "id": "cmthfowkk00332da1oogf1dab",
+      "name": "GK",
+      "basePrice": 3000000
+    },
+    {
+      "id": "cmthfcmk6001u2da159nhujfh",
+      "name": "Silver",
+      "basePrice": 200000
+    }
+  ]
+}

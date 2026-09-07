@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Shield, Target, Plus, Check, Trash2, Activity, X, Calendar, ClipboardList } from 'lucide-react';
+import { Shield, Target, Plus, Check, Trash2, Activity, X, Calendar, ClipboardList, Star } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import Dropdown from '../../../components/Dropdown';
@@ -43,7 +43,27 @@ function PlayerStatsModal({ match, teamA, teamB, onClose, token, refresh }: any)
       if (existing) {
         return prev.map(s => s.playerId === playerId ? { ...s, [field]: parsed } : s);
       }
-      return [...prev, { playerId, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheet: false, [field]: parsed }];
+      return [...prev, { playerId, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheet: false, isMotm: false, [field]: parsed }];
+    });
+  };
+
+  const handleMotmToggle = (playerId: string) => {
+    setStats(prev => {
+      let newStats = [...prev];
+      const existingIdx = newStats.findIndex(s => s.playerId === playerId);
+      
+      let isNowOn = true;
+      if (existingIdx !== -1) {
+         isNowOn = !newStats[existingIdx].isMotm;
+         newStats[existingIdx].isMotm = isNowOn;
+      } else {
+         newStats.push({ playerId, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheet: false, isMotm: true });
+      }
+
+      if (isNowOn) {
+        newStats = newStats.map(s => s.playerId === playerId ? s : { ...s, isMotm: false });
+      }
+      return newStats;
     });
   };
 
@@ -103,6 +123,15 @@ function PlayerStatsModal({ match, teamA, teamB, onClose, token, refresh }: any)
             <div className="flex flex-col items-center bg-red-500/10 px-3 py-2 rounded-lg border border-red-500/20">
               <span className="text-[9px] uppercase tracking-widest text-red-500/70 font-bold mb-1.5">Red</span>
               <input type="number" min="0" value={getStat(p.id, 'redCards') === 0 ? '' : getStat(p.id, 'redCards')} placeholder="0" onChange={e => handleStatChange(p.id, 'redCards', e.target.value)} className="w-10 bg-transparent text-center text-red-400 font-bold text-lg outline-none placeholder:text-red-600/30" />
+            </div>
+            <div className="flex flex-col items-center justify-center px-2">
+              <button 
+                onClick={() => handleMotmToggle(p.id)}
+                className={`p-2 rounded-full transition-all ${getStat(p.id, 'isMotm') ? 'bg-gold/20 text-gold shadow-[0_0_10px_rgba(255,215,0,0.3)]' : 'text-zinc-600 hover:text-zinc-400 hover:bg-white/5'}`}
+                title="Man of the Match"
+              >
+                <Star size={20} fill={getStat(p.id, 'isMotm') ? "currentColor" : "none"} />
+              </button>
             </div>
           </div>
         </div>

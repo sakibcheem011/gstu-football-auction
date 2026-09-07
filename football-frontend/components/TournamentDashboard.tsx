@@ -198,7 +198,7 @@ function MatchCard({ matchInfo, teams }: { matchInfo: any, teams: any[] }) {
         const renderTeamStats = (players: any[], alignRight: boolean) => {
           if (!players) return null;
           const teamPlayerIds = new Set(players.map(p => p.id));
-          const teamStats = match.stats.filter((s: any) => teamPlayerIds.has(s.playerId) && (s.goals > 0 || s.yellowCards > 0 || s.redCards > 0));
+          const teamStats = match.stats.filter((s: any) => teamPlayerIds.has(s.playerId) && (s.goals > 0 || s.yellowCards > 0 || s.redCards > 0 || s.isMotm));
           if (teamStats.length === 0) return null;
 
           return (
@@ -215,11 +215,13 @@ function MatchCard({ matchInfo, teams }: { matchInfo: any, teams: any[] }) {
                           {s.goals > 0 && <span title="Goals" className="drop-shadow-md">{'⚽'.repeat(s.goals)}</span>}
                           {s.yellowCards > 0 && <span title="Yellow Cards" className="drop-shadow-md">{'🟨'.repeat(s.yellowCards)}</span>}
                           {s.redCards > 0 && <span title="Red Cards" className="drop-shadow-md">{'🟥'.repeat(s.redCards)}</span>}
+                          {s.isMotm && <span title="Man of the Match" className="drop-shadow-md ml-1 text-gold">🌟</span>}
                         </div>
                       </>
                     ) : (
                       <>
                         <div className="flex items-center gap-1">
+                          {s.isMotm && <span title="Man of the Match" className="drop-shadow-md mr-1 text-gold">🌟</span>}
                           {s.goals > 0 && <span title="Goals" className="drop-shadow-md">{'⚽'.repeat(s.goals)}</span>}
                           {s.yellowCards > 0 && <span title="Yellow Cards" className="drop-shadow-md">{'🟨'.repeat(s.yellowCards)}</span>}
                           {s.redCards > 0 && <span title="Red Cards" className="drop-shadow-md">{'🟥'.repeat(s.redCards)}</span>}

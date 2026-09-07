@@ -85,6 +85,7 @@ model Player {
   wishlistedByTeams Team[]           @relation("TeamWishlist")
   jerseyDesigns     JerseyDesign[]
   jerseyVotes       JerseyVote[]
+  matchStats        PlayerMatchStat[]
 }
 
 model JerseyDesign {
@@ -155,7 +156,9 @@ model PlayerMatchStat {
   yellowCards Int     @default(0)
   redCards    Int     @default(0)
   cleanSheet  Boolean @default(false)
+  isMotm      Boolean @default(false)
   match       Match   @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  player      Player  @relation(fields: [playerId], references: [id], onDelete: Cascade)
 }
 
 model News {
