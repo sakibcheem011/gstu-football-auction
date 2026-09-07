@@ -190,6 +190,61 @@ function MatchCard({ matchInfo, teams }: { matchInfo: any, teams: any[] }) {
         </div>
         <div className="font-semibold w-1/4 text-left text-zinc-200 text-sm lg:text-base">{tB}</div>
       </div>
+
+      {match.status === 'COMPLETED' && match.stats && match.stats.length > 0 && (() => {
+        const tAObj = teams.find(t => t.id === fixture.teamAId);
+        const tBObj = teams.find(t => t.id === fixture.teamBId);
+        
+        const renderTeamStats = (players: any[], alignRight: boolean) => {
+          if (!players) return null;
+          const teamPlayerIds = new Set(players.map(p => p.id));
+          const teamStats = match.stats.filter((s: any) => teamPlayerIds.has(s.playerId) && (s.goals > 0 || s.yellowCards > 0 || s.redCards > 0));
+          if (teamStats.length === 0) return null;
+
+          return (
+            <div className={`flex flex-col gap-1.5 ${alignRight ? 'items-end' : 'items-start'}`}>
+              {teamStats.map((s: any) => {
+                const p = players.find(p => p.id === s.playerId);
+                if (!p) return null;
+                return (
+                  <div key={s.id} className="flex items-center gap-2 text-xs text-zinc-300">
+                    {alignRight ? (
+                      <>
+                        <span className="font-medium text-zinc-400">{p.name}</span>
+                        <div className="flex items-center gap-1">
+                          {s.goals > 0 && <span title="Goals" className="drop-shadow-md">{'⚽'.repeat(s.goals)}</span>}
+                          {s.yellowCards > 0 && <span title="Yellow Cards" className="drop-shadow-md">{'🟨'.repeat(s.yellowCards)}</span>}
+                          {s.redCards > 0 && <span title="Red Cards" className="drop-shadow-md">{'🟥'.repeat(s.redCards)}</span>}
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex items-center gap-1">
+                          {s.goals > 0 && <span title="Goals" className="drop-shadow-md">{'⚽'.repeat(s.goals)}</span>}
+                          {s.yellowCards > 0 && <span title="Yellow Cards" className="drop-shadow-md">{'🟨'.repeat(s.yellowCards)}</span>}
+                          {s.redCards > 0 && <span title="Red Cards" className="drop-shadow-md">{'🟥'.repeat(s.redCards)}</span>}
+                        </div>
+                        <span className="font-medium text-zinc-400">{p.name}</span>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          );
+        };
+
+        return (
+          <div className="mt-4 pt-4 border-t border-zinc-800/50 flex justify-between">
+            <div className="w-1/2 pr-2 border-r border-zinc-800/30">
+              {renderTeamStats(tAObj?.players, true)}
+            </div>
+            <div className="w-1/2 pl-2">
+              {renderTeamStats(tBObj?.players, false)}
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
