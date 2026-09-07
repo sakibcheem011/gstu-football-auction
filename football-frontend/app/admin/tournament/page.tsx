@@ -49,15 +49,15 @@ function PlayerStatsModal({ match, teamA, teamB, onClose, token, refresh }: any)
 
   const handleMotmToggle = (playerId: string) => {
     setStats(prev => {
+      const existingIdx = prev.findIndex(s => s.playerId === playerId);
+      const isCurrentlyOn = existingIdx !== -1 ? !!prev[existingIdx].isMotm : false;
+      const isNowOn = !isCurrentlyOn;
+
       let newStats = [...prev];
-      const existingIdx = newStats.findIndex(s => s.playerId === playerId);
-      
-      let isNowOn = true;
       if (existingIdx !== -1) {
-         isNowOn = !newStats[existingIdx].isMotm;
-         newStats[existingIdx].isMotm = isNowOn;
+        newStats[existingIdx] = { ...newStats[existingIdx], isMotm: isNowOn };
       } else {
-         newStats.push({ playerId, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheet: false, isMotm: true });
+        newStats.push({ playerId, goals: 0, assists: 0, yellowCards: 0, redCards: 0, cleanSheet: false, isMotm: true });
       }
 
       if (isNowOn) {
@@ -124,13 +124,13 @@ function PlayerStatsModal({ match, teamA, teamB, onClose, token, refresh }: any)
               <span className="text-[9px] uppercase tracking-widest text-red-500/70 font-bold mb-1.5">Red</span>
               <input type="number" min="0" value={getStat(p.id, 'redCards') === 0 ? '' : getStat(p.id, 'redCards')} placeholder="0" onChange={e => handleStatChange(p.id, 'redCards', e.target.value)} className="w-10 bg-transparent text-center text-red-400 font-bold text-lg outline-none placeholder:text-red-600/30" />
             </div>
-            <div className="flex flex-col items-center justify-center px-2">
+            <div className="flex flex-col items-center justify-center pl-1 pr-2">
               <button 
                 onClick={() => handleMotmToggle(p.id)}
-                className={`p-2 rounded-full transition-all ${getStat(p.id, 'isMotm') ? 'bg-gold/20 text-gold shadow-[0_0_10px_rgba(255,215,0,0.3)]' : 'text-zinc-600 hover:text-zinc-400 hover:bg-white/5'}`}
+                className={`px-3 py-2 rounded-lg text-xs font-bold tracking-wider uppercase transition-all border ${getStat(p.id, 'isMotm') ? 'bg-gold/20 text-gold border-gold/50 shadow-[0_0_10px_rgba(255,215,0,0.3)]' : 'bg-white/5 text-zinc-500 border-white/10 hover:bg-white/10 hover:text-zinc-300'}`}
                 title="Man of the Match"
               >
-                <Star size={20} fill={getStat(p.id, 'isMotm') ? "currentColor" : "none"} />
+                MOTM
               </button>
             </div>
           </div>

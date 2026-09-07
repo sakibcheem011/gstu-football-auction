@@ -215,13 +215,13 @@ function MatchCard({ matchInfo, teams }: { matchInfo: any, teams: any[] }) {
                           {s.goals > 0 && <span title="Goals" className="drop-shadow-md">{'⚽'.repeat(s.goals)}</span>}
                           {s.yellowCards > 0 && <span title="Yellow Cards" className="drop-shadow-md">{'🟨'.repeat(s.yellowCards)}</span>}
                           {s.redCards > 0 && <span title="Red Cards" className="drop-shadow-md">{'🟥'.repeat(s.redCards)}</span>}
-                          {s.isMotm && <span title="Man of the Match" className="drop-shadow-md ml-1 text-gold">🌟</span>}
+                          {s.isMotm && <span title="Man of the Match" className="ml-1 text-[8px] font-bold bg-gold/20 text-gold px-1.5 py-0.5 rounded border border-gold/30">MOTM</span>}
                         </div>
                       </>
                     ) : (
                       <>
                         <div className="flex items-center gap-1">
-                          {s.isMotm && <span title="Man of the Match" className="drop-shadow-md mr-1 text-gold">🌟</span>}
+                          {s.isMotm && <span title="Man of the Match" className="mr-1 text-[8px] font-bold bg-gold/20 text-gold px-1.5 py-0.5 rounded border border-gold/30">MOTM</span>}
                           {s.goals > 0 && <span title="Goals" className="drop-shadow-md">{'⚽'.repeat(s.goals)}</span>}
                           {s.yellowCards > 0 && <span title="Yellow Cards" className="drop-shadow-md">{'🟨'.repeat(s.yellowCards)}</span>}
                           {s.redCards > 0 && <span title="Red Cards" className="drop-shadow-md">{'🟥'.repeat(s.redCards)}</span>}
